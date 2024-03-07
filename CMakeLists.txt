@@ -27,7 +27,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         Physics/drawingstyle.h Physics/drawingstyle.cpp
         Physics/softscene.h Physics/softscene.cpp
-        Inspector/inspectorparamslist.h Inspector/inspectorparamslist.cpp
+        Inspector/inspectableparamslist.h Inspector/inspectableparamslist.cpp
+        Inspector/inspectableparam.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET SoftWorld APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
