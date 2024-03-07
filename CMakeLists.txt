@@ -58,7 +58,7 @@ target_link_libraries(SoftWorld PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.SoftWorld)
 endif()
-target_include_directories(SoftWorld PRIVATE /home/danila/Desktop/SoftWorld)
+target_include_directories(SoftWorld PRIVATE ./)
 
 set_target_properties(SoftWorld PROPERTIES
     ${BUNDLE_ID_OPTION}
