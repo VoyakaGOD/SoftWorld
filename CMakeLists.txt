@@ -23,6 +23,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(SoftWorld
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        Physics/physicalbody.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET SoftWorld APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
