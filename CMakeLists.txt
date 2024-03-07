@@ -13,6 +13,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
+        UI/sceneview.cpp
+        UI/sceneview.h
         main.cpp
         mainwindow.cpp
         mainwindow.h
@@ -51,6 +53,8 @@ target_link_libraries(SoftWorld PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.SoftWorld)
 endif()
+target_include_directories(SoftWorld PRIVATE /home/danila/Desktop/SoftWorld)
+
 set_target_properties(SoftWorld PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
