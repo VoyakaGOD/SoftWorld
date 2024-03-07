@@ -2,6 +2,7 @@
 #define SOFTSCENE_H
 
 #include "physicalbody.h"
+#include "../Inspector/inspectorparamslist.h"
 
 class SoftScene
 {
@@ -10,7 +11,7 @@ public:
     void NextStep(double delta_time);
     void AddBody(void /*mind*/);
     void RemoveBody(void /*mind*/);
-    void /*mind*/ GetInspectorParams() const;
+    InspectorParamsList GetInspectorParams() const;
     PhysicalBody &GetBodyAt(const QPoint &point) const;
 };
 
