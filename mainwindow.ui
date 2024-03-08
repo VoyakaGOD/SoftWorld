@@ -35,7 +35,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Run</string>
+         <string>Stop</string>
         </property>
        </widget>
       </item>
@@ -48,7 +48,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Stop</string>
+         <string>Run</string>
         </property>
        </widget>
       </item>
@@ -68,7 +68,7 @@
      </layout>
     </item>
     <item>
-     <widget class="SceneView" name="main_view">
+     <widget class="SceneView" name="main_view" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -137,8 +137,9 @@
  <customwidgets>
   <customwidget>
    <class>SceneView</class>
-   <extends>QGraphicsView</extends>
+   <extends>QWidget</extends>
    <header location="global">sceneview.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -22,17 +22,17 @@ public:
     virtual void KeepSceneBorders(const QRect &world_rect) = 0;
     virtual void ApplyInternalRestrictions(double delta_time) = 0;
     virtual void ApplyGravity(double air_density, double g, double delta_time) = 0;
-    virtual void MoveTo(const QPoint &point) = 0;
+    virtual void MoveBy(const QPoint &offset) = 0;
     virtual void AddMomentum(const QPoint &momentum) = 0;
 
 //drawing methods
 public:
-    virtual void DrawBy(QPainter &painter) const = 0;
+    virtual void DrawBy(QPainter &painter) = 0;
 
 //debugging methods
 public:
-    virtual QPoint GetLocalCoordinate(QPoint &&global_coordinate) const = 0;
-    virtual QPoint GetGlobalCoordinate(QPoint &&local_coordinate) const = 0;
+    virtual QPoint GetLocalCoordinate(QPoint &global_coordinate) const = 0;
+    virtual QPoint GetGlobalCoordinate(QPoint &local_coordinate) const = 0;
 };
 
 #endif // PHYSICALBODY_H

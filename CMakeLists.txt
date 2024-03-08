@@ -15,6 +15,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 set(PROJECT_SOURCES
         UI/sceneview.cpp
         UI/sceneview.h
+        Physics/physicalbody.h
+        Physics/ghostbody.h
+        Physics/ghostbody.cpp
         main.cpp
         mainwindow.cpp
         mainwindow.h
@@ -25,7 +28,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(SoftWorld
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        Physics/physicalbody.h
 
         Physics/drawingstyle.h Physics/drawingstyle.cpp
         Physics/softscene.h Physics/softscene.cpp

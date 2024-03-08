@@ -6,8 +6,12 @@
 
 class SoftScene
 {
-private:
+
+public:
     QRect world_rect;
+
+private:
+
     list<PhysicalBody*> bodies;
     double air_density;
     double g;

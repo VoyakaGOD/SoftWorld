@@ -5,7 +5,10 @@ SoftScene::SoftScene(QRect world_rect, double air_density, double g):
 
 void SoftScene::Draw(QPainter &painter) const
 {
-    throw "not implemented yet!";
+    for(auto body : bodies)
+    {
+        body->DrawBy(painter);
+    }
 }
 
 void SoftScene::DoNextStep(double delta_time)
