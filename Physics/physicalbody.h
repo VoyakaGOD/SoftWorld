@@ -5,7 +5,7 @@
 #include <QRect>
 #include <QPainter>
 #include "drawingstyle.h"
-#include "../Inspector/inspectableparamslist.h"
+#include "Inspector/inspectableparam.h"
 
 class PhysicalBody
 {
@@ -14,7 +14,7 @@ public:
     virtual QRect GetBoundingRect() const = 0;
     virtual InspectableParamsList GetInspectableParams() = 0;
     virtual bool ContainsPoint(const QPoint &point) const = 0;
-    virtual PhysicalBody *Clone() = 0;
+    virtual PhysicalBody *Clone() const = 0;
 
 //simulation methods
 public:
@@ -27,12 +27,12 @@ public:
 
 //drawing methods
 public:
-    virtual void DrawBy(QPainter &painter) = 0;
+    virtual void Draw(QPainter &painter) = 0;
 
 //debugging methods
 public:
-    virtual QPoint GetLocalCoordinate(QPoint &global_coordinate) const = 0;
-    virtual QPoint GetGlobalCoordinate(QPoint &local_coordinate) const = 0;
+    virtual QPoint GetLocalCoordinate(const QPoint &global_coordinate) const = 0;
+    virtual QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const = 0;
 };
 
 #endif // PHYSICALBODY_H

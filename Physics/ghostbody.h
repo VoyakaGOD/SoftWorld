@@ -13,7 +13,7 @@ public:
     virtual QRect GetBoundingRect() const override;
     virtual InspectableParamsList GetInspectableParams() override;
     virtual bool ContainsPoint(const QPoint &point) const override;
-    virtual PhysicalBody *Clone() override;
+    virtual PhysicalBody *Clone() const override;
 
 //simulation methods
 public:
@@ -27,11 +27,11 @@ public:
 
 //drawing methods
 public:
-    void DrawBy(QPainter &painter);
+    void Draw(QPainter &painter);
 
 //debugging methods
 public:
-    QPoint GetLocalCoordinate(QPoint &global_coordinate) const override;
-    QPoint GetGlobalCoordinate(QPoint &local_coordinate) const override;
+    QPoint GetLocalCoordinate(const QPoint &global_coordinate) const override;
+    QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const override;
 
 };

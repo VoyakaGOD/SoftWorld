@@ -7,6 +7,7 @@ enum InspectableParamType
 {
     Int,
     Double,
+    Float,
     Color
 };
 
@@ -27,6 +28,7 @@ public:                                                                         
 
 INSPECTABLE(int, Int);
 INSPECTABLE(double, Double);
+INSPECTABLE(float, Float);
 INSPECTABLE(QColor, Color);
 
 #undef INSPECTABLE

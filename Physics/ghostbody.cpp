@@ -8,14 +8,16 @@ QRect GhostBody::GetBoundingRect() const {
 }
 
 InspectableParamsList GhostBody::GetInspectableParams() {
-    return InspectableParamsList("ghost", 0);
+    InspectableParamsList list("ghost", 1);
+    list.params.push_back(InspectableFloat("radius", radius));
+    return list;
 }
 
 bool GhostBody::ContainsPoint(const QPoint &point) const {
     return (point - this->origin).manhattanLength() < radius;
 }
 
-PhysicalBody* GhostBody::Clone() {
+PhysicalBody* GhostBody::Clone() const {
     return nullptr;
 }
 
@@ -44,7 +46,7 @@ void GhostBody::AddMomentum(const QPoint &momentum) {
     return;
 }
 
-void GhostBody::DrawBy(QPainter &painter) {
+void GhostBody::Draw(QPainter &painter) {
     painter.setBrush(Qt::SolidPattern);
     painter.setBrush(Qt::green);
     painter.setPen(Qt::black);
@@ -52,10 +54,10 @@ void GhostBody::DrawBy(QPainter &painter) {
     return;
 }
 
-QPoint GhostBody::GetLocalCoordinate(QPoint &global_coordinate) const {
+QPoint GhostBody::GetLocalCoordinate(const QPoint &global_coordinate) const {
     return global_coordinate - this->origin;
 }
 
-QPoint GhostBody::GetGlobalCoordinate(QPoint &local_coordinate) const {
+QPoint GhostBody::GetGlobalCoordinate(const QPoint &local_coordinate) const {
     return local_coordinate + this->origin;
 }

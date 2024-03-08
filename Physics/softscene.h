@@ -2,16 +2,12 @@
 #define SOFTSCENE_H
 
 #include "physicalbody.h"
-#include "../Inspector/inspectableparamslist.h"
+#include "Inspector/inspectableparamslist.h"
 
 class SoftScene
 {
-
-public:
-    QRect world_rect;
-
 private:
-
+    QRect world_rect;
     list<PhysicalBody*> bodies;
     double air_density;
     double g;
