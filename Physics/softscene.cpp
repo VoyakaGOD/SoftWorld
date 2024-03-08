@@ -1,10 +1,12 @@
 #include "softscene.h"
 
-SoftScene::SoftScene(QRect world_rect, double air_density, double g):
+SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
     world_rect(world_rect), air_density(air_density), g(g) {}
 
 void SoftScene::Draw(QPainter &painter) const
 {
+    lock_guard<mutex> lock(synchronizer);
+
     for(auto body : bodies)
     {
         body->DrawBy(painter);
@@ -13,6 +15,8 @@ void SoftScene::Draw(QPainter &painter) const
 
 void SoftScene::DoNextStep(double delta_time)
 {
+    lock_guard<mutex> lock(synchronizer);
+
     for(auto body1 : bodies)
     {
         body1->ApplyGravity(air_density, g, delta_time);
@@ -34,16 +38,22 @@ void SoftScene::DoNextStep(double delta_time)
 
 void SoftScene::AddBody(PhysicalBody *body)
 {
+    lock_guard<mutex> lock(synchronizer);
+
     bodies.push_back(body);
 }
 
 void SoftScene::RemoveBody(PhysicalBody *body)
 {
+    lock_guard<mutex> lock(synchronizer);
+
     bodies.remove(body);
 }
 
 InspectableParamsList SoftScene::GetInspectableParams()
 {
+    lock_guard<mutex> lock(synchronizer);
+
     InspectableParamsList list("scene", 2);
     list.params.push_back(InspectableDouble("air density", air_density));
     list.params.push_back(InspectableDouble("g", g));
@@ -52,10 +62,22 @@ InspectableParamsList SoftScene::GetInspectableParams()
 
 PhysicalBody *SoftScene::GetBodyAt(const QPoint &point) const
 {
+    lock_guard<mutex> lock(synchronizer);
+
     for(auto body : bodies)
     {
         if(body->ContainsPoint(point))
             return body;
     }
     return nullptr;
+}
+
+void SoftScene::Lock()
+{
+    synchronizer.lock();
+}
+
+void SoftScene::Unlock()
+{
+    synchronizer.unlock();
 }
