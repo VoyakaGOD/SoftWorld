@@ -6,13 +6,20 @@
 
 class SoftScene
 {
+private:
+    QRect world_rect;
+    list<PhysicalBody*> bodies;
+    double air_density;
+    double g;
+
 public:
+    SoftScene(QRect world_rect, double air_density, double g);
     void Draw(QPainter &painter) const;
-    void NextStep(double delta_time);
-    void AddBody(void /*mind*/);
-    void RemoveBody(void /*mind*/);
+    void DoNextStep(double delta_time);
+    void AddBody(PhysicalBody *body);
+    void RemoveBody(PhysicalBody *body);
     InspectableParamsList GetInspectableParams();
-    PhysicalBody &GetBodyAt(const QPoint &point) const;
+    PhysicalBody *GetBodyAt(const QPoint &point) const;
 };
 
 #endif // SOFTSCENE_H
