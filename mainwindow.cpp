@@ -4,7 +4,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->topButtons->setTitleBarWidget(new QWidget());
+    ui->topButtonsDock->setTitleBarWidget(new QWidget());
 }
 
 MainWindow::~MainWindow()

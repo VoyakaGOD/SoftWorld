@@ -102,7 +102,7 @@
    </attribute>
    <widget class="QWidget" name="palleteContents"/>
   </widget>
-  <widget class="QDockWidget" name="topButtons">
+  <widget class="QDockWidget" name="topButtonsDock">
    <property name="minimumSize">
     <size>
      <width>51</width>
@@ -179,6 +179,10 @@
         <property name="text">
          <string>Stop</string>
         </property>
+        <property name="icon">
+         <iconset resource="icons.qrc">
+          <normaloff>:/icons/Icons/stop.png</normaloff>:/icons/Icons/stop.png</iconset>
+        </property>
        </widget>
       </item>
      </layout>
@@ -214,6 +218,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
