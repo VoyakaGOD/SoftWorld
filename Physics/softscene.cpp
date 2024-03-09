@@ -9,7 +9,7 @@ void SoftScene::Draw(QPainter &painter) const
 
     for(auto body : bodies)
     {
-        body->DrawBy(painter);
+        body->Draw(painter);
     }
 }
 
