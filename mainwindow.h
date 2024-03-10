@@ -18,9 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_sim_stop_btn_clicked();
-
-    void on_sim_run_btn_clicked();
+    void on_run_stop_btn_clicked();
 
 private:
     Ui::MainWindow *ui;
