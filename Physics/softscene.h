@@ -3,7 +3,7 @@
 
 #include <mutex>
 #include "physicalbody.h"
-#include "Inspector/inspectableparamslist.h"
+#include "Inspector/inspectorcontext.h"
 
 class SoftScene
 {
@@ -20,7 +20,7 @@ public:
     void DoNextStep(double delta_time);
     void AddBody(PhysicalBody *body);
     void RemoveBody(PhysicalBody *body);
-    InspectableParamsList GetInspectableParams();
+    void WidenInspectorContext(InspectorContext &context);
     PhysicalBody *GetBodyAt(const QPoint &point) const;
     void Lock();
     void Unlock();

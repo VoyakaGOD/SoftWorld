@@ -50,14 +50,13 @@ void SoftScene::RemoveBody(PhysicalBody *body)
     bodies.remove(body);
 }
 
-InspectableParamsList SoftScene::GetInspectableParams()
+void SoftScene::WidenInspectorContext(InspectorContext &context)
 {
     lock_guard<mutex> lock(synchronizer);
 
-    InspectableParamsList list("scene", 2);
-    list.params.push_back(InspectableDouble("air density", air_density));
-    list.params.push_back(InspectableDouble("g", g));
-    return list;
+    context.SetTargetName("scene");
+    context.AddParam("air density", air_density, (double)0, (double)1000);
+    context.AddParam("g", g, (double)0, (double)100);
 }
 
 PhysicalBody *SoftScene::GetBodyAt(const QPoint &point) const

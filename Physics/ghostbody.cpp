@@ -7,10 +7,8 @@ QRect GhostBody::GetBoundingRect() const {
                  this->origin.y() + this->radius);
 }
 
-InspectableParamsList GhostBody::GetInspectableParams() {
-    InspectableParamsList list("ghost", 1);
-    list.params.push_back(InspectableFloat("radius", radius));
-    return list;
+void GhostBody::WidenInspectorContext(InspectorContext &context) {
+    context.AddParam("radius", radius, (float)10, (float)250);
 }
 
 bool GhostBody::ContainsPoint(const QPoint &point) const {
