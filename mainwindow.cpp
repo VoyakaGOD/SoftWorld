@@ -2,6 +2,8 @@
 #include "./ui_mainwindow.h"
 
 //temporary:
+#include "Inspector/inspectorheader.h"
+
 static bool is_running = true;
 QIcon run_icon;
 QIcon stop_icon;
@@ -12,9 +14,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     ui->topButtonsContents->layout()->setAlignment(ui->run_stop_btn, Qt::AlignHCenter);
-    run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);   //temporary
-    stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off); //temporary
-    MainWindow::on_run_stop_btn_clicked();                                                        //temporary
+    //temporary *********************************************************************************************
+    run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
+    stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
+    MainWindow::on_run_stop_btn_clicked();
+
+    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "test header", 1);
+    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "It's a very very long header", 4);
+
+    //temporary *********************************************************************************************
 }
 
 MainWindow::~MainWindow()

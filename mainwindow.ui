@@ -55,10 +55,16 @@
    </layout>
   </widget>
   <widget class="QDockWidget" name="inspectorDock">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
      <width>100</width>
-     <height>99</height>
+     <height>171</height>
     </size>
    </property>
    <property name="contextMenuPolicy">
@@ -79,7 +85,25 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="inspectorContents"/>
+   <widget class="QWidget" name="inspectorContents">
+    <layout class="QFormLayout" name="inspectorLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+    </layout>
+   </widget>
   </widget>
   <widget class="QDockWidget" name="palleteDock">
    <property name="minimumSize">
@@ -146,7 +170,7 @@
       <height>16777215</height>
      </size>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="topLayout">
      <property name="spacing">
       <number>0</number>
      </property>
