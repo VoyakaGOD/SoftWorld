@@ -8,6 +8,11 @@
 static bool is_running = true;
 QIcon run_icon;
 QIcon stop_icon;
+
+static void test_func()
+{
+    qDebug("everything was deleted!");
+}
 //temporary
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -22,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "some object", 1);
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "actions", 3);
-    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("delete everything", nullptr));
+    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("delete everything", test_func));
 
     //temporary *********************************************************************************************
 }
