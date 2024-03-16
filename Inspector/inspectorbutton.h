@@ -15,7 +15,7 @@ private:
 private slots:
     void HandleClick();
 public:
-    InspectorButton(QWidget *container, QFormLayout *layout, const InspectableAction action);
+    InspectorButton(QWidget *container, QFormLayout *layout, const InspectableAction &action);
     ~InspectorButton();
 };
 

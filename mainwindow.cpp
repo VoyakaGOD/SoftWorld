@@ -3,6 +3,7 @@
 
 //temporary:
 #include "Inspector/inspectorheader.h"
+#include "Inspector/inspectornumericfield.h"
 #include "Inspector/inspectorbutton.h"
 
 static bool is_running = true;
@@ -26,8 +27,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     MainWindow::on_run_stop_btn_clicked();
 
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "some object", 1);
+    new InspectorNumericField(ui->inspectorContents, ui->inspectorLayout, InspectableParam("param1", InspectableParamType::Int));
+    new InspectorNumericField(ui->inspectorContents, ui->inspectorLayout, InspectableParam("param2", InspectableParamType::Double));
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "actions", 3);
     new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("delete everything", test_func));
+    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("clone", test_func));
 
     //temporary *********************************************************************************************
 }
