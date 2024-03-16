@@ -3,6 +3,7 @@
 
 //temporary:
 #include "Inspector/inspectorheader.h"
+#include "Inspector/inspectorbutton.h"
 
 static bool is_running = true;
 QIcon run_icon;
@@ -19,8 +20,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
     MainWindow::on_run_stop_btn_clicked();
 
-    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "test header", 1);
-    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "It's a very very long header", 4);
+    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "some object", 1);
+    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "actions", 3);
+    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("delete everything", nullptr));
 
     //temporary *********************************************************************************************
 }
