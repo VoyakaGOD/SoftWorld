@@ -5,14 +5,26 @@
 #include <QLayout>
 #include "palleteitem.h"
 
-class Pallete : QLayout {
+class Pallete : public QWidget {
     Q_OBJECT
-    void AddPalleteItem(PalleteItem* item) {
-        item->setMinimumHeight(32);
-        item->setMaximumHeight(32);
-        this->addWidget(item);
-    }
-    void RemovePalleteItem(PalleteItem* item) {
-        this->removeWidget(item);
-    }
-}
+
+    SceneView* sceneview;
+    PalleteItem* context_menu_target = nullptr;
+
+    public:
+    QVBoxLayout layout;
+
+    explicit Pallete(QWidget *parent = nullptr);
+
+    void PostInit(SceneView* view);
+
+    void AddPalleteItem(PhysicalBody* body, QString name = "");
+
+    int FindItemByPos(const QPoint &pos);
+
+    public slots:
+        void ShowContextMenu(const QPoint &pos);
+        void RemoveThisPalleteItem();
+};
+
+

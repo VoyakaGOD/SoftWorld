@@ -17,6 +17,8 @@ set(PROJECT_SOURCES
         UI/sceneview.h
         UI/palleteitem.h
         UI/palleteitem.cpp
+        UI/pallete.h
+        UI/pallete.cpp
         Physics/physicalbody.h
         Physics/ghostbody.h
         Physics/ghostbody.cpp

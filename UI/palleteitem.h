@@ -10,12 +10,13 @@ class PalleteItem : public QWidget
     Q_OBJECT
 
     public:
-        explicit PalleteItem(QWidget *parent, SceneView *sceneview, PhysicalBody *body, QString);
+        explicit PalleteItem(QWidget *parent, SceneView *sceneview, PhysicalBody *body, QString str);
+        QString name;
 
     protected:
         SceneView* scene_view_target;
         PhysicalBody* body;
-        QString name;
+
 
         void paintEvent(QPaintEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;

@@ -1,20 +1,26 @@
 #include "palleteitem.h"
 #include <iostream>
-
+#include <QStyle>
+#include <QMouseEvent>
 
 PalleteItem::PalleteItem(QWidget *parent, SceneView *scene_view, PhysicalBody* body, QString str)
     : QWidget(parent), scene_view_target(scene_view), body(body), name(str) {
         this->setMaximumHeight(32);
         this->setMinimumHeight(32);
+        this->setFocusPolicy(Qt::ClickFocus);
     }
 
 void PalleteItem::paintEvent(QPaintEvent *event) {
+    cout << "paint" << endl;
     int height = this->size().height();
-    int pos = 0;
     if (height > 30) {
         height = 30;
     }
     QPainter painter(this);
+    this->style()->drawItemText(&painter,
+        this->rect().adjusted(height, 0, 0, 0), 0, this->palette()
+        , 1, this->name);
+
     if (this->body) {
         QRect rect = this->body->GetBoundingRect();
         qreal scale = min(((qreal)height) / rect.height(), ((qreal)height) / rect.width());
@@ -25,10 +31,10 @@ void PalleteItem::paintEvent(QPaintEvent *event) {
         painter.setBrush(Qt::red);
         painter.drawRect(QRect(0,0,height,height));
     }
-    pos += height;
-    painter.drawText(QPoint(pos, height), this->name);
+
 }
 
 void PalleteItem::mousePressEvent(QMouseEvent *event) {
-    this->scene_view_target->SetInsertion(this->body);
+    if (event->button() == Qt::LeftButton)
+        this->scene_view_target->SetInsertion(this->body);
 }
