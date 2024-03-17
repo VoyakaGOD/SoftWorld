@@ -3,7 +3,7 @@
 
 //temporary:
 #include "Inspector/inspectorheader.h"
-#include "Inspector/inspectornumericfield.h"
+#include "Inspector/inspectorintegerfield.h"
 #include "Inspector/inspectorbutton.h"
 
 static bool is_running = true;
@@ -13,6 +13,12 @@ QIcon stop_icon;
 static void test_func()
 {
     qDebug("everything was deleted!");
+}
+
+int int_param_value = 0;
+static void print_func()
+{
+    qDebug("int_param = %d", int_param_value);
 }
 //temporary
 
@@ -27,11 +33,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     MainWindow::on_run_stop_btn_clicked();
 
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "some object", 1);
-    new InspectorNumericField(ui->inspectorContents, ui->inspectorLayout, InspectableParam("param1", InspectableParamType::Int));
-    new InspectorNumericField(ui->inspectorContents, ui->inspectorLayout, InspectableParam("param2", InspectableParamType::Double));
+
+    CertainInspectableParam<int> int_param("integer", InspectableParamType::Int, int_param_value, 12, 25);
+    new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
+    auto d_par = new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
+
+    auto d_hdr = new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "d-hdr", 3);
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "actions", 3);
+    auto d_btn = new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("d-btn", test_func));
     new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("delete everything", test_func));
-    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("clone", test_func));
+    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("print", print_func));
+
+    delete d_btn;
+    delete d_hdr;
+    delete d_par;
 
     //temporary *********************************************************************************************
 }

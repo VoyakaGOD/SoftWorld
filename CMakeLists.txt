@@ -36,7 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Inspector/inspectableparam.h
 
         icons.qrc
-        Inspector/inspectornumericfield.h Inspector/inspectornumericfield.cpp
+        Inspector/inspectorintegerfield.h
         Inspector/inspectoritem.h
         Inspector/inspectorheader.h Inspector/inspectorheader.cpp
         Inspector/inspectorbutton.h Inspector/inspectorbutton.cpp
