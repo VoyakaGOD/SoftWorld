@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //CertainInspectableParam color_param("color", InspectableParamType::Color, color_param_value);
 
-    CertainInspectableParam int_param("integer", InspectableParamType::Int, int_param_value, 12, 25);
+    CertainInspectableParam int_param("integer", InspectableParamType::Int, int_param_value, 12, 125);
     new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
     auto d_par = new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
 

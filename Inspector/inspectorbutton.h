@@ -10,7 +10,6 @@ class InspectorButton : public InspectorItem
 {
 private:
     QPushButton *button;
-    Action action;
 public:
     InspectorButton(QWidget *container, QFormLayout *layout, const InspectableAction &action);
     ~InspectorButton();
