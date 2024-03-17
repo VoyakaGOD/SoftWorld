@@ -8,7 +8,7 @@
 class Pallete : public QWidget {
     Q_OBJECT
 
-    SceneView* sceneview;
+    SceneView* sceneview = nullptr;
     PalleteItem* context_menu_target = nullptr;
 
     public:

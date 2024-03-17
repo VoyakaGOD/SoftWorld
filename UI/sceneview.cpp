@@ -5,7 +5,7 @@
 extern SoftScene main_scene;
 
 SceneView::SceneView(QWidget *parent)
-    : QWidget(parent), scene(&main_scene), selected_body(nullptr) {
+    : QWidget(parent), scene(&main_scene) {
     //this->SetViewport(this->scene->world_rect);
 }
 

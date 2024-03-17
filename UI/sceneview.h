@@ -15,11 +15,11 @@ class SceneView : public QWidget
         qreal yscale = 1;
         SoftScene* scene = NULL;
 
-        PhysicalBody* selected_body;
-        bool body_grabbed;
+        PhysicalBody* selected_body = nullptr;
+        bool body_grabbed = false;
         QPoint grabded_point;
 
-        PhysicalBody* inserted_body;
+        PhysicalBody* inserted_body = nullptr;
 
         explicit SceneView(QWidget *parent = nullptr);
 
