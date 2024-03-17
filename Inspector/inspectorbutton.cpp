@@ -4,16 +4,10 @@ InspectorButton::InspectorButton(QWidget *container, QFormLayout *layout, const 
 {
     button = new QPushButton(action.name, container);
     layout->addRow(button);
-    this->action = action.action;
-    connect(button, SIGNAL(clicked()), this, SLOT(HandleClick()));
+    CONNECT(button, &QPushButton::clicked, action.action);
 }
 
 InspectorButton::~InspectorButton()
 {
     delete button;
-}
-
-void InspectorButton::HandleClick()
-{
-    action();
 }

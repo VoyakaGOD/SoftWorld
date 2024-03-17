@@ -14,7 +14,6 @@ private:
     QLabel *label;
     QSpinBox *box;
     T &param_value;
-
 public:
     InspectorIntegerField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<T> &param) : param_value(param.value)
     {
@@ -24,7 +23,10 @@ public:
         box->setMinimum(static_cast<int>(param.min));
         box->setContextMenuPolicy(Qt::PreventContextMenu);
         layout->addRow(label, box);
+        CONNECT(box, &QSpinBox::valueChanged, [=](int value){ param.value = value; });
     }
+
+    void foo(int a);
 
     ~InspectorIntegerField()
     {

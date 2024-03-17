@@ -1,7 +1,7 @@
 #ifndef INSPECTORITEM_H
 #define INSPECTORITEM_H
 
-using namespace std;
+#define CONNECT QObject::connect
 
 class InspectorItem {};
 
