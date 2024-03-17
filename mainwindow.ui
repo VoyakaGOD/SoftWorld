@@ -50,6 +50,9 @@
         <height>200</height>
        </size>
       </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
    </layout>
@@ -84,8 +87,8 @@
   <widget class="QDockWidget" name="palleteDock">
    <property name="minimumSize">
     <size>
-     <width>100</width>
-     <height>46</height>
+     <width>107</width>
+     <height>62</height>
     </size>
    </property>
    <property name="contextMenuPolicy">
@@ -106,7 +109,9 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="palleteContents"/>
+   <widget class="QWidget" name="palleteContents">
+    <layout class="QVBoxLayout" name="verticalLayout_2"/>
+   </widget>
   </widget>
   <widget class="QDockWidget" name="topButtonsDock">
    <property name="minimumSize">

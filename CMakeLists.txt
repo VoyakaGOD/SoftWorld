@@ -15,6 +15,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 set(PROJECT_SOURCES
         UI/sceneview.cpp
         UI/sceneview.h
+        UI/palleteitem.h
+        UI/palleteitem.cpp
         Physics/physicalbody.h
         Physics/ghostbody.h
         Physics/ghostbody.cpp

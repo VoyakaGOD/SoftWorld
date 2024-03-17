@@ -1,11 +1,15 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <UI/palleteitem.h>
+#include <Physics/ghostbody.h>
 
 //temporary:
 static bool is_running = true;
 QIcon run_icon;
 QIcon stop_icon;
 //temporary
+
+PalleteItem* ghost_pi;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -15,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);   //temporary
     stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off); //temporary
     MainWindow::on_run_stop_btn_clicked();                                                        //temporary
+
+    ghost_pi = new PalleteItem(ui->palleteDock, ui->main_view, new GhostBody(), "test");
+    ui->verticalLayout_2->addWidget(ghost_pi);
+
 }
 
 MainWindow::~MainWindow()

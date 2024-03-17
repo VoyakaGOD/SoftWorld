@@ -1,3 +1,5 @@
+#pragma once
+
 #include <QWidget>
 #include <QGraphicsView>
 #include <QPainter>
@@ -17,9 +19,12 @@ class SceneView : public QWidget
         bool body_grabbed;
         QPoint grabded_point;
 
+        PhysicalBody* inserted_body;
+
         explicit SceneView(QWidget *parent = nullptr);
 
         void SetViewport(QRect &rect);
+        void SetInsertion(PhysicalBody* body);
         QPoint ToSceneCoordinates(QPoint point);
 
     protected:

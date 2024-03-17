@@ -20,6 +20,12 @@ void SceneView::paintEvent(QPaintEvent * event) {
     painter.scale(this->xscale, this->yscale);
     painter.translate(this->translation);
     this->scene->Draw(painter);
+
+    if (this->inserted_body){
+        QPoint mouse_pos = ToSceneCoordinates(this->mapFromGlobal(QCursor::pos()));
+        painter.translate(mouse_pos);
+        this->inserted_body->Draw(painter);
+    }
 }
 
 QPoint SceneView::ToSceneCoordinates(QPoint point) {
@@ -31,6 +37,14 @@ QPoint SceneView::ToSceneCoordinates(QPoint point) {
 
 void SceneView::mousePressEvent(QMouseEvent *event) {
     QPoint pos = this->ToSceneCoordinates(event->pos());
+
+    if (inserted_body) {
+        PhysicalBody* new_body = this->inserted_body->Clone();
+        new_body->MoveBy(event->pos());
+        this->scene->AddBody(new_body);
+        this->inserted_body = nullptr;
+    }
+
     PhysicalBody* body = this->scene->GetBodyAt(pos);
     if (body) {
         this->selected_body = body;
@@ -52,5 +66,11 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
         this->selected_body->MoveBy(offset);
         this->update();
     }
+    if (inserted_body) {
+        this->update();
+    }
+}
 
+void SceneView::SetInsertion(PhysicalBody* body) {
+    this->inserted_body = body;
 }
