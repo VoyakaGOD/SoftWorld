@@ -1,5 +1,10 @@
 #include "inspectorcolorfield.h"
 
+static QColor GetRandomColor()
+{
+    return QColor(rand() % 255, rand() %255, rand() % 255);
+}
+
 InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<QColor> &param)
 {
     label = new QLabel(param.name, container);
@@ -19,9 +24,9 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
 
     layout->addRow(label, field);
 
-    auto on_update = [=, this](const QColor &color){ param.value = color; ChangeColor(color); };
-    CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ if(text.length() == 7) on_update(QColor(text)); });
-    CONNECT(icon, &ColorIcon::clicked, [=](){ on_update(param.value == Qt::white ? Qt::black : Qt::white); });
+    auto update = [=, this](const QColor &color){ param.value = color; ChangeColor(color); };
+    CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ if(text.length() == 7) update(QColor(text)); });
+    CONNECT(icon, &ColorIcon::clicked, [=](){ update(GetRandomColor()); });
 }
 
 InspectorColorField::~InspectorColorField()
