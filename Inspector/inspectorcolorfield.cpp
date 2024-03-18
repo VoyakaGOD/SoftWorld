@@ -4,7 +4,7 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
 {
     label = new QLabel(param.name, container);
 
-    icon = new ColorIcon(param.value, 30, container);
+    icon = new ColorIcon(param.value, 20, container);
 
     input = new QLineEdit(param.value.name(), container);
     QString pattern = QString("#%1%1%1%1%1%1").arg("[0-9a-fA-F]");
@@ -20,7 +20,7 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
     layout->addRow(label, field);
 
     auto on_update = [=, this](const QColor &color){ param.value = color; ChangeColor(color); };
-    CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ on_update(QColor(text)); });
+    CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ if(text.length() == 7) on_update(QColor(text)); });
     CONNECT(icon, &ColorIcon::clicked, [=](){ on_update(param.value == Qt::white ? Qt::black : Qt::white); });
 }
 
@@ -35,4 +35,5 @@ InspectorColorField::~InspectorColorField()
 void InspectorColorField::ChangeColor(const QColor &color)
 {
     icon->SetColor(color);
+    input->setText(color.name());
 }
