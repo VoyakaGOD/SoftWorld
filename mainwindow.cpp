@@ -4,6 +4,7 @@
 //temporary:
 #include "Inspector/inspectorheader.h"
 #include "Inspector/inspectorintegerfield.h"
+#include "Inspector/inspectorcolorfield.h"
 #include "Inspector/inspectorbutton.h"
 
 static bool is_running = true;
@@ -36,7 +37,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "some object", 1);
 
-    //CertainInspectableParam color_param("color", InspectableParamType::Color, color_param_value);
+    CertainInspectableParam color_param("color", InspectableParamType::Color, color_param_value);
+    new InspectorColorField(ui->inspectorContents, ui->inspectorLayout, color_param);
+    //QColorDialog::getColor();
 
     CertainInspectableParam int_param("integer", InspectableParamType::Int, int_param_value, 12, 125);
     new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);

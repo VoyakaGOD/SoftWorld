@@ -19,16 +19,19 @@ private:
 public:
     InspectorIntegerField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<T> &param)
     {
+        int max_value = static_cast<int>(param.max);
+        int min_value = static_cast<int>(param.min);
+
         label = new QLabel(param.name, container);
 
         box = new QSpinBox(container);
-        box->setMaximum(static_cast<int>(param.max));
-        box->setMinimum(static_cast<int>(param.min));
+        box->setMaximum(max_value);
+        box->setMinimum(min_value);
         box->setContextMenuPolicy(Qt::PreventContextMenu);
 
         slider = new QSlider(Qt::Horizontal, container);
-        slider->setMaximum(static_cast<int>(param.max));
-        slider->setMinimum(static_cast<int>(param.min));
+        slider->setMaximum(max_value);
+        slider->setMinimum(min_value);
 
         field = new QHBoxLayout();
         field->addWidget(box, 25);
@@ -38,6 +41,9 @@ public:
 
         CONNECT(box, &QSpinBox::valueChanged, [=](int value){ param.value = value; UpdateValue(value); });
         CONNECT(slider, &QSlider::valueChanged, [=](int value){ param.value = value; UpdateValue(value); });
+
+        param.value = qBound(min_value, param.value, max_value);
+        UpdateValue(param.value);
     }
 
     ~InspectorIntegerField()
