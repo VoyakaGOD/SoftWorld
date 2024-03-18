@@ -3,6 +3,12 @@
 SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
     world_rect(world_rect), air_density(air_density), g(g) {}
 
+SoftScene::~SoftScene() {
+    for (PhysicalBody* body: bodies) {
+        delete body;
+    }
+}
+
 void SoftScene::Draw(QPainter &painter) const
 {
     lock_guard<mutex> lock(synchronizer);

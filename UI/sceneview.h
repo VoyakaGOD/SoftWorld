@@ -17,7 +17,7 @@ class SceneView : public QWidget
 
         PhysicalBody* selected_body = nullptr;
         bool body_grabbed = false;
-        QPoint grabded_point;
+        QPoint grabded_point = QPoint();
 
         PhysicalBody* inserted_body = nullptr;
 

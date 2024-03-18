@@ -16,6 +16,7 @@ private:
 
 public:
     SoftScene(const QRect &world_rect, double air_density, double g);
+    ~SoftScene();
     void Draw(QPainter &painter) const;
     void DoNextStep(double delta_time);
     void AddBody(PhysicalBody *body);

@@ -12,8 +12,10 @@ PalleteItem::PalleteItem(QWidget *parent, SceneView *scene_view, PhysicalBody* b
 
 PalleteItem::~PalleteItem() {
     if (this->body) {
-        if (this->scene_view_target && this->scene_view_target->inserted_body == this->body) {
-            this->scene_view_target->SetInsertion(nullptr);
+        if (this->scene_view_target) {
+            if (this->scene_view_target->inserted_body == this->body) {
+                this->scene_view_target->SetInsertion(nullptr);
+            }
         }
         delete this->body;
     }

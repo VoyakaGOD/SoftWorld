@@ -18,8 +18,17 @@ Pallete::~Pallete() {
     while (this->layout.count() > 0) {
         QLayoutItem* item = this->layout.itemAt(0);
         QWidget* widget = item->widget();
+        if (widget) {
+            this->layout.removeWidget(widget);
+            PalleteItem* pi = dynamic_cast<PalleteItem*>(widget);
+            if (pi) { // TODO: this is not needed with proper destruction order and may cause UB when deleting an active pallete item
+                pi->scene_view_target = nullptr;
+            }
+            delete widget;
+            continue;
+        }
         this->layout.removeItem(item);
-        delete widget;
+        delete item;
     }
 }
 
