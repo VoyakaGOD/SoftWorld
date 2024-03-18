@@ -14,6 +14,16 @@ Pallete::Pallete(QWidget *parent)
         this, SLOT(ShowContextMenu(const QPoint &)));
 }
 
+Pallete::~Pallete() {
+    while (this->layout.count() > 0) {
+        QLayoutItem* item = this->layout.itemAt(0);
+        QWidget* widget = item->widget();
+        this->layout.removeItem(item);
+        delete widget;
+    }
+}
+
+
 void Pallete::PostInit(SceneView* view) {
     this->sceneview = view;
     this->AddPalleteItem(new GhostBody(), "test");

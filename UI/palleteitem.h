@@ -11,6 +11,7 @@ class PalleteItem : public QWidget
 
     public:
         explicit PalleteItem(QWidget *parent, SceneView *sceneview, PhysicalBody *body, QString str);
+        ~PalleteItem();
         QString name;
 
     protected:

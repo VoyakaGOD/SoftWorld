@@ -10,8 +10,16 @@ PalleteItem::PalleteItem(QWidget *parent, SceneView *scene_view, PhysicalBody* b
         this->setFocusPolicy(Qt::ClickFocus);
     }
 
+PalleteItem::~PalleteItem() {
+    if (this->body) {
+        if (this->scene_view_target && this->scene_view_target->inserted_body == this->body) {
+            this->scene_view_target->SetInsertion(nullptr);
+        }
+        delete this->body;
+    }
+}
+
 void PalleteItem::paintEvent(QPaintEvent *event) {
-    cout << "paint" << endl;
     int height = this->size().height();
     if (height > 30) {
         height = 30;

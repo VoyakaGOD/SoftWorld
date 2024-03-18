@@ -16,6 +16,8 @@ class Pallete : public QWidget {
 
     explicit Pallete(QWidget *parent = nullptr);
 
+    ~Pallete();
+
     void PostInit(SceneView* view);
 
     void AddPalleteItem(PhysicalBody* body, QString name = "");
