@@ -42,6 +42,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Inspector/inspectorbutton.h Inspector/inspectorbutton.cpp
         Inspector/inspectorcolorfield.h Inspector/inspectorcolorfield.cpp
         Inspector/slidermanagers.h Inspector/slidermanagers.cpp
+        Inspector/coloricon.h Inspector/coloricon.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
