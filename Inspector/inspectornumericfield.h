@@ -8,8 +8,9 @@
 #include <QSlider>
 #include "inspectableparam.h"
 #include "inspectoritem.h"
+#include "slidermanagers.h"
 
-template <typename T, typename SpinBoxT, typename ImplicitT>
+template <typename T, typename SpinBoxT, typename ManagerT>
 class InspectorNumericField : public InspectorItem
 {
 private:
@@ -17,11 +18,12 @@ private:
     SpinBoxT *box;
     QSlider *slider;
     QHBoxLayout *field;
+    ManagerT manager;
 public:
     InspectorNumericField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<T> &param)
     {
-        ImplicitT max_value = static_cast<ImplicitT>(param.max);
-        ImplicitT min_value = static_cast<ImplicitT>(param.min);
+        T max_value = param.max;
+        T min_value = param.min;
 
         label = new QLabel(param.name, container);
 
@@ -31,8 +33,7 @@ public:
         box->setContextMenuPolicy(Qt::PreventContextMenu);
 
         slider = new QSlider(Qt::Horizontal, container);
-        slider->setMaximum(max_value);
-        slider->setMinimum(min_value);
+        manager = ManagerT(slider, min_value, max_value);
 
         field = new QHBoxLayout();
         field->addWidget(box, 25);
@@ -40,12 +41,12 @@ public:
         field->setSpacing(7);
         layout->addRow(label, field);
 
-        auto on_update = [=, this](ImplicitT value){ param.value = static_cast<T>(value); UpdateValue(value); };
-        CONNECT(box, &SpinBoxT::valueChanged, on_update);
-        CONNECT(slider, &QSlider::valueChanged, on_update);
-
         param.value = qBound(min_value, param.value, max_value);
         UpdateValue(param.value);
+
+        auto on_update = [=, this](T value){ param.value = value; UpdateValue(value); };
+        CONNECT(box, &SpinBoxT::valueChanged, on_update);
+        CONNECT(slider, &QSlider::valueChanged, [=, this](int value){ on_update(manager.ConvertFromRaw(value)); });
     }
 
     ~InspectorNumericField()
@@ -56,17 +57,17 @@ public:
         delete field;
     }
 private:
-    void UpdateValue(ImplicitT value)
+    void UpdateValue(T value)
     {
         box->setValue(value);
-        slider->setValue(value);
+        slider->setValue(manager.ConvertToRaw(value));
     }
 };
 
 template <typename T>
-using InspectorIntegerField = InspectorNumericField<T, QSpinBox, int>;
+using InspectorIntegerField = InspectorNumericField<T, QSpinBox, IntSliderManager>;
 
 template <typename T>
-using InspectorFractionalField = InspectorNumericField<T, QDoubleSpinBox, double>;
+using InspectorFractionalField = InspectorNumericField<T, QDoubleSpinBox, DoubleSliderManager>;
 
 #endif // INSPECTORNUMERICFIELD_H

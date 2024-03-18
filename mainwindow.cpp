@@ -18,12 +18,13 @@ static void test_func()
 
 int int_param_value = 0;
 QColor color_param_value = QColorConstants::Blue;
-float float_param_value;
-double double_param_value;
+float float_param_value = 0;
+double double_param_value = 0;
 static void print_func()
 {
-    qDebug("int_param = %d, color_param = #%d%d%d",
-           int_param_value, color_param_value.red(), color_param_value.green(), color_param_value.blue());
+    qDebug("int_param = %d, color_param = #%d%d%d, float_param = %f, double_param = %f",
+           int_param_value, color_param_value.red(), color_param_value.green(), color_param_value.blue(),
+           float_param_value, double_param_value);
 }
 //temporary
 
@@ -43,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     new InspectorColorField(ui->inspectorContents, ui->inspectorLayout, color_param);
     //QColorDialog::getColor();
 
-    CertainInspectableParam int_param("integer", InspectableParamType::Int, int_param_value, 12, 125);
+    CertainInspectableParam int_param("integer", InspectableParamType::Int, int_param_value, 12, 25);
     new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
     auto d_par = new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
 
