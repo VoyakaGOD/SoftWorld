@@ -6,7 +6,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QRegularExpressionValidator>
-#include "inspectableparam.h"
 #include "inspectoritem.h"
 #include "coloricon.h"
 
@@ -19,7 +18,7 @@ private:
     QHBoxLayout *field;
     void ChangeColor(const QColor &color);
 public:
-    InspectorColorField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<QColor> &param);
+    InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value);
     ~InspectorColorField();
 };
 

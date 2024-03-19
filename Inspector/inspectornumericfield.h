@@ -6,7 +6,6 @@
 #include <QDoubleSpinBox>
 #include <QFormLayout>
 #include <QSlider>
-#include "inspectableparam.h"
 #include "inspectoritem.h"
 #include "slidermanagers.h"
 
@@ -20,12 +19,9 @@ private:
     QHBoxLayout *field;
     ManagerT manager;
 public:
-    InspectorNumericField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<T> &param)
+    InspectorNumericField(QWidget *container, QFormLayout *layout, const char *name, T &value, T min_value, T max_value)
     {
-        T max_value = param.max;
-        T min_value = param.min;
-
-        label = new QLabel(param.name, container);
+        label = new QLabel(name, container);
 
         box = new SpinBoxT(container);
         box->setMaximum(max_value);
@@ -41,12 +37,12 @@ public:
         field->setSpacing(7);
         layout->addRow(label, field);
 
-        param.value = qBound(min_value, param.value, max_value);
-        UpdateValue(param.value);
+        value = qBound(min_value, value, max_value);
+        UpdateValue(value);
 
-        auto on_update = [=, this](T value){ param.value = value; UpdateValue(value); };
-        CONNECT(box, &SpinBoxT::valueChanged, on_update);
-        CONNECT(slider, &QSlider::valueChanged, [=, this](int value){ on_update(manager.ConvertFromRaw(value)); });
+        auto update = [&value, this](T new_value){ value = new_value; UpdateValue(new_value); };
+        CONNECT(box, &SpinBoxT::valueChanged, update);
+        CONNECT(slider, &QSlider::valueChanged, [update, this](int value){ update(manager.ConvertFromRaw(value)); });
     }
 
     ~InspectorNumericField()

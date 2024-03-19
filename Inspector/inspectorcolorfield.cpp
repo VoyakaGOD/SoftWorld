@@ -5,13 +5,13 @@ static QColor GetRandomColor()
     return QColor(rand() % 255, rand() %255, rand() % 255);
 }
 
-InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const CertainInspectableParam<QColor> &param)
+InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value)
 {
-    label = new QLabel(param.name, container);
+    label = new QLabel(name, container);
 
-    icon = new ColorIcon(param.value, 20, container);
+    icon = new ColorIcon(value, 20, container);
 
-    input = new QLineEdit(param.value.name(), container);
+    input = new QLineEdit(value.name(), container);
     QString pattern = QString("#%1%1%1%1%1%1").arg("[0-9a-fA-F]");
     QRegularExpressionValidator *validator = new QRegularExpressionValidator(QRegularExpression(pattern));
     input->setValidator(validator);
@@ -24,7 +24,7 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
 
     layout->addRow(label, field);
 
-    auto update = [=, this](const QColor &color){ param.value = color; ChangeColor(color); };
+    auto update = [&value, this](const QColor &color){value = color;  ChangeColor(color); };
     CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ if(text.length() == 7) update(QColor(text)); });
     CONNECT(icon, &ColorIcon::clicked, [=](){ update(GetRandomColor()); });
 }

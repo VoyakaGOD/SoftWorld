@@ -6,6 +6,7 @@
 #include "inspectorheader.h"
 #include "inspectorbutton.h"
 #include "inspectorcolorfield.h"
+#include "inspectornumericfield.h"
 
 using namespace std;
 

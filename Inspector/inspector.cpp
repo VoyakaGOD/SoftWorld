@@ -31,9 +31,20 @@ void Inspector::AddAction(const char *name, Action action)
 
 void Inspector::AddParam(const char *name, QColor &value)
 {
-    items.push_back(new InspectorColorField(container, layout, CertainInspectableParam(name, InspectableParamType::Int, value)));
+    items.push_back(new InspectorColorField(container, layout, name, value));
 }
 
-void Inspector::AddParam(const char *name, int &value, int min, int max) {}
-void Inspector::AddParam(const char *name, double &value, double min, double max) {}
-void Inspector::AddParam(const char *name, float &value, float min, float max) {}
+void Inspector::AddParam(const char *name, int &value, int min, int max)
+{
+    items.push_back(new InspectorIntegerField(container, layout, name, value, min, max));
+}
+
+void Inspector::AddParam(const char *name, double &value, double min, double max)
+{
+    items.push_back(new InspectorFractionalField(container, layout, name, value, min, max));
+}
+
+void Inspector::AddParam(const char *name, float &value, float min, float max)
+{
+    items.push_back(new InspectorFractionalField(container, layout, name, value, min, max));
+}

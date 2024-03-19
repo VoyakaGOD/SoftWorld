@@ -33,7 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Physics/softscene.h Physics/softscene.cpp
         Inspector/action.h
 
-        Inspector/inspectableparam.h
+
 
         icons.qrc
         Inspector/inspectornumericfield.h
