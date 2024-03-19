@@ -37,6 +37,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
         this->body_grabbed = true;
         this->grabded_point = body->GetLocalCoordinate(pos);
     }
+    this->update(); //sorry, but it for testing
 }
 
 void SceneView::mouseReleaseEvent(QMouseEvent *event) {
@@ -52,5 +53,4 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
         this->selected_body->MoveBy(offset);
         this->update();
     }*/
-
 }

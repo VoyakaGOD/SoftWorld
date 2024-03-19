@@ -55,8 +55,12 @@ public:
 private:
     void UpdateValue(T value)
     {
+        box->blockSignals(true);
+        slider->blockSignals(true);
         box->setValue(value);
         slider->setValue(manager.ConvertToRaw(value));
+        box->blockSignals(false);
+        slider->blockSignals(false);
     }
 };
 

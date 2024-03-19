@@ -7,6 +7,10 @@
 #include "Inspector/inspectorcolorfield.h"
 #include "Inspector/inspectorbutton.h"
 #include "Inspector/inspector.h"
+#include "Physics/editonlybody.h"
+#include "Physics/softscene.h"
+
+extern SoftScene main_scene;
 
 static bool is_running = true;
 QIcon run_icon;
@@ -46,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     Inspector::AddParam("color", color_param_value);
     Inspector::AddParam("integer", int_param_value, 12, 25);
     Inspector::AddParam("float", float_param_value, -5.0f, 5.0f);
-    Inspector::AddParam("double", double_param_value, -5.0e7, 5.0e7);
+    Inspector::AddParam("double", double_param_value, -1e3, 1e3);
 
     Inspector::AddHeader("actions", NORMAL_HEADER);
     Inspector::AddAction("delete everything", test_func);
@@ -54,6 +58,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //Inspector::Clear();
     Inspector::AddHeader("----------------------", SMALL_HEADER);
+
+    EditOnlyBody *test_body = new EditOnlyBody(QPoint(300,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
+    main_scene.AddBody(test_body);
+    test_body->WidenInspectorContext();
 
     //temporary *********************************************************************************************
 }
