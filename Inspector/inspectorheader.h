@@ -5,12 +5,16 @@
 #include <QFormLayout>
 #include "inspectoritem.h"
 
+#define SMALL_HEADER 5
+#define NORMAL_HEADER 3
+#define LARGE_HEADER 1
+
 class InspectorHeader : public InspectorItem
 {
 private:
     QLabel *label;
 public:
-    InspectorHeader(QWidget *container, QFormLayout *layout, const char *text, int priority);
+    InspectorHeader(QWidget *container, QFormLayout *layout, const char *text, int size);
     ~InspectorHeader();
 };
 

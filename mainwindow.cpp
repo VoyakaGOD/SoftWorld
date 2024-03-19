@@ -6,6 +6,7 @@
 #include "Inspector/inspectornumericfield.h"
 #include "Inspector/inspectorcolorfield.h"
 #include "Inspector/inspectorbutton.h"
+#include "Inspector/inspector.h"
 
 static bool is_running = true;
 QIcon run_icon;
@@ -38,7 +39,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
     MainWindow::on_run_stop_btn_clicked();
 
-    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "some object", 1);
+
+    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout);
+    Inspector::AddHeader("some object", LARGE_HEADER);
 
     CertainInspectableParam color_param("color", InspectableParamType::Color, color_param_value);
     new InspectorColorField(ui->inspectorContents, ui->inspectorLayout, color_param);
@@ -52,15 +55,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     CertainInspectableParam double_param("double", InspectableParamType::Double, double_param_value, -5.0e7, 5.0e7);
     new InspectorFractionalField(ui->inspectorContents, ui->inspectorLayout, double_param);
 
-    auto d_hdr = new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "d-hdr", 3);
-    new InspectorHeader(ui->inspectorContents, ui->inspectorLayout, "actions", 3);
-    auto d_btn = new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("d-btn", test_func));
-    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("delete everything", test_func));
-    new InspectorButton(ui->inspectorContents, ui->inspectorLayout, InspectableAction("print", print_func));
+    Inspector::AddHeader("actions", NORMAL_HEADER);
+    Inspector::AddAction("delete everything", test_func);
+    Inspector::AddAction("print", print_func);
 
-    delete d_btn;
-    delete d_hdr;
     delete d_par;
+
+    Inspector::Clear();
+    Inspector::AddHeader("----------------------", SMALL_HEADER);
 
     //temporary *********************************************************************************************
 }

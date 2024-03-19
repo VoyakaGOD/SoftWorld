@@ -3,6 +3,10 @@
 
 #define CONNECT QObject::connect
 
-class InspectorItem {};
+class InspectorItem
+{
+public:
+    virtual ~InspectorItem();
+};
 
 #endif // INSPECTORITEM_H
