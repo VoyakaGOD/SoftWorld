@@ -31,8 +31,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         Physics/drawingstyle.h Physics/drawingstyle.cpp
         Physics/softscene.h Physics/softscene.cpp
-        Inspector/inspectableaction.cpp Inspector/inspectableaction.h
-        Inspector/inspectorcontext.cpp Inspector/inspectorcontext.h
+        Inspector/action.h
+
         Inspector/inspectableparam.h
 
         icons.qrc

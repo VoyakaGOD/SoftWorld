@@ -3,7 +3,7 @@
 
 #include <mutex>
 #include "physicalbody.h"
-#include "Inspector/inspectorcontext.h"
+#include "Inspector/inspector.h"
 
 class SoftScene
 {
@@ -20,7 +20,7 @@ public:
     void DoNextStep(double delta_time);
     void AddBody(PhysicalBody *body);
     void RemoveBody(PhysicalBody *body);
-    void WidenInspectorContext(InspectorContext &context);
+    void WidenInspectorContext();
     PhysicalBody *GetBodyAt(const QPoint &point) const;
     void Lock();
     void Unlock();

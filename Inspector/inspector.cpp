@@ -2,7 +2,7 @@
 
 QWidget *Inspector::container;
 QFormLayout *Inspector::layout;
-std::vector<InspectorItem *> Inspector::items;
+vector<InspectorItem *> Inspector::items;
 
 Inspector::Inspector() {}
 
@@ -26,5 +26,14 @@ void Inspector::AddHeader(const char *text, int size)
 
 void Inspector::AddAction(const char *name, Action action)
 {
-    items.push_back(new InspectorButton(container, layout, InspectableAction(name, action)));
+    items.push_back(new InspectorButton(container, layout, name, action));
 }
+
+void Inspector::AddParam(const char *name, QColor &value)
+{
+    items.push_back(new InspectorColorField(container, layout, CertainInspectableParam(name, InspectableParamType::Int, value)));
+}
+
+void Inspector::AddParam(const char *name, int &value, int min, int max) {}
+void Inspector::AddParam(const char *name, double &value, double min, double max) {}
+void Inspector::AddParam(const char *name, float &value, float min, float max) {}

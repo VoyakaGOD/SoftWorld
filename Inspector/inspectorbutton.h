@@ -3,15 +3,15 @@
 
 #include <QPushButton>
 #include <QFormLayout>
-#include "inspectableaction.h"
 #include "inspectoritem.h"
+#include "action.h"
 
 class InspectorButton : public InspectorItem
 {
 private:
     QPushButton *button;
 public:
-    InspectorButton(QWidget *container, QFormLayout *layout, const InspectableAction &action);
+    InspectorButton(QWidget *container, QFormLayout *layout, const char *name, Action action);
     ~InspectorButton();
 };
 

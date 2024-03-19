@@ -43,12 +43,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     Inspector::Mount(ui->inspectorContents, ui->inspectorLayout);
     Inspector::AddHeader("some object", LARGE_HEADER);
 
-    CertainInspectableParam color_param("color", InspectableParamType::Color, color_param_value);
-    new InspectorColorField(ui->inspectorContents, ui->inspectorLayout, color_param);
+    Inspector::AddParam("color", color_param_value);
 
     CertainInspectableParam int_param("integer", InspectableParamType::Int, int_param_value, 12, 25);
     new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
-    auto d_par = new InspectorIntegerField(ui->inspectorContents, ui->inspectorLayout, int_param);
 
     CertainInspectableParam float_param("float", InspectableParamType::Float, float_param_value, -5.0f, 5.0f);
     new InspectorFractionalField(ui->inspectorContents, ui->inspectorLayout, float_param);
@@ -59,9 +57,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     Inspector::AddAction("delete everything", test_func);
     Inspector::AddAction("print", print_func);
 
-    delete d_par;
-
-    Inspector::Clear();
+    //Inspector::Clear();
     Inspector::AddHeader("----------------------", SMALL_HEADER);
 
     //temporary *********************************************************************************************

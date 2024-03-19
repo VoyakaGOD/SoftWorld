@@ -5,14 +5,14 @@
 #include <QRect>
 #include <QPainter>
 #include "drawingstyle.h"
-#include "Inspector/inspectorcontext.h"
+#include "Inspector/inspector.h"
 
 class PhysicalBody
 {
 //general methods
 public:
     virtual QRect GetBoundingRect() const = 0;
-    virtual void WidenInspectorContext(InspectorContext &context) = 0;
+    virtual void WidenInspectorContext() = 0;
     virtual bool ContainsPoint(const QPoint &point) const = 0;
     virtual PhysicalBody *Clone() const = 0;
 

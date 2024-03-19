@@ -50,13 +50,13 @@ void SoftScene::RemoveBody(PhysicalBody *body)
     bodies.remove(body);
 }
 
-void SoftScene::WidenInspectorContext(InspectorContext &context)
+void SoftScene::WidenInspectorContext()
 {
     lock_guard<mutex> lock(synchronizer);
 
-    context.SetTargetName("scene");
-    context.AddParam("air density", air_density, (double)0, (double)1000);
-    context.AddParam("g", g, (double)0, (double)100);
+    Inspector::AddHeader("scene", LARGE_HEADER);
+    Inspector::AddParam("air density", air_density, (double)0, (double)1000);
+    Inspector::AddParam("g", g, (double)0, (double)100);
 }
 
 PhysicalBody *SoftScene::GetBodyAt(const QPoint &point) const

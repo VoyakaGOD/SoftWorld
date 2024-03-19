@@ -7,8 +7,9 @@ QRect GhostBody::GetBoundingRect() const {
                  this->origin.y() + this->radius);
 }
 
-void GhostBody::WidenInspectorContext(InspectorContext &context) {
-    context.AddParam("radius", radius, (float)10, (float)250);
+void GhostBody::WidenInspectorContext() {
+    Inspector::AddHeader("ghost body", LARGE_HEADER);
+    Inspector::AddParam("radius", radius, (float)10, (float)250);
 }
 
 bool GhostBody::ContainsPoint(const QPoint &point) const {
