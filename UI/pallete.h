@@ -11,6 +11,8 @@ class Pallete : public QFrame {
     SceneView* sceneview = nullptr;
     PalleteItem* context_menu_target = nullptr;
     QAction delete_action;
+    QAction save_item_action;
+    QAction load_item_action;
 
     public:
     QVBoxLayout layout;
@@ -28,6 +30,8 @@ class Pallete : public QFrame {
     public slots:
         void ShowContextMenu(const QPoint &pos);
         void RemoveThisPalleteItem();
+        void SaveThisPalleteItem();
+        void LoadNewPalleteItem();
 };
 
 

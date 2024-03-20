@@ -1,5 +1,13 @@
 #include "ghostbody.h"
 
+void GhostBody::GetData(void* data) const {
+    GhostBodyData* gdata = (GhostBodyData*)data;
+    PhysicalBody::GetData(&(gdata->super));
+    gdata->x = this->origin.x();
+    gdata->y = this->origin.y();
+    gdata->radius = this->radius;
+}
+
 QRect GhostBody::GetBoundingRect() const {
     return QRect(this->origin.x() - this->radius,
                  this->origin.y() - this->radius,
@@ -47,8 +55,8 @@ void GhostBody::AddMomentum(const QPoint &momentum) {
 
 void GhostBody::Draw(QPainter &painter) {
     painter.setBrush(Qt::SolidPattern);
-    painter.setBrush(Qt::green);
-    painter.setPen(Qt::black);
+    painter.setBrush(this->drawing_style.main_color);
+    painter.setPen(this->drawing_style.border_color);
     painter.drawEllipse(this->origin, (int)(this->radius), (int)(this->radius));
     return;
 }

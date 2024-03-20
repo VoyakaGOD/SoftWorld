@@ -15,11 +15,9 @@ class PalleteItem : public QFrame
 
         QString name;
         SceneView* scene_view_target;
-
-    protected:
         PhysicalBody* body;
 
-
+    protected:
         void paintEvent(QPaintEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
 };

@@ -22,6 +22,10 @@ set(PROJECT_SOURCES
         Physics/physicalbody.h
         Physics/ghostbody.h
         Physics/ghostbody.cpp
+        Physics/fileworks.h
+        Physics/fileworks.cpp
+        Physics/serialize.h
+        Physics/serialize.cpp
         main.cpp
         mainwindow.cpp
         mainwindow.h

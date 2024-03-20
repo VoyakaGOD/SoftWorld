@@ -7,14 +7,36 @@
 #include "drawingstyle.h"
 #include "Inspector/inspector.h"
 
+enum BodyClass {
+    BODY_CLASS_UNDEF = 0,
+    BODY_CLASS_GHOST,
+};
+struct PhysicalBodyData {
+    DrawingStyle drawing_style;
+};
+
 class PhysicalBody
 {
 //general methods
 public:
+    PhysicalBody() {};
+
     virtual QRect GetBoundingRect() const = 0;
     virtual void WidenInspectorContext() = 0;
     virtual bool ContainsPoint(const QPoint &point) const = 0;
     virtual PhysicalBody *Clone() const = 0;
+
+//fileworks
+public:
+    virtual BodyClass GetClass() const {return BODY_CLASS_UNDEF;}
+    virtual size_t GetDataSize() const {return sizeof(PhysicalBodyData);}
+
+    PhysicalBody(PhysicalBodyData* data) : drawing_style(data->drawing_style) {};
+    virtual void GetData(void* data) const {
+        ((PhysicalBodyData*)data)->drawing_style = this->drawing_style;
+    }
+
+
 
 //simulation methods
 public:
@@ -33,6 +55,9 @@ public:
 public:
     virtual QPoint GetLocalCoordinate(const QPoint &global_coordinate) const = 0;
     virtual QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const = 0;
+
+public:
+    DrawingStyle drawing_style;
 };
 
 #endif // PHYSICALBODY_H
