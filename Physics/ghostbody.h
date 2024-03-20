@@ -13,7 +13,7 @@ public:
 
 public:
     virtual QRect GetBoundingRect() const override;
-    virtual InspectableParamsList GetInspectableParams() override;
+    virtual void WidenInspectorContext() override;
     virtual bool ContainsPoint(const QPoint &point) const override;
     virtual PhysicalBody *Clone() const override;
 

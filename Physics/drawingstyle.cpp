@@ -3,9 +3,9 @@
 DrawingStyle::DrawingStyle(QColor main_color, QColor border_color, double border_thickness) :
     main_color(main_color), border_color(border_color), border_thickness(border_thickness) {}
 
-void DrawingStyle::AddToInspectableParamsList(InspectableParamsList &list)
+void DrawingStyle::WidenInspectorContext()
 {
-    list.params.push_back(InspectableColor("main color", main_color));
-    list.params.push_back(InspectableColor("border color", border_color));
-    list.params.push_back(InspectableDouble("border thickness", border_thickness));
+    Inspector::AddParam("main color", main_color);
+    Inspector::AddParam("border color", border_color);
+    Inspector::AddParam("border thickness", border_thickness);
 }

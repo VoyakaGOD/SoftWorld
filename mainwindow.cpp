@@ -4,9 +4,31 @@
 #include <Physics/ghostbody.h>
 
 //temporary:
+#include "Inspector/inspectorheader.h"
+#include "Inspector/inspectornumericfield.h"
+#include "Inspector/inspectorcolorfield.h"
+#include "Inspector/inspectorbutton.h"
+#include "Inspector/inspector.h"
+
 static bool is_running = true;
 QIcon run_icon;
 QIcon stop_icon;
+
+static void test_func()
+{
+    qDebug("everything was deleted!");
+}
+
+int int_param_value = 0;
+QColor color_param_value = QColorConstants::Blue;
+float float_param_value = 0;
+double double_param_value = 0;
+static void print_func()
+{
+    qDebug("int_param = %d, color_param = %s, float_param = %f, double_param = %f",
+           int_param_value, color_param_value.name().toUtf8().constData(),
+           float_param_value, double_param_value);
+}
 //temporary
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -16,11 +38,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     ui->topButtonsContents->layout()->setAlignment(ui->run_stop_btn, Qt::AlignHCenter);
+    //temporary *********************************************************************************************
+    run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
+    stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
+    MainWindow::on_run_stop_btn_clicked();
 
-    run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);   //temporary
-    stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off); //temporary
-    MainWindow::on_run_stop_btn_clicked();                                                        //temporary
 
+    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout);
+
+    Inspector::AddHeader("some object", LARGE_HEADER);
+    Inspector::AddParam("color", color_param_value);
+    Inspector::AddParam("integer", int_param_value, 12, 25);
+    Inspector::AddParam("float", float_param_value, -5.0f, 5.0f);
+    Inspector::AddParam("double", double_param_value, -5.0e7, 5.0e7);
+
+    Inspector::AddHeader("actions", NORMAL_HEADER);
+    Inspector::AddAction("delete everything", test_func);
+    Inspector::AddAction("print", print_func);
+
+    //Inspector::Clear();
+    Inspector::AddHeader("----------------------", SMALL_HEADER);
+
+    //temporary *********************************************************************************************
 }
 
 MainWindow::~MainWindow()

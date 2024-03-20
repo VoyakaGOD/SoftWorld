@@ -73,12 +73,13 @@ void SceneView::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void SceneView::mouseMoveEvent(QMouseEvent *event) {
-    if (body_grabbed) {
+    /*if (body_grabbed) {
         QPoint pos = this->ToSceneCoordinates(event->pos());
         QPoint offset = pos - this->selected_body->GetGlobalCoordinate(this->grabded_point);
         this->selected_body->MoveBy(offset);
         this->update();
     }
+    */
     if (inserted_body) {
         this->setFocus();
         this->update();

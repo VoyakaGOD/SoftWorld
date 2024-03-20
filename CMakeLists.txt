@@ -35,12 +35,20 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         Physics/drawingstyle.h Physics/drawingstyle.cpp
         Physics/softscene.h Physics/softscene.cpp
-        Inspector/inspectableparamslist.h Inspector/inspectableparamslist.cpp
-        Inspector/inspectableparam.h
+        Inspector/action.h
+
+
 
         icons.qrc
-
-
+        Inspector/inspectornumericfield.h
+        Inspector/inspectoritem.h
+        Inspector/inspectorheader.h Inspector/inspectorheader.cpp
+        Inspector/inspectorbutton.h Inspector/inspectorbutton.cpp
+        Inspector/inspectorcolorfield.h Inspector/inspectorcolorfield.cpp
+        Inspector/slidermanagers.h Inspector/slidermanagers.cpp
+        Inspector/coloricon.h Inspector/coloricon.cpp
+        Inspector/inspector.h Inspector/inspector.cpp
+        Inspector/inspectoritem.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
