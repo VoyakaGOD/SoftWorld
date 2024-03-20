@@ -32,6 +32,7 @@ static void print_func()
     qDebug("int_param = %d, color_param = %s, float_param = %f, double_param = %f",
            int_param_value, color_param_value.name().toUtf8().constData(),
            float_param_value, double_param_value);
+
 }
 //temporary
 
@@ -42,13 +43,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     ui->topButtonsContents->layout()->setAlignment(ui->run_stop_btn, Qt::AlignHCenter);
+    setStyleSheet(styleSheet() + "QMainWindow::separator { width: 2px; height: 2px; } ");
+    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout);
+
     //temporary *********************************************************************************************
     run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
     stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
     MainWindow::on_run_stop_btn_clicked();
-
-
-    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout);
 
     Inspector::AddHeader("some object", LARGE_HEADER);
     Inspector::AddParam("color", color_param_value);
