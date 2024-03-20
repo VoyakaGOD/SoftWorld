@@ -5,7 +5,20 @@
 extern SoftScene main_scene;
 
 SceneView::SceneView(QWidget *parent)
-    : QWidget(parent), scene(&main_scene) {
+    : QWidget(parent), scene(&main_scene),
+    delete_action("delete selected body", this), clear_cursor_action("clear cursor", this) {
+
+    this->delete_action.setShortcut(QKeySequence::Delete);
+    this->delete_action.setShortcutContext(Qt::WidgetShortcut);
+    connect(&(this->delete_action), SIGNAL(triggered()), this, SLOT(DeleteSelected()));
+    this->addAction(&(this->delete_action));
+
+    this->clear_cursor_action.setShortcut(QKeySequence("q"));
+    this->clear_cursor_action.setShortcutContext(Qt::WidgetShortcut);
+    connect(&(this->clear_cursor_action), SIGNAL(triggered()), this, SLOT(ClearCursor()));
+    this->addAction(&(this->clear_cursor_action));
+
+
     //this->SetViewport(this->scene->world_rect);
 }
 
@@ -67,10 +80,27 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
         this->update();
     }
     if (inserted_body) {
+        this->setFocus();
         this->update();
     }
 }
 
 void SceneView::SetInsertion(PhysicalBody* body) {
     this->inserted_body = body;
+    this->update();
+}
+
+void SceneView::ClearCursor() {
+    this->inserted_body = nullptr;
+    this->update();
+}
+
+void SceneView::DeleteSelected() {
+    if (this->selected_body) {
+        this->body_grabbed = false;
+        this->scene->RemoveBody(this->selected_body);
+        delete this->selected_body;
+        this->selected_body = nullptr;
+        this->update();
+    }
 }

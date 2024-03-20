@@ -27,10 +27,16 @@ class SceneView : public QWidget
         void SetInsertion(PhysicalBody* body);
         QPoint ToSceneCoordinates(QPoint point);
 
+    public slots:
+        void ClearCursor();
+        void DeleteSelected();
+
     protected:
         void paintEvent(QPaintEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
         void mouseReleaseEvent(QMouseEvent *event) override;
         void mouseMoveEvent(QMouseEvent *event) override;
 
+        QAction delete_action;
+        QAction clear_cursor_action;
 };

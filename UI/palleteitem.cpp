@@ -3,11 +3,13 @@
 #include <QStyle>
 #include <QMouseEvent>
 
-PalleteItem::PalleteItem(QWidget *parent, SceneView *scene_view, PhysicalBody* body, QString str)
-    : QWidget(parent), scene_view_target(scene_view), body(body), name(str) {
-        this->setMaximumHeight(32);
+static const int ITEM_MARGIN = 2;
+
+PalleteItem::PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *scene_view, PhysicalBody* body, QString str)
+    : QFrame(parent, f), scene_view_target(scene_view), body(body), name(str) {
         this->setMinimumHeight(32);
         this->setFocusPolicy(Qt::ClickFocus);
+        this->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     }
 
 PalleteItem::~PalleteItem() {
@@ -22,26 +24,29 @@ PalleteItem::~PalleteItem() {
 }
 
 void PalleteItem::paintEvent(QPaintEvent *event) {
-    int height = this->size().height();
+    int framewidth = this->frameWidth() + ITEM_MARGIN;
+    int height = this->size().height() - 2*framewidth;
     if (height > 30) {
         height = 30;
     }
     QPainter painter(this);
     this->style()->drawItemText(&painter,
-        this->rect().adjusted(height, 0, 0, 0), 0, this->palette()
+        this->rect().adjusted(height + framewidth + ITEM_MARGIN, framewidth, -framewidth, -framewidth), 0, this->palette()
         , 1, this->name);
 
     if (this->body) {
         QRect rect = this->body->GetBoundingRect();
         qreal scale = min(((qreal)height) / rect.height(), ((qreal)height) / rect.width());
         painter.scale(scale, scale);
+        painter.translate(framewidth, framewidth);
         this->body->Draw(painter);
     }
     else {
         painter.setBrush(Qt::red);
-        painter.drawRect(QRect(0,0,height,height));
+        painter.drawRect(QRect(framewidth,framewidth,height,height));
     }
 
+    QFrame::paintEvent(event);
 }
 
 void PalleteItem::mousePressEvent(QMouseEvent *event) {

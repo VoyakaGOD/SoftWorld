@@ -5,12 +5,12 @@
 #include <QPainter>
 #include "sceneview.h"
 
-class PalleteItem : public QWidget
+class PalleteItem : public QFrame
 {
     Q_OBJECT
 
     public:
-        explicit PalleteItem(QWidget *parent, SceneView *sceneview, PhysicalBody *body, QString str);
+        explicit PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *sceneview, PhysicalBody *body, QString str);
         ~PalleteItem();
 
         QString name;

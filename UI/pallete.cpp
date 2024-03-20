@@ -4,14 +4,20 @@
 #include <Physics/ghostbody.h> //temporary
 #include <iostream>
 
-Pallete::Pallete(QWidget *parent)
- : QWidget(parent), layout(this) {
+Pallete::Pallete(QWidget *parent, Qt::WindowFlags f)
+ : QFrame(parent, f), layout(this), delete_action("delete", this) {
     this->setLayout(&(this->layout));
     //this->setLayoutDirection(Qt::RightToLeft);
     this->layout.addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Expanding));
     this->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    this->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    this->setLineWidth(2);
+
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
         this, SLOT(ShowContextMenu(const QPoint &)));
+
+    connect(&(this->delete_action), SIGNAL(triggered()) , this, SLOT(RemoveThisPalleteItem()));
 }
 
 Pallete::~Pallete() {
@@ -40,7 +46,7 @@ void Pallete::PostInit(SceneView* view) {
 }
 
 void Pallete::AddPalleteItem(PhysicalBody* body, QString name) {
-    PalleteItem* item = new PalleteItem(dynamic_cast<QWidget*>(this->parent()), this->sceneview, body, name);
+    PalleteItem* item = new PalleteItem(this, Qt::WindowFlags(), this->sceneview, body, name);
     this->layout.insertWidget(this->layout.count()-1, item);
     cout << item->pos().x() << "_" << item->pos().y() << "_" << item->height() << "_" << item->width() << endl;
 }
@@ -59,9 +65,7 @@ void Pallete::ShowContextMenu(const QPoint &pos){
 
     QMenu *menu=new QMenu(static_cast<QWidget*>(this));
     if (this->context_menu_target) {
-        QAction *item_del_act = new QAction("delete", this);
-        item_del_act->connect(item_del_act, SIGNAL(triggered()) , this, SLOT(RemoveThisPalleteItem()));
-        menu->addAction(item_del_act);
+        menu->addAction(&(this->delete_action));
     }
     menu->popup(((QWidget*)this)->mapToGlobal(pos));
 }
