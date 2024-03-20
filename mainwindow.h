@@ -20,6 +20,8 @@ public:
 private slots:
     void on_run_stop_btn_clicked();
 
+    void on_inspector_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

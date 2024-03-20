@@ -18,6 +18,9 @@ static bool is_running = true;
 QIcon run_icon;
 QIcon stop_icon;
 
+QIcon hide_icon;
+QIcon show_icon;
+
 static void test_func()
 {
     qDebug("everything was deleted!");
@@ -49,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //temporary *********************************************************************************************
     run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
     stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
+    hide_icon.addFile(QString::fromUtf8(":/Icons/closed_lock.png"), QSize(), QIcon::Normal, QIcon::Off);
+    show_icon.addFile(QString::fromUtf8(":/Icons/opened_lock.png"), QSize(), QIcon::Normal, QIcon::Off);
     MainWindow::on_run_stop_btn_clicked();
 
     Inspector::AddHeader("some object", LARGE_HEADER);
@@ -81,5 +86,22 @@ void MainWindow::on_run_stop_btn_clicked()
     is_running = !is_running;                                               //temporary
     ui->run_stop_btn->setIcon(is_running ? stop_icon : run_icon);           //temporary
     ui->run_stop_btn->setText(is_running ? "stop" : "run");                 //temporary
+}
+
+
+void MainWindow::on_inspector_btn_clicked()
+{
+    if(ui->inspectorDock->isHidden())
+    {
+        ui->inspectorDock->show();
+        ui->inspector_btn->setText("hide inspector");
+        ui->inspector_btn->setIcon(show_icon);
+    }
+    else
+    {
+        ui->inspectorDock->hide();
+        ui->inspector_btn->setText("show inspector");
+        ui->inspector_btn->setIcon(hide_icon);
+    }
 }
 

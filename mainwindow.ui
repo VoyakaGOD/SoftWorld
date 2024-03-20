@@ -130,6 +130,9 @@
      <height>107</height>
     </size>
    </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::PreventContextMenu</enum>
+   </property>
    <property name="accessibleName">
     <string/>
    </property>
@@ -154,7 +157,7 @@
   <widget class="QDockWidget" name="topButtonsDock">
    <property name="minimumSize">
     <size>
-     <width>409</width>
+     <width>478</width>
      <height>30</height>
     </size>
    </property>
@@ -215,7 +218,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="some_button">
+      <widget class="QPushButton" name="inspector_btn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -223,7 +226,14 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>some button</string>
+        <string>show/hide inspector</string>
+       </property>
+       <property name="icon">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/closed_lock.png</normaloff>:/Icons/closed_lock.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
