@@ -1,9 +1,11 @@
+#pragma once
+
 #include "physicalbody.h"
 
 class GhostBody: public PhysicalBody {
 
 public:
-    GhostBody() : origin(0, 0), radius(10) {
+    GhostBody() : origin(10, 10), radius(10) {
     }
 
     QPoint origin;

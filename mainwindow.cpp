@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <UI/palleteitem.h>
+#include <Physics/ghostbody.h>
 
 //temporary:
 #include "Inspector/inspectorheader.h"
@@ -36,6 +38,8 @@ static void print_func()
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->palleteContents->PostInit(ui->main_view);
+
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     ui->topButtonsContents->layout()->setAlignment(ui->run_stop_btn, Qt::AlignHCenter);
     //temporary *********************************************************************************************
@@ -77,3 +81,4 @@ void MainWindow::on_run_stop_btn_clicked()
     ui->run_stop_btn->setIcon(is_running ? stop_icon : run_icon);           //temporary
     ui->run_stop_btn->setText(is_running ? "stop" : "run");                 //temporary
 }
+

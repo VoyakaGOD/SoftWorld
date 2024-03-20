@@ -33,7 +33,12 @@ void EditOnlyBody::SolveCollision(PhysicalBody *another) {}
 void EditOnlyBody::KeepSceneBorders(const QRect &world_rect) {}
 void EditOnlyBody::ApplyInternalRestrictions(double delta_time) {}
 void EditOnlyBody::ApplyGravity(double air_density, double g, double delta_time) {}
-void EditOnlyBody::MoveBy(const QPoint &offset) {}
+
+void EditOnlyBody::MoveBy(const QPoint &offset)
+{
+    this->origin = this->origin + offset;
+}
+
 void EditOnlyBody::AddMomentum(const QPoint &momentum) {}
 
 void EditOnlyBody::Draw(QPainter &painter)

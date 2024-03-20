@@ -3,8 +3,8 @@
 QRect GhostBody::GetBoundingRect() const {
     return QRect(this->origin.x() - this->radius,
                  this->origin.y() - this->radius,
-                 this->origin.x() + this->radius,
-                 this->origin.y() + this->radius);
+                 2 * this->radius,
+                 2 * this->radius);
 }
 
 void GhostBody::WidenInspectorContext() {
@@ -17,7 +17,7 @@ bool GhostBody::ContainsPoint(const QPoint &point) const {
 }
 
 PhysicalBody* GhostBody::Clone() const {
-    return nullptr;
+    return new GhostBody(*this);
 }
 
 void GhostBody::SolveCollision(PhysicalBody *another) {
