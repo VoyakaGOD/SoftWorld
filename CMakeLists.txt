@@ -50,6 +50,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Inspector/inspector.h Inspector/inspector.cpp
         Inspector/inspectoritem.cpp
         Physics/editonlybody.h Physics/editonlybody.cpp
+        Inspector/lockableobject.h
+
 
 
     )

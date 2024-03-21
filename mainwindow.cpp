@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     ui->topButtonsContents->layout()->setAlignment(ui->run_stop_btn, Qt::AlignHCenter);
     setStyleSheet(styleSheet() + "QMainWindow::separator { width: 2px; height: 2px; } ");
-    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout);
+    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, &main_scene);
 
     //temporary *********************************************************************************************
     run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -94,13 +94,11 @@ void MainWindow::on_inspector_btn_clicked()
     if(ui->inspectorDock->isHidden())
     {
         ui->inspectorDock->show();
-        ui->inspector_btn->setText("hide inspector");
         ui->inspector_btn->setIcon(show_icon);
     }
     else
     {
         ui->inspectorDock->hide();
-        ui->inspector_btn->setText("show inspector");
         ui->inspector_btn->setIcon(hide_icon);
     }
 }

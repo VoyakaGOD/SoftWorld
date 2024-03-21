@@ -5,7 +5,7 @@ static QColor GetRandomColor()
     return QColor(rand() % 255, rand() %255, rand() % 255);
 }
 
-InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value)
+InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value, LockableObject *scene)
 {
     label = new QLabel(name, container);
 

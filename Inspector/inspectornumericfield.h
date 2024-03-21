@@ -8,6 +8,7 @@
 #include <QSlider>
 #include "inspectoritem.h"
 #include "slidermanagers.h"
+#include "lockableobject.h"
 
 template <typename T, typename SpinBoxT, typename ManagerT>
 class InspectorNumericField : public InspectorItem
@@ -19,7 +20,7 @@ private:
     QHBoxLayout *field;
     ManagerT manager;
 public:
-    InspectorNumericField(QWidget *container, QFormLayout *layout, const char *name, T &value, T min_value, T max_value)
+    InspectorNumericField(QWidget *container, QFormLayout *layout, const char *name, T &value, T min_value, T max_value, LockableObject *scene)
     {
         label = new QLabel(name, container);
 
