@@ -6,5 +6,9 @@
         <file>Icons/closed_lock.png</file>
         <file>Icons/opened_lock.png</file>
         <file>Icons/clear.png</file>
+        <file>Icons/load_scene.png</file>
+        <file>Icons/save_scene.png</file>
+        <file>Icons/load_palette.png</file>
+        <file>Icons/save_palette.png</file>
     </qresource>
 </RCC>
