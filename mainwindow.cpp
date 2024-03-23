@@ -11,8 +11,10 @@
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
 #include "Physics/softscene.h"
+#include "testthread.h"
 
 extern SoftScene main_scene;
+extern TestThread *tt;
 
 static bool is_running = true;
 QIcon run_icon;
@@ -71,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     EditOnlyBody *test_body = new EditOnlyBody(QPoint(300,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
+
+    tt = new TestThread(ui->main_view);
+    tt->start();
 
     //temporary *********************************************************************************************
 }

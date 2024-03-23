@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "Physics/softscene.h"
 #include "Physics/ghostbody.h"
+#include "testthread.h"
 
 #include <QApplication>
 
 SoftScene main_scene = SoftScene(QRect(0,0,100,100), 0, 10);
 MainWindow* main_window = NULL;
+TestThread *tt;
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +17,9 @@ int main(int argc, char *argv[])
 
     main_scene.AddBody(new GhostBody());
 
-
     w.show();
+
+    CONNECT(&a, &QApplication::aboutToQuit, tt, &TestThread::on_exit);
+
     return a.exec();
 }
