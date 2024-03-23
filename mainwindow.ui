@@ -232,6 +232,9 @@
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/opened_lock.png</normaloff>:/Icons/opened_lock.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>I</string>
+       </property>
        <property name="checkable">
         <bool>false</bool>
        </property>

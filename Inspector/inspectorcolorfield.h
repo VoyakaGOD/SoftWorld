@@ -5,6 +5,7 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QRegularExpressionValidator>
 #include "inspectoritem.h"
 #include "coloricon.h"
@@ -16,6 +17,7 @@ private:
     QLabel *label;
     ColorIcon *icon;
     QLineEdit *input;
+    QPushButton *dialog_button;
     QHBoxLayout *field;
     void ChangeColor(const QColor &color);
 public:

@@ -10,5 +10,6 @@
         <file>Icons/save_scene.png</file>
         <file>Icons/load_palette.png</file>
         <file>Icons/save_palette.png</file>
+        <file>Icons/settings.png</file>
     </qresource>
 </RCC>
