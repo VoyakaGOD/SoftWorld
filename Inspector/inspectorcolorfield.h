@@ -10,6 +10,8 @@
 #include "inspectoritem.h"
 #include "coloricon.h"
 #include "lockableobject.h"
+#include "Utils/icons.h"
+#include "Utils/colorutility.h"
 
 class InspectorColorField : public InspectorItem
 {

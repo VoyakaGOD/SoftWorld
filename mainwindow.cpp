@@ -45,9 +45,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->palleteContents->PostInit(ui->main_view);
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
-    //ui->topButtonsContents->layout()->setAlignment(ui->run_stop_btn, Qt::AlignHCenter);
-    //ui->topButtonsContents->layout()->setAlignment(ui->clear_btn, Qt::AlignHCenter);
     Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, &main_scene);
+    Icons::AddIcon("settings", ":/Icons/settings.png");
 
     //temporary *********************************************************************************************
     run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
