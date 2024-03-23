@@ -20,10 +20,20 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
 
     layout->addRow(label, field);
 
-    auto update = [&value, this](const QColor &color){value = color;  ChangeColor(color); };
-    CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ if(text.length() == 7) update(QColor(text)); });
-    CONNECT(icon, &ColorIcon::clicked, [=](){ update(ColorUtility::GetRandomColor()); });
-    CONNECT(dialog_button, &QPushButton::clicked, [=, &value](){
+    auto update = [&value, scene, this](const QColor &color){
+        scene->Lock();
+        value = color;
+        scene->Unlock();
+        ChangeColor(color);
+    };
+    CONNECT(input, &QLineEdit::textChanged, [update](const QString &text){
+        if(text.length() == 7)
+            update(QColor(text));
+    });
+    CONNECT(icon, &ColorIcon::clicked, [update](){
+        update(ColorUtility::GetRandomColor());
+    });
+    CONNECT(dialog_button, &QPushButton::clicked, [update, container, &value](){
         QColor color = QColorDialog::getColor(value, container);
         if(color.isValid())
             update(color);

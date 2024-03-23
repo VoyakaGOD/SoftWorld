@@ -4,7 +4,11 @@ InspectorButton::InspectorButton(QWidget *container, QFormLayout *layout, const 
 {
     button = new QPushButton(name, container);
     layout->addRow(button);
-    CONNECT(button, &QPushButton::clicked, action);
+    CONNECT(button, &QPushButton::clicked, [=]() {
+        scene->Lock();
+        action();
+        scene->Unlock();
+    });
 }
 
 InspectorButton::~InspectorButton()

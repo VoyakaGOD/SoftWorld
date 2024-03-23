@@ -41,9 +41,14 @@ public:
         value = qBound(min_value, value, max_value);
         UpdateValue(value);
 
-        auto update = [&value, this](T new_value){ value = new_value; UpdateValue(new_value); };
+        auto update = [&value, this](T new_value){
+            value = new_value;
+            UpdateValue(new_value);
+        };
         CONNECT(box, &SpinBoxT::valueChanged, update);
-        CONNECT(slider, &QSlider::valueChanged, [update, this](int value){ update(manager.ConvertFromRaw(value)); });
+        CONNECT(slider, &QSlider::valueChanged, [update, this](int value){
+            update(manager.ConvertFromRaw(value));
+        });
     }
 
     ~InspectorNumericField()
