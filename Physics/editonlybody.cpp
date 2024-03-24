@@ -9,7 +9,7 @@ EditOnlyBody::EditOnlyBody(const QPoint &origin, double radius, DrawingStyle sty
 QRect EditOnlyBody::GetBoundingRect() const
 {
     return QRect(this->origin.x() - this->radius, this->origin.y() - this->radius,
-        this->origin.x() + this->radius, this->origin.y() + this->radius);
+        2*this->radius, 2*this->radius);
 }
 
 void EditOnlyBody::WidenInspectorContext()

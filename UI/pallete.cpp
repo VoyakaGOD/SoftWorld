@@ -5,10 +5,13 @@
 #include <Utils/serialize.h>
 #include <QFileDialog>
 #include <iostream>
+#include <Inspector/inspector.h>
 
 Pallete::Pallete(QWidget *parent, Qt::WindowFlags f)
  : QFrame(parent, f), layout(this),
-   delete_action("delete", this), load_item_action("add body from file", this), save_item_action("save body", this) {
+   delete_action("delete", this), inspect_action("inspect", this),
+   load_item_action("add body from file", this), save_item_action("save body", this),
+   pick_item_action("add selected body", this) {
     this->setLayout(&(this->layout));
     //this->setLayoutDirection(Qt::RightToLeft);
     this->layout.addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Expanding));
@@ -20,9 +23,12 @@ Pallete::Pallete(QWidget *parent, Qt::WindowFlags f)
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
         this, SLOT(ShowContextMenu(const QPoint &)));
 
-    connect(&(this->delete_action)   , SIGNAL(triggered()) , this, SLOT(RemoveThisPalleteItem()));
-    connect(&(this->load_item_action), SIGNAL(triggered()) , this, SLOT(LoadNewPalleteItem()));
-    connect(&(this->save_item_action), SIGNAL(triggered()) , this, SLOT(SaveThisPalleteItem()));
+    connect(&(this->delete_action)    , SIGNAL(triggered()) , this, SLOT(RemoveThisPalleteItem()));
+    connect(&(this->inspect_action)   , SIGNAL(triggered()) , this, SLOT(InspectThisPalleteItem()));
+    connect(&(this->save_item_action) , SIGNAL(triggered()) , this, SLOT(SaveThisPalleteItem()));
+
+    connect(&(this->load_item_action) , SIGNAL(triggered()) , this, SLOT(LoadNewPalleteItem()));
+    connect(&(this->pick_item_action) , SIGNAL(triggered()) , this, SLOT(PickItemFromScene()));
 }
 
 Pallete::~Pallete() {
@@ -70,6 +76,13 @@ void Pallete::RemoveThisPalleteItem() {
     }
 }
 
+void Pallete::InspectThisPalleteItem() {
+    if (this->context_menu_target) {
+        Inspector::Clear();
+        this->context_menu_target->body->WidenInspectorContext();
+    }
+}
+
 void Pallete::SaveThisPalleteItem() {
     if (this->context_menu_target) {
         try {
@@ -98,6 +111,13 @@ void Pallete::LoadNewPalleteItem() {
     }
 }
 
+void Pallete::PickItemFromScene() {
+    PhysicalBody* new_body = this->sceneview->selected_body->Clone();
+
+    new_body->MoveBy(new_body->GetBoundingRect().center() * -1);
+    this->AddPalleteItem(new_body, "New body");
+}
+
 void Pallete::ShowContextMenu(const QPoint &pos){
 
     this->context_menu_target = dynamic_cast<PalleteItem*>(this->childAt(pos));
@@ -105,8 +125,10 @@ void Pallete::ShowContextMenu(const QPoint &pos){
     QMenu *menu=new QMenu(static_cast<QWidget*>(this));
     if (this->context_menu_target) {
         menu->addAction(&(this->delete_action));
+        menu->addAction(&(this->inspect_action));
         menu->addAction(&(this->save_item_action));
     }
     menu->addAction(&(this->load_item_action));
+    menu->addAction(&(this->pick_item_action));
     menu->popup(((QWidget*)this)->mapToGlobal(pos));
 }

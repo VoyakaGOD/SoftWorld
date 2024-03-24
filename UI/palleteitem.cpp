@@ -90,8 +90,10 @@ void PalleteItem::paintEvent(QPaintEvent *event) {
     if (this->body) {
         QRect rect = this->body->GetBoundingRect();
         qreal scale = min(((qreal)height) / rect.height(), ((qreal)height) / rect.width());
-        painter.scale(scale, scale);
         painter.translate(framewidth, framewidth);
+        painter.scale(scale, scale);
+        painter.translate(-rect.left(), -rect.top());
+
         this->body->Draw(painter);
     }
     else {
