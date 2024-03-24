@@ -54,10 +54,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Inspector/inspector.h Inspector/inspector.cpp
         Inspector/inspectoritem.cpp
         Physics/editonlybody.h Physics/editonlybody.cpp
-        Inspector/lockableobject.h
+
         Utils/cstringcomparator.h Utils/cstringcomparator.cpp
         Utils/icons.cpp Utils/icons.h
         Utils/colorutility.h Utils/colorutility.cpp
+        Inspector/editingmanager.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET SoftWorld APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

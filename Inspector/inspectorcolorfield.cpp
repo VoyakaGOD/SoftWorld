@@ -1,6 +1,6 @@
 #include "inspectorcolorfield.h"
 
-InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value, LockableObject *scene)
+InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value, EditingManager *manager)
 {
     label = new QLabel(name, container);
 
@@ -20,10 +20,10 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
 
     layout->addRow(label, field);
 
-    auto update = [&value, scene, this](const QColor &color){
-        scene->Lock();
+    auto update = [&value, manager, this](const QColor &color){
+        manager->OnEditingStarted();
         value = color;
-        scene->Unlock();
+        manager->OnEditingEnded();
         ChangeColor(color);
     };
     CONNECT(input, &QLineEdit::textChanged, [update](const QString &text){

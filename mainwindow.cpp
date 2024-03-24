@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->palleteContents->PostInit(ui->main_view);
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
-    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, &main_scene);
+    Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, ui->main_view);
     Icons::AddIcon("settings", ":/Icons/settings.png");
 
     //temporary *********************************************************************************************

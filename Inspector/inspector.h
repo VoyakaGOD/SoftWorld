@@ -7,7 +7,6 @@
 #include "inspectorbutton.h"
 #include "inspectorcolorfield.h"
 #include "inspectornumericfield.h"
-#include "lockableobject.h"
 
 using namespace std;
 
@@ -17,10 +16,13 @@ private:
     static QWidget *container;
     static QFormLayout *layout;
     static vector<InspectorItem *> items;
-    static LockableObject *scene;
+    static EditingManager *manager;
+    static void *target;
 
 public:
-    static void Mount(QWidget *container, QFormLayout *layout, LockableObject *scene);
+    static void Mount(QWidget *container, QFormLayout *layout, EditingManager *default_manager);
+    static void SetTarget(void *target, EditingManager *manager);
+    static bool IsTarget(void *ptr);
     static void Clear();
     static void AddHeader(const char *text, int size);
     static void AddAction(const char *name, Action action);

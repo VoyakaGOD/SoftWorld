@@ -3,15 +3,29 @@
 QWidget *Inspector::container;
 QFormLayout *Inspector::layout;
 vector<InspectorItem *> Inspector::items;
-LockableObject *Inspector::scene;
+EditingManager *Inspector::manager;
+void *Inspector::target;
 
 Inspector::Inspector() {}
 
-void Inspector::Mount(QWidget *container, QFormLayout *layout, LockableObject *scene)
+void Inspector::Mount(QWidget *container, QFormLayout *layout, EditingManager *default_manager)
 {
     Inspector::container = container;
     Inspector::layout = layout;
-    Inspector::scene = scene;
+    Inspector::manager = default_manager;
+    Inspector::target = nullptr;
+}
+
+void Inspector::SetTarget(void *target, EditingManager *manager)
+{
+    Inspector::manager = manager;
+    Inspector::target = target;
+    Clear();
+}
+
+bool Inspector::IsTarget(void *ptr)
+{
+    return target == ptr;
 }
 
 void Inspector::Clear()
@@ -28,25 +42,25 @@ void Inspector::AddHeader(const char *text, int size)
 
 void Inspector::AddAction(const char *name, Action action)
 {
-    items.push_back(new InspectorButton(container, layout, name, action, scene));
+    items.push_back(new InspectorButton(container, layout, name, action, manager));
 }
 
 void Inspector::AddParam(const char *name, QColor &value)
 {
-    items.push_back(new InspectorColorField(container, layout, name, value, scene));
+    items.push_back(new InspectorColorField(container, layout, name, value, manager));
 }
 
 void Inspector::AddParam(const char *name, int &value, int min, int max)
 {
-    items.push_back(new InspectorIntegerField(container, layout, name, value, min, max, scene));
+    items.push_back(new InspectorIntegerField(container, layout, name, value, min, max, manager));
 }
 
 void Inspector::AddParam(const char *name, double &value, double min, double max)
 {
-    items.push_back(new InspectorFractionalField(container, layout, name, value, min, max, scene));
+    items.push_back(new InspectorFractionalField(container, layout, name, value, min, max, manager));
 }
 
 void Inspector::AddParam(const char *name, float &value, float min, float max)
 {
-    items.push_back(new InspectorFractionalField(container, layout, name, value, min, max, scene));
+    items.push_back(new InspectorFractionalField(container, layout, name, value, min, max, manager));
 }

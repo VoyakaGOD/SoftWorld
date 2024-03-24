@@ -1,13 +1,13 @@
 #include "inspectorbutton.h"
 
-InspectorButton::InspectorButton(QWidget *container, QFormLayout *layout, const char *name, Action action, LockableObject *scene)
+InspectorButton::InspectorButton(QWidget *container, QFormLayout *layout, const char *name, Action action, EditingManager *manager)
 {
     button = new QPushButton(name, container);
     layout->addRow(button);
     CONNECT(button, &QPushButton::clicked, [=]() {
-        scene->Lock();
+        manager->OnEditingStarted();
         action();
-        scene->Unlock();
+        manager->OnEditingEnded();
     });
 }
 

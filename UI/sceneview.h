@@ -4,10 +4,11 @@
 #include <QGraphicsView>
 #include <QPainter>
 #include <Physics/softscene.h>
+#include "Inspector/editingmanager.h"
 
 class PalleteItem; // TODO find better way
 
-class SceneView : public QWidget
+class SceneView : public QWidget, public EditingManager
 {
     Q_OBJECT
 
@@ -31,6 +32,9 @@ class SceneView : public QWidget
         void SetInsertion(PhysicalBody* body);
         void SetInsertion(PalleteItem* item);
         QPoint ToSceneCoordinates(QPoint point);
+
+        void OnEditingStarted() override;
+        void OnEditingEnded() override;
 
     public slots:
         void ClearCursor();

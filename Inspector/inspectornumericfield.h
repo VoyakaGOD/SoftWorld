@@ -8,7 +8,7 @@
 #include <QSlider>
 #include "inspectoritem.h"
 #include "slidermanagers.h"
-#include "lockableobject.h"
+#include "editingmanager.h"
 
 template <typename T, typename SpinBoxT, typename ManagerT>
 class InspectorNumericField : public InspectorItem
@@ -18,9 +18,10 @@ private:
     SpinBoxT *box;
     QSlider *slider;
     QHBoxLayout *field;
-    ManagerT manager;
+    ManagerT box_manager;
 public:
-    InspectorNumericField(QWidget *container, QFormLayout *layout, const char *name, T &value, T min_value, T max_value, LockableObject *scene)
+    InspectorNumericField(QWidget *container, QFormLayout *layout,
+        const char *name, T &value, T min_value, T max_value, EditingManager *manager)
     {
         label = new QLabel(name, container);
 
@@ -30,7 +31,7 @@ public:
         box->setContextMenuPolicy(Qt::PreventContextMenu);
 
         slider = new QSlider(Qt::Horizontal, container);
-        manager = ManagerT(slider, min_value, max_value);
+        box_manager = ManagerT(slider, min_value, max_value);
 
         field = new QHBoxLayout();
         field->addWidget(box, 25);
@@ -38,16 +39,20 @@ public:
         field->setSpacing(7);
         layout->addRow(label, field);
 
+        manager->OnEditingStarted();
         value = qBound(min_value, value, max_value);
+        manager->OnEditingEnded();
         UpdateValue(value);
 
-        auto update = [&value, this](T new_value){
+        auto update = [&value, manager, this](T new_value){
+            manager->OnEditingStarted();
             value = new_value;
+            manager->OnEditingEnded();
             UpdateValue(new_value);
         };
         CONNECT(box, &SpinBoxT::valueChanged, update);
         CONNECT(slider, &QSlider::valueChanged, [update, this](int value){
-            update(manager.ConvertFromRaw(value));
+            update(box_manager.ConvertFromRaw(value));
         });
     }
 
@@ -64,7 +69,7 @@ private:
         box->blockSignals(true);
         slider->blockSignals(true);
         box->setValue(value);
-        slider->setValue(manager.ConvertToRaw(value));
+        slider->setValue(box_manager.ConvertToRaw(value));
         box->blockSignals(false);
         slider->blockSignals(false);
     }

@@ -4,9 +4,9 @@
 #include <mutex>
 #include "physicalbody.h"
 #include "Inspector/inspector.h"
-#include "Inspector/lockableobject.h"
+#include "Inspector/editingmanager.h"
 
-class SoftScene : public LockableObject
+class SoftScene
 {
 private:
     mutable mutex synchronizer;
@@ -24,8 +24,8 @@ public:
     void RemoveBody(PhysicalBody *body);
     void WidenInspectorContext();
     PhysicalBody *GetBodyAt(const QPoint &point) const;
-    void Lock() override;
-    void Unlock() override;
+    void Lock();
+    void Unlock();
 };
 
 #endif // SOFTSCENE_H

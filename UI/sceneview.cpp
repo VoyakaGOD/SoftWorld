@@ -68,7 +68,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
         this->selected_body = body;
         this->body_grabbed = true;
         this->grabded_point = body->GetLocalCoordinate(pos);
-        Inspector::Clear();
+        Inspector::SetTarget(body, this);
         body->WidenInspectorContext();
     }
     this->update(); //sorry, but it for testing
@@ -119,4 +119,15 @@ void SceneView::DeleteSelected() {
         this->selected_body = nullptr;
         this->update();
     }
+}
+
+void SceneView::OnEditingStarted()
+{
+    scene->Lock();
+}
+
+void SceneView::OnEditingEnded()
+{
+    scene->Unlock();
+    update();
 }

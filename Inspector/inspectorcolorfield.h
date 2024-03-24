@@ -9,7 +9,7 @@
 #include <QRegularExpressionValidator>
 #include "inspectoritem.h"
 #include "coloricon.h"
-#include "lockableobject.h"
+#include "editingmanager.h"
 #include "Utils/icons.h"
 #include "Utils/colorutility.h"
 
@@ -23,7 +23,7 @@ private:
     QHBoxLayout *field;
     void ChangeColor(const QColor &color);
 public:
-    InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value, LockableObject *scene);
+    InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value, EditingManager *manager);
     ~InspectorColorField();
 };
 
