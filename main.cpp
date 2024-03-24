@@ -15,7 +15,6 @@ int main(int argc, char *argv[])
 
     main_scene.AddBody(new GhostBody());
 
-
     w.show();
     return a.exec();
 }

@@ -1,6 +1,6 @@
 #include "colorutility.h"
 
-static auto validator = new QRegularExpressionValidator(QRegularExpression(QString("#%1%1%1%1%1%1").arg("[0-9a-fA-F]")));
+static auto validator = new QRegularExpressionValidator(QRegularExpression(QString("^#[A-Fa-f0-9]{6}$")));
 
 ColorUtility::ColorUtility() {}
 
