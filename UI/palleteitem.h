@@ -24,6 +24,9 @@ class PalleteItem : public QFrame
         virtual void SaveID(DataStorageWriter &data);
         virtual void SaveData(DataStorageWriter &data);
 
+        void SetActive();
+        void SetInactive();
+
     protected:
         void paintEvent(QPaintEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;

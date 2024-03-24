@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <Physics/softscene.h>
 
+class PalleteItem; // TODO find better way
+
 class SceneView : public QWidget
 {
     Q_OBJECT
@@ -20,11 +22,14 @@ class SceneView : public QWidget
         QPoint grabded_point = QPoint();
 
         PhysicalBody* inserted_body = nullptr;
+        PalleteItem* inserted_body_pi = nullptr;
 
         explicit SceneView(QWidget *parent = nullptr);
+        ~SceneView();
 
         void SetViewport(QRect &rect);
         void SetInsertion(PhysicalBody* body);
+        void SetInsertion(PalleteItem* item);
         QPoint ToSceneCoordinates(QPoint point);
 
     public slots:

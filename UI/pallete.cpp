@@ -32,9 +32,6 @@ Pallete::~Pallete() {
         if (widget) {
             this->layout.removeWidget(widget);
             PalleteItem* pi = dynamic_cast<PalleteItem*>(widget);
-            if (pi) { // TODO: this is not needed with proper destruction order and may cause UB when deleting an active pallete item
-                pi->scene_view_target = nullptr;
-            }
             delete widget;
             continue;
         }

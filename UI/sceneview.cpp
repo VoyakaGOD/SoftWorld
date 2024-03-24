@@ -2,6 +2,8 @@
 #include <QMouseEvent>
 #include <iostream>
 
+#include "palleteitem.h" // TODO remove
+
 extern SoftScene main_scene;
 
 SceneView::SceneView(QWidget *parent)
@@ -18,8 +20,11 @@ SceneView::SceneView(QWidget *parent)
     connect(&(this->clear_cursor_action), SIGNAL(triggered()), this, SLOT(ClearCursor()));
     this->addAction(&(this->clear_cursor_action));
 
-
     //this->SetViewport(this->scene->world_rect);
+}
+
+SceneView::~SceneView() {
+    this->ClearCursor();
 }
 
 void SceneView::SetViewport(QRect &rect) {
@@ -55,7 +60,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
         PhysicalBody* new_body = this->inserted_body->Clone();
         new_body->MoveBy(event->pos());
         this->scene->AddBody(new_body);
-        this->inserted_body = nullptr;
+        this->ClearCursor();
     }
 
     PhysicalBody* body = this->scene->GetBodyAt(pos);
@@ -86,13 +91,21 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void SceneView::SetInsertion(PhysicalBody* body) {
+    if (this->inserted_body_pi) {
+        this->inserted_body_pi->SetInactive();
+        this->inserted_body_pi = nullptr;
+    }
     this->inserted_body = body;
     this->update();
 }
 
+void SceneView::SetInsertion(PalleteItem* item) {
+    this->SetInsertion(item->body);
+    this->inserted_body_pi = item;
+}
+
 void SceneView::ClearCursor() {
-    this->inserted_body = nullptr;
-    this->update();
+    this->SetInsertion((PhysicalBody*)nullptr);
 }
 
 void SceneView::DeleteSelected() {
