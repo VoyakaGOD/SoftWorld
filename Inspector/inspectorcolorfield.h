@@ -6,7 +6,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QRegularExpressionValidator>
 #include "inspectoritem.h"
 #include "coloricon.h"
 #include "editingmanager.h"

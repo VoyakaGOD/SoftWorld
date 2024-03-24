@@ -64,3 +64,8 @@ void Inspector::AddParam(const char *name, float &value, float min, float max)
 {
     items.push_back(new InspectorFractionalField(container, layout, name, value, min, max, manager));
 }
+
+void Inspector::AddParam(const char *name, QString &value, int max_length)
+{
+    items.push_back(new InspectorStringField(container, layout, name, value, max_length, manager));
+}

@@ -21,9 +21,11 @@ QIcon stop_icon;
 QIcon hide_icon;
 QIcon show_icon;
 
+QString dev = "everything was deleted!";
+
 static void test_func()
 {
-    qDebug("everything was deleted!");
+    qDebug() << dev;
 }
 
 int int_param_value = 0;
@@ -60,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     Inspector::AddParam("integer", int_param_value, 12, 25);
     Inspector::AddParam("float", float_param_value, -5.0f, 5.0f);
     Inspector::AddParam("double", double_param_value, -1e3, 1e3);
+    Inspector::AddParam("dev", dev);
 
     Inspector::AddHeader("actions", NORMAL_HEADER);
     Inspector::AddAction("delete everything", test_func);

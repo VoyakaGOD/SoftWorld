@@ -7,6 +7,7 @@
 #include "inspectorbutton.h"
 #include "inspectorcolorfield.h"
 #include "inspectornumericfield.h"
+#include "inspectorstringfield.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ public:
     static void AddParam(const char *name, int &value, int min = INT_MIN, int max = INT_MAX);
     static void AddParam(const char *name, double &value, double min = -1e35, double max = 1e35);
     static void AddParam(const char *name, float &value, float min = -1e305, float max = 1e305);
+    static void AddParam(const char *name, QString &value, int max_length = 32767);
 
 private:
     Inspector();
