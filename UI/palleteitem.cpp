@@ -13,8 +13,7 @@ PalleteItem::PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *scene_vi
     : QFrame(parent, f), scene_view_target(scene_view), body(body), name(str) {
         this->setMinimumHeight(32);
         this->setFocusPolicy(Qt::ClickFocus);
-        this->setFrameStyle(QFrame::Panel | QFrame::Raised);
-        this->setLineWidth(FRAME_WIDTH_BASE);
+        this->SetInactive();
         this->setAutoFillBackground(true);
 }
 
@@ -42,7 +41,6 @@ PalleteItem::PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *scene_vi
 }
 
 void PalleteItem::SetActive() {
-    this->setBackgroundRole(QPalette::Highlight);
     this->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     this->setLineWidth(FRAME_WIDTH_SELECT);
 }
