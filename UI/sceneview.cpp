@@ -68,7 +68,10 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
         this->selected_body = body;
         this->body_grabbed = true;
         this->grabded_point = body->GetLocalCoordinate(pos);
+        Inspector::Clear();
+        body->WidenInspectorContext();
     }
+    this->update(); //sorry, but it for testing
 }
 
 void SceneView::mouseReleaseEvent(QMouseEvent *event) {

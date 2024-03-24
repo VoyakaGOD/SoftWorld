@@ -8,6 +8,7 @@
 #include <QSlider>
 #include "inspectoritem.h"
 #include "slidermanagers.h"
+#include "lockableobject.h"
 
 template <typename T, typename SpinBoxT, typename ManagerT>
 class InspectorNumericField : public InspectorItem
@@ -19,7 +20,7 @@ private:
     QHBoxLayout *field;
     ManagerT manager;
 public:
-    InspectorNumericField(QWidget *container, QFormLayout *layout, const char *name, T &value, T min_value, T max_value)
+    InspectorNumericField(QWidget *container, QFormLayout *layout, const char *name, T &value, T min_value, T max_value, LockableObject *scene)
     {
         label = new QLabel(name, container);
 
@@ -40,9 +41,14 @@ public:
         value = qBound(min_value, value, max_value);
         UpdateValue(value);
 
-        auto update = [&value, this](T new_value){ value = new_value; UpdateValue(new_value); };
+        auto update = [&value, this](T new_value){
+            value = new_value;
+            UpdateValue(new_value);
+        };
         CONNECT(box, &SpinBoxT::valueChanged, update);
-        CONNECT(slider, &QSlider::valueChanged, [update, this](int value){ update(manager.ConvertFromRaw(value)); });
+        CONNECT(slider, &QSlider::valueChanged, [update, this](int value){
+            update(manager.ConvertFromRaw(value));
+        });
     }
 
     ~InspectorNumericField()
@@ -55,8 +61,12 @@ public:
 private:
     void UpdateValue(T value)
     {
+        box->blockSignals(true);
+        slider->blockSignals(true);
         box->setValue(value);
         slider->setValue(manager.ConvertToRaw(value));
+        box->blockSignals(false);
+        slider->blockSignals(false);
     }
 };
 

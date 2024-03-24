@@ -43,9 +43,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Physics/drawingstyle.h Physics/drawingstyle.cpp
         Physics/softscene.h Physics/softscene.cpp
         Inspector/action.h
-
-
-
         icons.qrc
         Inspector/inspectornumericfield.h
         Inspector/inspectoritem.h
@@ -56,7 +53,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Inspector/coloricon.h Inspector/coloricon.cpp
         Inspector/inspector.h Inspector/inspector.cpp
         Inspector/inspectoritem.cpp
-
+        Physics/editonlybody.h Physics/editonlybody.cpp
+        Inspector/lockableobject.h
+        Utils/cstringcomparator.h Utils/cstringcomparator.cpp
+        Utils/icons.cpp Utils/icons.h
+        Utils/colorutility.h Utils/colorutility.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET SoftWorld APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

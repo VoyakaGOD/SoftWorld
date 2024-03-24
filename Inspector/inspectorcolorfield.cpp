@@ -1,32 +1,43 @@
 #include "inspectorcolorfield.h"
 
-static QColor GetRandomColor()
-{
-    return QColor(rand() % 255, rand() %255, rand() % 255);
-}
-
-InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value)
+InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout, const char *name, QColor &value, LockableObject *scene)
 {
     label = new QLabel(name, container);
 
     icon = new ColorIcon(value, 20, container);
 
     input = new QLineEdit(value.name(), container);
-    QString pattern = QString("#%1%1%1%1%1%1").arg("[0-9a-fA-F]");
-    QRegularExpressionValidator *validator = new QRegularExpressionValidator(QRegularExpression(pattern));
-    input->setValidator(validator);
+    input->setValidator(ColorUtility::GetValidator());
     input->setContextMenuPolicy(Qt::PreventContextMenu);
+
+    dialog_button = new QPushButton(Icons::Get("settings"), "", container);
 
     field = new QHBoxLayout(container);
     field->addWidget(icon);
     field->addWidget(input);
+    field->addWidget(dialog_button);
     field->setSpacing(7);
 
     layout->addRow(label, field);
 
-    auto update = [&value, this](const QColor &color){value = color;  ChangeColor(color); };
-    CONNECT(input, &QLineEdit::textChanged, [=](const QString &text){ if(text.length() == 7) update(QColor(text)); });
-    CONNECT(icon, &ColorIcon::clicked, [=](){ update(GetRandomColor()); });
+    auto update = [&value, scene, this](const QColor &color){
+        scene->Lock();
+        value = color;
+        scene->Unlock();
+        ChangeColor(color);
+    };
+    CONNECT(input, &QLineEdit::textChanged, [update](const QString &text){
+        if(text.length() == 7)
+            update(QColor(text));
+    });
+    CONNECT(icon, &ColorIcon::clicked, [update](){
+        update(ColorUtility::GetRandomColor());
+    });
+    CONNECT(dialog_button, &QPushButton::clicked, [update, container, &value](){
+        QColor color = QColorDialog::getColor(value, container);
+        if(color.isValid())
+            update(color);
+    });
 }
 
 InspectorColorField::~InspectorColorField()
@@ -34,6 +45,7 @@ InspectorColorField::~InspectorColorField()
     delete label;
     delete icon;
     delete input;
+    delete dialog_button;
     delete field;
 }
 
