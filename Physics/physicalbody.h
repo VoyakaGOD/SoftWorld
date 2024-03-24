@@ -5,14 +5,12 @@
 #include <QRect>
 #include <QPainter>
 #include "drawingstyle.h"
+#include <Utils/fileworks.h>
 #include "Inspector/inspector.h"
 
 enum BodyClass {
     BODY_CLASS_UNDEF = 0,
-    BODY_CLASS_GHOST,
-};
-struct PhysicalBodyData {
-    DrawingStyle drawing_style;
+    BODY_CLASS_GHOST = 0x77,
 };
 
 class PhysicalBody
@@ -28,13 +26,13 @@ public:
 
 //fileworks
 public:
-    virtual BodyClass GetClass() const {return BODY_CLASS_UNDEF;}
-    virtual size_t GetDataSize() const {return sizeof(PhysicalBodyData);}
+    virtual size_t GetSavedSize() const;
 
-    PhysicalBody(PhysicalBodyData* data) : drawing_style(data->drawing_style) {};
-    virtual void GetData(void* data) const {
-        ((PhysicalBodyData*)data)->drawing_style = this->drawing_style;
-    }
+    PhysicalBody(DataStorageReader &data);
+
+    virtual void SaveID(DataStorageWriter &data) const;
+
+    virtual void SaveData(DataStorageWriter &data) const;
 
 
 

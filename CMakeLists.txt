@@ -20,12 +20,15 @@ set(PROJECT_SOURCES
         UI/pallete.h
         UI/pallete.cpp
         Physics/physicalbody.h
+        Physics/physicalbody.cpp
         Physics/ghostbody.h
         Physics/ghostbody.cpp
-        Physics/fileworks.h
-        Physics/fileworks.cpp
-        Physics/serialize.h
-        Physics/serialize.cpp
+        Physics/drawingstyle.h
+        Physics/drawingstyle.cpp
+        Utils/fileworks.h
+        Utils/fileworks.cpp
+        Utils/serialize.h
+        Utils/serialize.cpp
         main.cpp
         mainwindow.cpp
         mainwindow.h

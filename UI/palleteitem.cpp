@@ -2,6 +2,7 @@
 #include <iostream>
 #include <QStyle>
 #include <QMouseEvent>
+#include <Utils/serialize.h>
 
 static const int ITEM_MARGIN = 2;
 
@@ -10,7 +11,7 @@ PalleteItem::PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *scene_vi
         this->setMinimumHeight(32);
         this->setFocusPolicy(Qt::ClickFocus);
         this->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    }
+}
 
 PalleteItem::~PalleteItem() {
     if (this->body) {
@@ -22,6 +23,41 @@ PalleteItem::~PalleteItem() {
         delete this->body;
     }
 }
+
+PalleteItem::PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *scene_view, DataStorageReader &data)
+        : PalleteItem(parent, f, scene_view, nullptr, nullptr) {
+
+    uint16_t fixed_len = *(uint16_t*)(data.data); // required "fixed data len" field
+    PTR_MOVE_BYTES(data.data, fixed_len)
+    this->body = physicalBodyDeserialize(data);
+    char* name_str = stringDeserialize(data);
+    this->name = name_str ? name_str : "*Unnamed*";
+    DataObjectSkipEnd(data);
+    PTR_MOVE_BYTES(data.data, 1)
+}
+
+size_t PalleteItem::GetSavedSize() {
+    return (2*sizeof(saved_obj_id_t)) + sizeof(obj_fixed_data_len_t) + (this->body ? this->body->GetSavedSize() : sizeof(saved_obj_id_t)) + (this->name.length() + 1 + sizeof(saved_obj_id_t));
+}
+
+void PalleteItem::SaveID(DataStorageWriter &data) {
+    PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_PALLETE_ITEM)
+}
+
+void PalleteItem::SaveData(DataStorageWriter &data) {
+    *(obj_fixed_data_len_t*)data.data = sizeof(obj_fixed_data_len_t);
+    PTR_MOVE_BYTES(data.data, sizeof(obj_fixed_data_len_t))
+
+    if (this->body)
+        SAVE_OBJ(data, *(this->body))
+    else {
+        PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_INVALID)
+    }
+
+    size_t str_size = StringSerialize(this->name.toStdString(), data.data);
+    PTR_MOVE_BYTES(data.data, str_size);
+}
+
 
 void PalleteItem::paintEvent(QPaintEvent *event) {
     int framewidth = this->frameWidth() + ITEM_MARGIN;

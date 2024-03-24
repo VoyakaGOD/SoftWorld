@@ -2,12 +2,6 @@
 
 #include "physicalbody.h"
 
-struct GhostBodyData {
-    PhysicalBodyData super;
-    int x, y;
-    float radius;
-};
-
 class GhostBody: public PhysicalBody {
 
 public:
@@ -19,10 +13,10 @@ public:
 
 // fileworks
 public:
-    virtual BodyClass GetClass() const override {return BODY_CLASS_GHOST;}
-    virtual size_t GetDataSize() const override {return sizeof(GhostBodyData);}
-    virtual void GetData(void* data) const override;
-    GhostBody(GhostBodyData* data) : PhysicalBody(&(data->super)), origin(data->x, data->y), radius(data->radius) {printf("D %d %d %d\n", data->x, data->y, data->radius);}
+    virtual size_t GetSavedSize() const override;
+    virtual void SaveID(DataStorageWriter &data)   const override;
+    virtual void SaveData(DataStorageWriter &data) const override;
+    GhostBody(DataStorageReader &reader);
 
 
 

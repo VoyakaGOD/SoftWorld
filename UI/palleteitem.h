@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include <QPainter>
 #include "sceneview.h"
+#include <Utils/fileworks.h>
 
 class PalleteItem : public QFrame
 {
@@ -16,6 +17,12 @@ class PalleteItem : public QFrame
         QString name;
         SceneView* scene_view_target;
         PhysicalBody* body;
+
+    public:
+        explicit PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *sceneview, DataStorageReader &data);
+        virtual size_t GetSavedSize();
+        virtual void SaveID(DataStorageWriter &data);
+        virtual void SaveData(DataStorageWriter &data);
 
     protected:
         void paintEvent(QPaintEvent *event) override;

@@ -1,11 +1,46 @@
 #include "ghostbody.h"
+#include <Utils/serialize.h>
+#include <iostream> //TEMPORARY
 
-void GhostBody::GetData(void* data) const {
-    GhostBodyData* gdata = (GhostBodyData*)data;
-    PhysicalBody::GetData(&(gdata->super));
+struct GhostBodyData {
+    obj_fixed_data_len_t size;
+    int x, y;
+    float radius;
+};
+
+static GhostBodyData default_data = {.x = 10, .y = 10, .radius = 10};
+
+#define GBDATA(reader, field) \
+    ((offsetof(GhostBodyData, field) + sizeof(GhostBodyData::field) <= (((GhostBodyData*)(reader.data))->size)) ? \
+    (((GhostBodyData*)(reader.data))->field) : default_data.field)
+
+GhostBody::GhostBody(DataStorageReader &reader) :
+    PhysicalBody(reader), origin(GBDATA(reader,x), GBDATA(reader,y)), radius(GBDATA(reader, radius)) {
+    PTR_MOVE_BYTES(reader.data, ((GhostBodyData*)(reader.data))->size);
+    DataObjectSkipEnd(reader);
+    PTR_MOVE_BYTES(reader.data, 1)
+}
+
+size_t GhostBody::GetSavedSize() const {
+
+    return PhysicalBody::GetSavedSize()
+     + sizeof(saved_obj_id_t) + sizeof(GhostBodyData) + 1;
+};
+
+void GhostBody::SaveID(DataStorageWriter &data) const {
+    PhysicalBody::SaveID(data);
+    PTR_APPEND(data.data, saved_obj_id_t, BODY_CLASS_GHOST);
+}
+
+void GhostBody::SaveData(DataStorageWriter &data) const {
+    PhysicalBody::SaveData(data);
+
+    GhostBodyData* gdata = (GhostBodyData*)(data.data);
+    gdata->size = sizeof(*gdata);
     gdata->x = this->origin.x();
     gdata->y = this->origin.y();
     gdata->radius = this->radius;
+    PUT_FIXEDONLY_NUL(data.data)
 }
 
 QRect GhostBody::GetBoundingRect() const {

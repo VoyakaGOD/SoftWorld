@@ -22,8 +22,9 @@ class Pallete : public QFrame {
     ~Pallete();
 
     void PostInit(SceneView* view);
-
-    void AddPalleteItem(PhysicalBody* body, QString name = "");
+    PalleteItem* AddPalleteItem(PalleteItem* item);
+    PalleteItem* AddPalleteItem(PhysicalBody* body, QString name = "");
+    void RemovePalleteItem(PalleteItem* item);
 
     int FindItemByPos(const QPoint &pos);
 
