@@ -12,7 +12,7 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
 
     dialog_button = new QPushButton(Icons::Get("settings"), "", container);
 
-    field = new QHBoxLayout(container);
+    field = new QHBoxLayout();
     field->addWidget(icon);
     field->addWidget(input);
     field->addWidget(dialog_button);
