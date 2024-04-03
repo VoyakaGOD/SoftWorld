@@ -7,7 +7,7 @@
 extern SoftScene main_scene;
 
 SceneView::SceneView(QWidget *parent)
-    : QWidget(parent), scene(&main_scene),
+    : QFrame(parent), scene(&main_scene),
     delete_action("delete selected body", this), clear_cursor_action("clear cursor", this) {
 
     this->delete_action.setShortcut(QKeySequence::Delete);
@@ -20,6 +20,8 @@ SceneView::SceneView(QWidget *parent)
     connect(&(this->clear_cursor_action), SIGNAL(triggered()), this, SLOT(ClearCursor()));
     this->addAction(&(this->clear_cursor_action));
 
+    this->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    this->setLineWidth(2);
     //this->SetViewport(this->scene->world_rect);
 }
 
@@ -44,6 +46,7 @@ void SceneView::paintEvent(QPaintEvent * event) {
         painter.translate(mouse_pos);
         this->inserted_body->Draw(painter);
     }
+    QFrame::paintEvent(event);
 }
 
 QPoint SceneView::ToSceneCoordinates(QPoint point) {
@@ -82,6 +85,7 @@ void SceneView::mouseReleaseEvent(QMouseEvent *event) {
 
 void SceneView::mouseMoveEvent(QMouseEvent *event) {
     if (body_grabbed) {
+        // TODO mutex here
         QPoint pos = this->ToSceneCoordinates(event->pos());
         QPoint offset = pos - this->selected_body->GetGlobalCoordinate(this->grabded_point);
         this->selected_body->MoveBy(offset);
