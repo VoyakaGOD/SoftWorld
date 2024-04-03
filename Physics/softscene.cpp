@@ -58,7 +58,7 @@ void SoftScene::RemoveBody(PhysicalBody *body)
 
 void SoftScene::WidenInspectorContext()
 {
-    lock_guard<mutex> lock(synchronizer);
+    //lock_guard<mutex> lock(synchronizer);
 
     Inspector::AddHeader("scene", LARGE_HEADER);
     Inspector::AddParam("air density", air_density, (double)0, (double)1000);
