@@ -16,4 +16,6 @@ Ctrl + S | save scene
 Ctrl + O | load scene
 Alt + S | save palette
 Alt + O | load palette
+Q | cancel insertion
+Del | delete body/item/whatever
 Enter | run/stop
