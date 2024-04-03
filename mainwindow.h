@@ -22,6 +22,8 @@ private slots:
 
     void on_inspector_btn_clicked();
 
+    void on_palette_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

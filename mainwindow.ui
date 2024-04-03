@@ -226,7 +226,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>inspector</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
@@ -258,6 +258,9 @@
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/save_scene.png</normaloff>:/Icons/save_scene.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+S</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -274,6 +277,9 @@
        <property name="icon">
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/load_scene.png</normaloff>:/Icons/load_scene.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+O</string>
        </property>
       </widget>
      </item>
@@ -334,6 +340,9 @@
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/stop.png</normaloff>:/Icons/stop.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Return</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -367,6 +376,9 @@
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/load_palette.png</normaloff>:/Icons/load_palette.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Alt+O</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -387,6 +399,9 @@
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/save_palette.png</normaloff>:/Icons/save_palette.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Alt+S</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -401,11 +416,14 @@
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="text">
-        <string>palette</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset resource="icons.qrc">
          <normaloff>:/Icons/opened_lock.png</normaloff>:/Icons/opened_lock.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>P</string>
        </property>
       </widget>
      </item>

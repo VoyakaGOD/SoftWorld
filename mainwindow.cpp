@@ -105,3 +105,17 @@ void MainWindow::on_inspector_btn_clicked()
     }
 }
 
+void MainWindow::on_palette_btn_clicked()
+{
+    if(ui->palleteDock->isHidden())
+    {
+        ui->palleteDock->show();
+        ui->palette_btn->setIcon(show_icon);
+    }
+    else
+    {
+        ui->palleteDock->hide();
+        ui->palette_btn->setIcon(hide_icon);
+    }
+}
+

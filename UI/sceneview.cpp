@@ -128,6 +128,6 @@ void SceneView::OnEditingStarted()
 
 void SceneView::OnEditingEnded()
 {
-    scene->Unlock();
     update();
+    scene->Unlock();
 }
