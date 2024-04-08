@@ -5,15 +5,18 @@
 #include <QRect>
 #include <QPainter>
 #include "drawingstyle.h"
+#include <Serialize/deser_helpers.h>
 #include <Utils/fileworks.h>
 #include "Inspector/inspector.h"
+
+///SERIALIZABLE PhysicalBody PHYSICAL_BODY_ID base
 
 enum BodyClass {
     BODY_CLASS_UNDEF = 0,
     BODY_CLASS_GHOST = 0x77,
 };
 
-class PhysicalBody
+class PhysicalBody : public SerializableObject
 {
 //general methods
 public:
@@ -26,13 +29,13 @@ public:
 
 //fileworks
 public:
-    virtual size_t GetSavedSize() const;
+    virtual size_t GetSavedSize() const override;
 
     PhysicalBody(DataStorageReader &data);
 
-    virtual void SaveID(DataStorageWriter &data) const;
+    virtual void SaveID(DataStorageWriter &data) const override;
 
-    virtual void SaveData(DataStorageWriter &data) const;
+    virtual void SaveData(DataStorageWriter &data) const override;
 
 
 

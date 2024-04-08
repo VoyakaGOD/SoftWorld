@@ -1,4 +1,10 @@
+### Short length encoding format
+
+In some cases, a special format is used for length. The target value is encoded in any necessary number of bytes. In each byte, the least significant 7 bits encode useful data. When multiple bytes are used, the order is little-endian. the MSB is set in all but the last byte. So, if MSB=0, then this is a final byte, and if MSB=1, there are more bytes to read
+
+
 ## File format
+
 File is binary. It represents one or more **Objects**.
 
 Each **Object** begins with an **Object ID**, which is a `uint8_t` having one of the values of `SavedObjId` enum. **Object** can have multiple IDs, with first one specifying the base class and each following ID specifying the derived class. **Object ID** of base class always has its MSB set, while **Object ID** of the final class does not. This can be used to determine the final class when skipping objects. ID of 0 is reserved in all classes. If deserializer function encounters 0 ID of top class, it should exit, while leaving data pointer pointing at 0 (for handling early end of data)
@@ -8,6 +14,7 @@ Object data immediately follows object ID. It consists of one or more **data sec
 Each **data section** starts with `uint16_t` specifying its **length** (including length field). Then follows the length-2 bytes, containing fixed length data member info for the object. If, when deserializing, this length is less than actual size of data neeeded for the object, it is assumed that this is because file is creted by old version of a program and fields not present were not added yet, so they are initialized with some default values.
 
 After the data section may follow one or more additional **Object**s, forming variable length data. Last byte of **data section** is always set to 0, to indicate that there are no additional objects present.
+
 
 ## Deserialization
 

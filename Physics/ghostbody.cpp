@@ -1,5 +1,6 @@
 #include "ghostbody.h"
-#include <Utils/serialize.h>
+#include <Serialize/serialize.h>
+#include <Serialize/deserialize.h>
 #include <iostream> //TEMPORARY
 
 struct GhostBodyData {
@@ -26,11 +27,6 @@ size_t GhostBody::GetSavedSize() const {
     return PhysicalBody::GetSavedSize()
      + sizeof(saved_obj_id_t) + sizeof(GhostBodyData) + 1;
 };
-
-void GhostBody::SaveID(DataStorageWriter &data) const {
-    PhysicalBody::SaveID(data);
-    PTR_APPEND(data.data, saved_obj_id_t, BODY_CLASS_GHOST);
-}
 
 void GhostBody::SaveData(DataStorageWriter &data) const {
     PhysicalBody::SaveData(data);

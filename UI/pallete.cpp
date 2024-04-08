@@ -2,7 +2,8 @@
 #include <QMenu>
 #include <QModelIndex>
 #include <Physics/ghostbody.h> //temporary
-#include <Utils/serialize.h>
+#include <Serialize/serialize.h>
+#include <Serialize/deserialize.h>
 #include <QFileDialog>
 #include <iostream>
 #include <Inspector/inspector.h>
@@ -90,7 +91,7 @@ void Pallete::SaveThisPalleteItem() {
             if (filename.isNull()) return;
 
             FileWriteInterface file_writer = FileWriteInterface(filename.toUtf8().data());
-            SERIALIZE_OBJ(file_writer, *(this->context_menu_target))
+            serializeObj(file_writer, *(this->context_menu_target));
         }
         catch (system_error err) {
             cout << err.what() << endl;
@@ -104,7 +105,12 @@ void Pallete::LoadNewPalleteItem() {
         if (filename.isNull()) return;
 
         FileReadInterface file_reader = FileReadInterface(filename.toUtf8().data());
-        this->AddPalleteItem(palleteItemDeserialize(this, this->windowFlags(), this->sceneview, file_reader));
+        PalleteItem* new_pi = this->AddPalleteItem(nullptr, QString());
+        if (palleteItemDeserialize(new_pi, file_reader) != 0) {
+            this->RemovePalleteItem(new_pi);
+            //TODO: pop up error
+        }
+
     }
     catch (system_error err) {
         cout << err.what() << endl;

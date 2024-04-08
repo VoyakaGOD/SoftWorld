@@ -1,0 +1,6 @@
+128 PhysicalBody PHYSICAL_BODY_ID base
+1 PalleteItem PALLETE_ITEM_ID inplace
+2 String SAVED_OBJ_STR special
+PhysicalBody:
+1 GhostBody GHOST_BODY_ID simple
+:

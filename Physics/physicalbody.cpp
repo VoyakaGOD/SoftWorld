@@ -1,4 +1,5 @@
-#include <Utils/serialize.h>
+#include <Serialize/serialize.h>
+#include <Serialize/deserialize.h>
 #include "physicalbody.h"
 
 #include <iostream>
@@ -23,9 +24,5 @@ void PhysicalBody::SaveData(DataStorageWriter &data) const {
     ((PhysicalBodyData*)data.data)->size = sizeof(PhysicalBodyData);
     ((PhysicalBodyData*)data.data)->drawing_style = this->drawing_style;
     PUT_FIXEDONLY_NUL(data.data)
-}
-
-void PhysicalBody::SaveID(DataStorageWriter &data) const {
-    PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_BODY)
 }
 

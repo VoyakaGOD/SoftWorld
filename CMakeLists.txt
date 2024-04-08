@@ -27,8 +27,15 @@ set(PROJECT_SOURCES
         Physics/drawingstyle.cpp
         Utils/fileworks.h
         Utils/fileworks.cpp
-        Utils/serialize.h
-        Utils/serialize.cpp
+        Serialize/ser_class_enums.h
+        Serialize/deser_helpers.h
+        Serialize/desertab.h
+        Serialize/deserialize.h
+        Serialize/deserialize.cpp
+        Serialize/saveid.cpp
+        Serialize/serialize_special.h
+        Serialize/serialize_special.cpp
+        Serialize/serialize.h
         main.cpp
         mainwindow.cpp
         mainwindow.h

@@ -2,8 +2,11 @@
 #include <iostream>
 #include <QStyle>
 #include <QMouseEvent>
-#include <Utils/serialize.h>
 #include <QPalette>
+#include <Serialize/deserialize.h>
+#include <Serialize/serialize_special.h>
+#include <Serialize/serialize.h>
+#include <Serialize/ser_class_enums.h>
 
 static const int ITEM_MARGIN = 2;
 static const int FRAME_WIDTH_BASE = 1;
@@ -28,16 +31,19 @@ PalleteItem::~PalleteItem() {
     }
 }
 
-PalleteItem::PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *scene_view, DataStorageReader &data)
-        : PalleteItem(parent, f, scene_view, nullptr, nullptr) {
+int PalleteItem::Deserialize(SerializableObject* obj, DataStorageReader &data) {
+    PalleteItem* item = dynamic_cast<PalleteItem*>(obj);
+    if (!item)
+        return DESERR_INVTYPE;
+    if (item->body)
+        delete item->body;
 
     uint16_t fixed_len = *(uint16_t*)(data.data); // required "fixed data len" field
     PTR_MOVE_BYTES(data.data, fixed_len)
-    this->body = physicalBodyDeserialize(data);
-    char* name_str = stringDeserialize(data);
-    this->name = name_str ? name_str : "*Unnamed*";
-    DataObjectSkipEnd(data);
-    PTR_MOVE_BYTES(data.data, 1)
+    item->body = physicalBodyDeserialize(data);
+    char* name_str = StringDeserialize(data);
+    item->name = name_str ? name_str : "*Unnamed*";
+    return DESERR_OK;
 }
 
 void PalleteItem::SetActive() {
@@ -51,26 +57,21 @@ void PalleteItem::SetInactive() {
     this->setLineWidth(FRAME_WIDTH_BASE);
 }
 
-size_t PalleteItem::GetSavedSize() {
-    return (2*sizeof(saved_obj_id_t)) + sizeof(obj_fixed_data_len_t) + (this->body ? this->body->GetSavedSize() : sizeof(saved_obj_id_t)) + (this->name.length() + 1 + sizeof(saved_obj_id_t));
+size_t PalleteItem::GetSavedSize() const {
+    return (2*sizeof(saved_obj_id_t)) + sizeof(obj_fixed_data_len_t) + (this->body ? this->body->GetSavedSize() : sizeof(saved_obj_id_t)) + StringGetSavedSize(this->name.length());
 }
 
-void PalleteItem::SaveID(DataStorageWriter &data) {
-    PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_PALLETE_ITEM)
-}
-
-void PalleteItem::SaveData(DataStorageWriter &data) {
+void PalleteItem::SaveData(DataStorageWriter &data) const {
     *(obj_fixed_data_len_t*)data.data = sizeof(obj_fixed_data_len_t);
     PTR_MOVE_BYTES(data.data, sizeof(obj_fixed_data_len_t))
 
     if (this->body)
-        SAVE_OBJ(data, *(this->body))
+        saveObj(data, *(this->body));
     else {
-        PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_INVALID)
+        PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_NONE)
     }
 
-    size_t str_size = StringSerialize(this->name.toStdString(), data.data);
-    PTR_MOVE_BYTES(data.data, str_size);
+    StringSerialize(this->name.toStdString(), data);
 }
 
 

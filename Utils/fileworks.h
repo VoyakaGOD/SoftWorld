@@ -14,7 +14,6 @@
 #include <stdio.h>
 #endif
 
-
 typedef uint8_t saved_obj_id_t;
 typedef uint16_t obj_fixed_data_len_t;
 

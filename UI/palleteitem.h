@@ -1,12 +1,16 @@
-#pragma once
+#ifndef PALLETEITEM_H
+#define PALLETEITEM_H
 
 #include <QWidget>
 #include <QGraphicsView>
 #include <QPainter>
 #include "sceneview.h"
 #include <Utils/fileworks.h>
+#include <Serialize/deser_helpers.h>
 
-class PalleteItem : public QFrame
+///SERIALIZABLE PalleteItem PALLETE_ITEM_ID inplace
+
+class PalleteItem : public QFrame, public SerializableObject
 {
     Q_OBJECT
 
@@ -19,10 +23,10 @@ class PalleteItem : public QFrame
         PhysicalBody* body;
 
     public:
-        explicit PalleteItem(QWidget *parent, Qt::WindowFlags f, SceneView *sceneview, DataStorageReader &data);
-        virtual size_t GetSavedSize();
-        virtual void SaveID(DataStorageWriter &data);
-        virtual void SaveData(DataStorageWriter &data);
+        static int Deserialize(SerializableObject* obj, DataStorageReader &data);
+        virtual size_t GetSavedSize() const override;
+        virtual void SaveID(DataStorageWriter &data) const override;
+        virtual void SaveData(DataStorageWriter &data) const override;
 
         void SetActive();
         void SetInactive();
@@ -31,3 +35,5 @@ class PalleteItem : public QFrame
         void paintEvent(QPaintEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
 };
+
+#endif

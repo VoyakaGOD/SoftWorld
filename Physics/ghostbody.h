@@ -2,6 +2,8 @@
 
 #include "physicalbody.h"
 
+///SERIALIZABLE GhostBody:PhysicalBody GHOST_BODY_ID simple
+
 class GhostBody: public PhysicalBody {
 
 public:
@@ -13,12 +15,11 @@ public:
 
 // fileworks
 public:
+    virtual void SaveID(DataStorageWriter &data) const override;
     virtual size_t GetSavedSize() const override;
-    virtual void SaveID(DataStorageWriter &data)   const override;
     virtual void SaveData(DataStorageWriter &data) const override;
+    static SerializableObject* Deserialize(DataStorageReader& reader) {return new GhostBody(reader);}
     GhostBody(DataStorageReader &reader);
-
-
 
 public:
 
