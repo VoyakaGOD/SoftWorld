@@ -18,8 +18,6 @@ static GhostBodyData default_data = {.x = 10, .y = 10, .radius = 10};
 GhostBody::GhostBody(DataStorageReader &reader) :
     PhysicalBody(reader), origin(GBDATA(reader,x), GBDATA(reader,y)), radius(GBDATA(reader, radius)) {
     PTR_MOVE_BYTES(reader.data, ((GhostBodyData*)(reader.data))->size);
-    DataObjectSkipEnd(reader);
-    PTR_MOVE_BYTES(reader.data, 1)
 }
 
 size_t GhostBody::GetSavedSize() const {

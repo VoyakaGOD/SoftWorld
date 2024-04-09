@@ -26,7 +26,7 @@ size_t writeShortLength(DataStorageWriter &writer, size_t len) {
 }
 
 size_t lenAsShortLength(size_t len) {
-    size_t ret;
+    size_t ret = 0;
     while(len) {
         len = len >> 7;
         ret++;
@@ -54,14 +54,14 @@ char* StringDeserialize(DataStorageReader &deser, size_t* len_ptr) {
 }
 
 size_t StringGetSavedSize(size_t len) {
-    return sizeof(saved_obj_id_t) + lenAsShortLength(len) + len + 1;
+    return sizeof(saved_obj_id_t) + lenAsShortLength(len) + len;
 }
 
 void StringSerialize(const char* str, DataStorageWriter &writer){
     uint8_t* begin = (uint8_t*)writer.data;
     PTR_APPEND(writer.data, saved_obj_id_t, SAVED_OBJ_STR)
     size_t len = strlen(str);
-    writeShortLength(writer, len);
+    writeShortLength(writer, len+1);
     strcpy((char*)(writer.data), str);
     PTR_MOVE_BYTES(writer.data, len+1)
 }
@@ -71,18 +71,18 @@ void StringSerialize(const void* str, DataStorageWriter &writer, size_t len){
     PTR_APPEND(writer.data, saved_obj_id_t, SAVED_OBJ_STR)
     writeShortLength(writer, len);
     memcpy((char*)(writer.data), str, len);
-    PTR_MOVE_BYTES(writer.data, len+1)
+    PTR_MOVE_BYTES(writer.data, len)
 }
 
 void StringSerialize(std::string str, DataStorageWriter &writer){
     uint8_t* begin = (uint8_t*)writer.data;
     PTR_APPEND(writer.data, saved_obj_id_t, SAVED_OBJ_STR)
-    writeShortLength(writer, str.length());
+    writeShortLength(writer, str.length()+1);
     char* cbuff = (char*)writer.data;
-    for (int i = 0; i < str.size(); i++) {
+    for (int i = 0; i < str.length(); i++) {
         cbuff[i] = str[i];
     }
-    cbuff[str.size()] = '\0';
+    cbuff[str.length()] = '\0';
 
-    PTR_MOVE_BYTES(writer.data, str.size() + 1)
+    PTR_MOVE_BYTES(writer.data, str.length() + 1)
 }

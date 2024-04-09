@@ -4,6 +4,7 @@
 #include <string>
 
 ///SERIALIZABLE String SAVED_OBJ_STR special nosaveid=1
+///SERIALIZABLE invalid SAVED_OBJ_INVALID special nosaveid=1
 
 size_t readShortLength(DataStorageReader &reader);
 size_t writeShortLength(DataStorageWriter &writer, size_t len);

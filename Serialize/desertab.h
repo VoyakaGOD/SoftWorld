@@ -21,6 +21,7 @@ DeserTblEntry obj_deser_tbl[] = {
 /*0*/ {},
 /*1*/ {.name = "PalleteItem", .type = DESER_TBL_INPLACE, .e_inplace = PalleteItem::Deserialize},
 /*2*/ {.name = "String", .type = DESER_TBL_SPECIAL},
+/*3*/ {.name = "invalid", .type = DESER_TBL_SPECIAL},
 };
 DeserTblBaseEntry obj_deser_tbl_b[] = {
 /*128*/ {.name = "PhysicalBody", .size = sizeof(physicalbody_deser_tbl)/sizeof(DeserTblEntry), .bsize = sizeof(physicalbody_deser_tbl_b)/sizeof(DeserTblBaseEntry), .e_norm = physicalbody_deser_tbl, .e_base = physicalbody_deser_tbl_b},

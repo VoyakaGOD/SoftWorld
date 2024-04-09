@@ -15,4 +15,5 @@ enum SavedObjId {
     PHYSICAL_BODY_ID = 128,
     PALLETE_ITEM_ID = 1,
     SAVED_OBJ_STR = 2,
+    SAVED_OBJ_INVALID = 3,
 };

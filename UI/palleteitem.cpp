@@ -58,7 +58,9 @@ void PalleteItem::SetInactive() {
 }
 
 size_t PalleteItem::GetSavedSize() const {
-    return (2*sizeof(saved_obj_id_t)) + sizeof(obj_fixed_data_len_t) + (this->body ? this->body->GetSavedSize() : sizeof(saved_obj_id_t)) + StringGetSavedSize(this->name.length());
+    size_t bsize = (this->body ? this->body->GetSavedSize() : 0);
+    size_t ssize = StringGetSavedSize(this->name.length()+1);
+    return (2*sizeof(saved_obj_id_t)) + sizeof(obj_fixed_data_len_t) + bsize + ssize;
 }
 
 void PalleteItem::SaveData(DataStorageWriter &data) const {
@@ -67,11 +69,9 @@ void PalleteItem::SaveData(DataStorageWriter &data) const {
 
     if (this->body)
         saveObj(data, *(this->body));
-    else {
-        PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_NONE)
-    }
 
     StringSerialize(this->name.toStdString(), data);
+    PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_NONE)
 }
 
 
