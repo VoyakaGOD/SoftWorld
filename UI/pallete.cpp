@@ -79,7 +79,7 @@ void Pallete::RemoveThisPalleteItem() {
 
 void Pallete::InspectThisPalleteItem() {
     if (this->context_menu_target) {
-        Inspector::Clear();
+        Inspector::SetTarget(context_menu_target->body, this);
         this->context_menu_target->body->WidenInspectorContext();
     }
 }
@@ -137,4 +137,14 @@ void Pallete::ShowContextMenu(const QPoint &pos){
     menu->addAction(&(this->load_item_action));
     menu->addAction(&(this->pick_item_action));
     menu->popup(((QWidget*)this)->mapToGlobal(pos));
+}
+
+void Pallete::OnEditingStarted()
+{
+
+}
+
+void Pallete::OnEditingEnded()
+{
+    context_menu_target->update();
 }

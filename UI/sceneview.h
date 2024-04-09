@@ -8,7 +8,7 @@
 
 class PalleteItem; // TODO find better way
 
-class SceneView : public QWidget, public EditingManager
+class SceneView : public QFrame, public EditingManager
 {
     Q_OBJECT
 

@@ -341,7 +341,7 @@
          <normaloff>:/Icons/stop.png</normaloff>:/Icons/stop.png</iconset>
        </property>
        <property name="shortcut">
-        <string>Return</string>
+        <string>U</string>
        </property>
       </widget>
      </item>

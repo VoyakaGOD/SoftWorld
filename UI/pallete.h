@@ -4,8 +4,9 @@
 #include <QWidget>
 #include <QLayout>
 #include "palleteitem.h"
+#include "Inspector/editingmanager.h"
 
-class Pallete : public QFrame {
+class Pallete : public QFrame, public EditingManager {
     Q_OBJECT
 
     SceneView* sceneview = nullptr;
@@ -38,6 +39,9 @@ class Pallete : public QFrame {
         void SaveThisPalleteItem();
         void LoadNewPalleteItem();
         void PickItemFromScene();
+
+        void OnEditingStarted() override;
+        void OnEditingEnded() override;
 };
 
 
