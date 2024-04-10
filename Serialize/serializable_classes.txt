@@ -1,7 +1,8 @@
-128 PhysicalBody PHYSICAL_BODY_ID base
-1 PalleteItem PALLETE_ITEM_ID inplace
+1 invalid SAVED_OBJ_INVALID special
 2 String SAVED_OBJ_STR special
-3 invalid SAVED_OBJ_INVALID special
+3 Package SAVED_OBJ_PKG special
+128 PhysicalBody SAVED_OBJ_PHYSICALBODY base
+4 PalleteItem SAVED_OBJ_PALLETE_ITEM inplace
 PhysicalBody:
 1 GhostBody GHOST_BODY_ID simple
 :

@@ -23,6 +23,7 @@ enum DeserializeError {
     DESERR_BADDATA,
     DESERR_ERRNO
 };
+extern DeserializeError last_deserialize_error;
 
 struct DeserTblEntry {
     DeserTblEntry* parent;

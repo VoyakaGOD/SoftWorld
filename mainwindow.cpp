@@ -118,4 +118,35 @@ void MainWindow::on_palette_btn_clicked()
         ui->palette_btn->setIcon(hide_icon);
     }
 }
+#include <Serialize/deserialize.h>
+#include <Serialize/serialize.h>
+#include <QFileDialog>
+#include <iostream>
+
+void MainWindow::on_save_palette_btn_clicked() {
+    try {
+        QString filename =QFileDialog::getSaveFileName(this, "Open file");
+        if (filename.isNull()) return;
+
+        FileWriteInterface file_writer = FileWriteInterface(filename.toUtf8().data());
+        serializeObj(file_writer, *(this->ui->palleteContents));
+    }
+    catch (system_error err) {
+        cout << err.what() << endl;
+    }
+}
+
+void MainWindow::on_load_palette_btn_clicked() {
+    try {
+        QString filename =QFileDialog::getOpenFileName(this, "Open file");
+        if (filename.isNull()) return;
+
+        FileReadInterface file_reader = FileReadInterface(filename.toUtf8().data());
+        int ret = palleteDeserialize(this->ui->palleteContents, file_reader);
+        // todo pop up error
+    }
+        catch (system_error err) {
+        cout << err.what() << endl;
+    }
+}
 

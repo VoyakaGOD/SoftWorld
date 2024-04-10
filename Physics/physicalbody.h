@@ -9,7 +9,7 @@
 #include <Utils/fileworks.h>
 #include "Inspector/inspector.h"
 
-///SERIALIZABLE PhysicalBody PHYSICAL_BODY_ID base
+///SERIALIZABLE PhysicalBody SAVED_OBJ_PHYSICALBODY base
 
 enum BodyClass {
     BODY_CLASS_UNDEF = 0,

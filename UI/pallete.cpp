@@ -3,6 +3,7 @@
 #include <QModelIndex>
 #include <Physics/ghostbody.h> //temporary
 #include <Serialize/serialize.h>
+#include <Serialize/serialize_special.h>
 #include <Serialize/deserialize.h>
 #include <QFileDialog>
 #include <iostream>
@@ -52,6 +53,19 @@ void Pallete::PostInit(SceneView* view) {
     this->sceneview = view;
     this->AddPalleteItem(new GhostBody(), "test");
     this->AddPalleteItem(new GhostBody(), "test2");
+}
+
+void Pallete::Clear(){
+    this->context_menu_target = nullptr;
+
+    for (int i = 0, j = 0; i < this->layout.count(); i++) {
+        QLayoutItem* item = this->layout.itemAt(j);
+        PalleteItem* pi =  dynamic_cast<PalleteItem*>(item->widget());
+        if (pi)
+            this->RemovePalleteItem(pi);
+        else
+            j++;
+    }
 }
 
 PalleteItem* Pallete::AddPalleteItem(PhysicalBody* body, QString name) {
@@ -124,7 +138,7 @@ void Pallete::PickItemFromScene() {
     this->AddPalleteItem(new_body, "New body");
 }
 
-void Pallete::ShowContextMenu(const QPoint &pos){
+void Pallete::ShowContextMenu(const QPoint &pos) {
 
     this->context_menu_target = dynamic_cast<PalleteItem*>(this->childAt(pos));
 
@@ -139,12 +153,50 @@ void Pallete::ShowContextMenu(const QPoint &pos){
     menu->popup(((QWidget*)this)->mapToGlobal(pos));
 }
 
-void Pallete::OnEditingStarted()
-{
+void Pallete::OnEditingStarted() {}
 
+void Pallete::OnEditingEnded() {
+    context_menu_target->update();
 }
 
-void Pallete::OnEditingEnded()
-{
-    context_menu_target->update();
+void Pallete::SaveID(DataStorageWriter &data) const {
+}
+
+size_t Pallete::GetSavedSize() const {
+    int n = this->layout.count();
+    size_t len = sizeof(saved_obj_id_t);
+    int pi_n = 0;
+
+    for (int i = 0; i < n; i++) {
+        QLayoutItem* item = this->layout.itemAt(i);
+        PalleteItem* pi =  dynamic_cast<PalleteItem*>(item->widget());
+        if (pi) {
+            pi_n++;
+            len += pi->GetSavedSize();
+        }
+    }
+    len += getPkgHeaderSize(pi_n);
+    return len;
+}
+
+void Pallete::SaveData(DataStorageWriter &data) const {
+    int n = this->layout.count();
+    int pi_n = 0;
+    for (int i = 0; i < n; i++) {
+        QLayoutItem* item = this->layout.itemAt(i);
+        PalleteItem* pi =  dynamic_cast<PalleteItem*>(item->widget());
+        if (pi) {
+            pi_n++; // maybe cringe
+        }
+    }
+
+    savePkgHeader(pi_n, data);
+
+    for (int i = 0; i < n; i++) {
+        QLayoutItem* item = this->layout.itemAt(i);
+        PalleteItem* pi =  dynamic_cast<PalleteItem*>(item->widget());
+        if (pi) {
+           saveObj(data, *pi);
+        }
+    }
 }

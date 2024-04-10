@@ -182,7 +182,7 @@ for bname, base in new_classes.items():
             saveid_file.write("void %s::SaveID(DataStorageWriter &data) const {\n" % cl.name)
             if bname != ser_root:
                 saveid_file.write("    %s::SaveID(data);\n" % bname)
-            saveid_file.write("    PTR_APPEND(data.data, saved_obj_id_t, %s);\n}\n" % cl.enum)
+            saveid_file.write("    WRITER_APPEND(data, saved_obj_id_t, %s);\n}\n" % cl.enum)
 
 
         if (cl.typ == "base"):

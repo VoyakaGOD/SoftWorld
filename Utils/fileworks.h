@@ -2,6 +2,7 @@
 
 #include "stddef.h"
 #include "stdint.h"
+#include <stdexcept>
 
 #ifdef unix
 #define FILEWORKS_UNIX
@@ -17,9 +18,25 @@
 typedef uint8_t saved_obj_id_t;
 typedef uint16_t obj_fixed_data_len_t;
 
-#define PTR_MOVE_BYTES(ptr, offs) (ptr) = ((uint8_t*)(ptr)) + offs;
+#define PTR_MOVE_BYTES(ptr, offs) (ptr) = ((uint8_t*)(ptr)) + (offs);
 
-#define PTR_APPEND(ptr, type, val) {(*(type*)(ptr)) = val; (ptr) = ((type*)ptr) + 1;}
+#define PTR_APPEND(ptr, type, val) {(*(type*)(ptr)) = val; (ptr) = ((type*)(ptr)) + 1;}
+#define WRITER_APPEND(writer, type, val) {  \
+    if (((type*)((writer).data)) + 1 > (writer).end) \
+        throw std::out_of_range("data write exceeds length of the buffer"); \
+    (*(type*)(writer.data)) = val; (writer.data) = ((type*)writer.data) + 1;    \
+}
+
+#define WRITER_CHECK_BYTES(writer, size) {\
+    if (((uint8_t*)(writer.data)) + (size) > writer.end) \
+        throw std::out_of_range("data write exceeds length of the buffer"); \
+}
+
+#define WRITER_MOVE_BYTES(writer, offs) {\
+    PTR_MOVE_BYTES(writer.data, offs)    \
+    WRITER_CHECK_BYTES(writer, 0)        \
+}
+
 
 #define PTR_READVAL(ptr, type, val) {val = (*(type*)(ptr)); (ptr) = ((type*)ptr) + 1;}
 

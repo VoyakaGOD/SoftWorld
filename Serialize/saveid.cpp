@@ -10,11 +10,11 @@
 
 void GhostBody::SaveID(DataStorageWriter &data) const {
     PhysicalBody::SaveID(data);
-    PTR_APPEND(data.data, saved_obj_id_t, GHOST_BODY_ID);
+    WRITER_APPEND(data, saved_obj_id_t, GHOST_BODY_ID);
 }
 void PhysicalBody::SaveID(DataStorageWriter &data) const {
-    PTR_APPEND(data.data, saved_obj_id_t, PHYSICAL_BODY_ID);
+    WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_PHYSICALBODY);
 }
 void PalleteItem::SaveID(DataStorageWriter &data) const {
-    PTR_APPEND(data.data, saved_obj_id_t, PALLETE_ITEM_ID);
+    WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_PALLETE_ITEM);
 }

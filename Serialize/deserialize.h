@@ -2,8 +2,6 @@
 
 #include "deser_helpers.h"
 
-extern int last_deserialize_error;
-
 SerializableObject* deserializeSimple(DataStorageReader &reader, DeserTblEntry* entry, void* reader_restore);
 int deserializeInplace(SerializableObject* object, DataStorageReader& reader, DeserTblEntry* entry, void* reader_restore);
 
@@ -13,6 +11,10 @@ PhysicalBody* physicalBodyDeserialize(DataStorageReader &deser);
 
 #ifdef PALLETEITEM_H
 int palleteItemDeserialize(PalleteItem* item, DataStorageReader &deser);
+#endif
+
+#ifdef PALLETE_H
+int palleteDeserialize(Pallete* pallete, DataStorageReader &reader);
 #endif
 
 void DataObjectSkipEnd(DataStorageReader &deser);

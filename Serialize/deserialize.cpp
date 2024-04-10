@@ -4,7 +4,7 @@
 #include <UI/pallete.h>
 #include "deserialize.h"
 
-int last_deserialize_error = DESERR_OK;
+DeserializeError last_deserialize_error;
 
 void DataObjectSkipEnd(DataStorageReader &deser) {
     while (*(saved_obj_id_t*)deser.data != SAVED_OBJ_NONE) {
@@ -20,6 +20,14 @@ void DataObjectSkip(DataStorageReader &deser) {
     if (obj_class == SAVED_OBJ_STR) {
         size_t len = readShortLength(deser);
         PTR_MOVE_BYTES(deser.data, len);
+        return;
+    }
+    if (obj_class == SAVED_OBJ_PKG) {
+        size_t len = readShortLength(deser);
+        for(int i = 0; i < len; i++) {
+            DataObjectSkip(deser);
+        }
+        return;
     }
 
     while (obj_class & 0x80) {
@@ -114,13 +122,13 @@ int deserializeInplace(SerializableObject* object, DataStorageReader& reader, De
 PhysicalBody* physicalBodyDeserialize(DataStorageReader &reader) {
     saved_obj_id_t obj_class = *(saved_obj_id_t*)(reader.data);
 
-    if (obj_class != PHYSICAL_BODY_ID){
+    if (obj_class != SAVED_OBJ_PHYSICALBODY){
         return nullptr;
     }
 
     void* reader_restore = reader.data;
     DeserTblEntry* entry = getDeserEntry(reader, reader_restore);
-    if (entry == (obj_deser_tbl + PALLETE_ITEM_ID)) {
+    if (entry == (obj_deser_tbl + SAVED_OBJ_PALLETE_ITEM)) {
         obj_fixed_data_len_t len = *(obj_fixed_data_len_t*)(reader.data);
         PTR_MOVE_BYTES(reader.data, len);
         PhysicalBody* ret = physicalBodyDeserialize(reader);
@@ -138,7 +146,7 @@ PhysicalBody* physicalBodyDeserialize(DataStorageReader &reader) {
 
 int palleteItemDeserialize(PalleteItem* item, DataStorageReader &reader) {
     saved_obj_id_t obj_class = *(saved_obj_id_t*)(reader.data);
-    if (obj_class == PHYSICAL_BODY_ID) {
+    if (obj_class == SAVED_OBJ_PHYSICALBODY) {
         PhysicalBody* body = physicalBodyDeserialize(reader);
         if (!body) {
             return last_deserialize_error;
@@ -155,4 +163,32 @@ int palleteItemDeserialize(PalleteItem* item, DataStorageReader &reader) {
     DeserTblEntry* entry = getDeserEntry(reader, reader_restore);
 
     return deserializeInplace(item, reader, entry, reader_restore);
+}
+
+int palleteDeserialize(Pallete* pallete, DataStorageReader &reader) {
+    saved_obj_id_t obj_class = *(saved_obj_id_t*)(reader.data);
+    if (obj_class == SAVED_OBJ_PKG) {
+        size_t size = 0;
+        int ret = readPkgHeader(reader, &size);
+        if (ret)
+            return ret;
+
+        pallete->Clear();
+        for (unsigned i = 0; i < size; i++) {
+            PalleteItem* item = pallete->AddPalleteItem(nullptr, nullptr);
+            ret = palleteItemDeserialize(item, reader);
+            if (ret) {
+                return ret;
+            }
+        }
+        return DESERR_OK;
+    }
+    pallete->Clear();
+    PalleteItem* item = pallete->AddPalleteItem(nullptr, nullptr);
+    int ret = palleteItemDeserialize(item, reader);
+    if (ret) {
+        pallete->RemovePalleteItem(item);
+        return ret;
+    }
+    return DESERR_OK;
 }

@@ -12,8 +12,9 @@ enum SavedPhysicalBodyId {
 };
 enum SavedObjId { 
     SAVED_OBJ_NONE = 0,
-    PHYSICAL_BODY_ID = 128,
-    PALLETE_ITEM_ID = 1,
+    SAVED_OBJ_PHYSICALBODY = 128,
+    SAVED_OBJ_PALLETE_ITEM = 4,
     SAVED_OBJ_STR = 2,
-    SAVED_OBJ_INVALID = 3,
+    SAVED_OBJ_PKG = 3,
+    SAVED_OBJ_INVALID = 1,
 };

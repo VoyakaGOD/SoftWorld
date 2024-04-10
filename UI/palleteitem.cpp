@@ -65,13 +65,13 @@ size_t PalleteItem::GetSavedSize() const {
 
 void PalleteItem::SaveData(DataStorageWriter &data) const {
     *(obj_fixed_data_len_t*)data.data = sizeof(obj_fixed_data_len_t);
-    PTR_MOVE_BYTES(data.data, sizeof(obj_fixed_data_len_t))
+    WRITER_MOVE_BYTES(data, sizeof(obj_fixed_data_len_t))
 
     if (this->body)
         saveObj(data, *(this->body));
 
     StringSerialize(this->name.toStdString(), data);
-    PTR_APPEND(data.data, saved_obj_id_t, SAVED_OBJ_NONE)
+    WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_NONE)
 }
 
 

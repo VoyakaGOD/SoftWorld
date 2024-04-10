@@ -24,6 +24,9 @@ private slots:
 
     void on_palette_btn_clicked();
 
+    void on_save_palette_btn_clicked();
+    void on_load_palette_btn_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -8,7 +8,7 @@
 #include <Utils/fileworks.h>
 #include <Serialize/deser_helpers.h>
 
-///SERIALIZABLE PalleteItem PALLETE_ITEM_ID inplace
+///SERIALIZABLE PalleteItem SAVED_OBJ_PALLETE_ITEM inplace
 
 class PalleteItem : public QFrame, public SerializableObject
 {

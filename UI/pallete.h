@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PALLETE_H
+#define PALLETE_H
 
 #include <vector>
 #include <QWidget>
@@ -6,7 +7,7 @@
 #include "palleteitem.h"
 #include "Inspector/editingmanager.h"
 
-class Pallete : public QFrame, public EditingManager {
+class Pallete : public QFrame, public EditingManager, public SerializableObject {
     Q_OBJECT
 
     SceneView* sceneview = nullptr;
@@ -25,11 +26,18 @@ class Pallete : public QFrame, public EditingManager {
     ~Pallete();
 
     void PostInit(SceneView* view);
+
+    void Clear();
     PalleteItem* AddPalleteItem(PalleteItem* item);
     PalleteItem* AddPalleteItem(PhysicalBody* body, QString name = QString());
     void RemovePalleteItem(PalleteItem* item);
 
     int FindItemByPos(const QPoint &pos);
+
+    // fileworks
+    virtual void SaveID(DataStorageWriter &data) const override;
+    virtual size_t GetSavedSize() const override;
+    virtual void SaveData(DataStorageWriter &data) const override;
 
     public slots:
         void ShowContextMenu(const QPoint &pos);
@@ -44,4 +52,4 @@ class Pallete : public QFrame, public EditingManager {
         void OnEditingEnded() override;
 };
 
-
+#endif
