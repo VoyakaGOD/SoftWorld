@@ -24,6 +24,7 @@ public:
     static void Mount(QWidget *container, QFormLayout *layout, EditingManager *default_manager);
     static void SetTarget(void *target, EditingManager *manager);
     static bool IsTarget(void *ptr);
+    static void *GetTarget();
     static void Clear();
     static void AddHeader(const char *text, int size);
     static void AddAction(const char *name, Action action);
