@@ -18,4 +18,4 @@ Alt + S | save palette
 Alt + O | load palette
 Q | cancel insertion
 Del | delete body/item/whatever when it selected
-U | run/stop
+Enter | run/stop

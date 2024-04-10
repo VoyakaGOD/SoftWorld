@@ -324,7 +324,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>25</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -341,7 +341,7 @@
          <normaloff>:/Icons/stop.png</normaloff>:/Icons/stop.png</iconset>
        </property>
        <property name="shortcut">
-        <string>U</string>
+        <string>Return</string>
        </property>
       </widget>
      </item>
@@ -382,7 +382,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="save_palette_bt">
+      <widget class="QPushButton" name="save_palette_btn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>

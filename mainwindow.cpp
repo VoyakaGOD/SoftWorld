@@ -85,9 +85,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_run_stop_btn_clicked()
 {
+    QKeySequence shortcut = ui->run_stop_btn->shortcut();                   //fix gt feature
     is_running = !is_running;                                               //temporary
     ui->run_stop_btn->setIcon(is_running ? stop_icon : run_icon);           //temporary
     ui->run_stop_btn->setText(is_running ? "stop" : "run");                 //temporary
+    ui->run_stop_btn->setShortcut(shortcut);                                //fix gt feature
 }
 
 
