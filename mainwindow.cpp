@@ -11,6 +11,7 @@
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
 #include "Physics/softscene.h"
+#include "Threads/physicalthread.h"
 
 extern SoftScene main_scene;
 
@@ -74,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     EditOnlyBody *test_body = new EditOnlyBody(QPoint(300,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
+    (new PhysicalThread(main_scene, 16000))->start();
 
     //temporary *********************************************************************************************
 }

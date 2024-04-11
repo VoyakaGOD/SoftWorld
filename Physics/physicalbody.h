@@ -1,6 +1,7 @@
 #ifndef PHYSICALBODY_H
 #define PHYSICALBODY_H
 
+#include <QVector2D>
 #include <QPoint>
 #include <QRect>
 #include <QPainter>
@@ -17,8 +18,7 @@ class PhysicalBody
 {
 //general methods
 public:
-    PhysicalBody() {};
-
+PhysicalBody() {}
     virtual QRect GetBoundingRect() const = 0;
     virtual void WidenInspectorContext() = 0;
     virtual bool ContainsPoint(const QPoint &point) const = 0;

@@ -86,6 +86,7 @@ void SceneView::mouseReleaseEvent(QMouseEvent *event) {
     if (body_grabbed) {
         body_grabbed = false;
     }
+    this->update();
 }
 
 void SceneView::mouseMoveEvent(QMouseEvent *event) {
