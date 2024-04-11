@@ -3,25 +3,39 @@
 SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
     world_rect(world_rect), air_density(air_density), g(g) {}
 
-SoftScene::~SoftScene() {
+SoftScene::~SoftScene()
+{
     for (PhysicalBody* body: bodies) {
         delete body;
     }
 }
 
+void SoftScene::PrepareToDraw(bool lock)
+{
+    if(prepared_to_draw)
+        return;
+    if(lock)
+        synchronizer.lock();
+    prepared_to_draw = true;
+}
+
 void SoftScene::Draw(QPainter &painter) const
 {
-    lock_guard<mutex> lock(synchronizer);
+    if(!prepared_to_draw)
+        throw "try do draw scene that is not prepared";
 
     for(auto body : bodies)
     {
         body->Draw(painter);
     }
+
+    prepared_to_draw = false;
+    synchronizer.unlock();
 }
 
 void SoftScene::DoNextStep(double delta_time)
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     for(auto body1 : bodies)
     {
@@ -44,21 +58,21 @@ void SoftScene::DoNextStep(double delta_time)
 
 void SoftScene::AddBody(PhysicalBody *body)
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     bodies.push_back(body);
 }
 
 void SoftScene::RemoveBody(PhysicalBody *body)
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     bodies.remove(body);
 }
 
 void SoftScene::WidenInspectorContext()
 {
-    //lock_guard<mutex> lock(synchronizer);
+    //QMutexLocker lock(&synchronizer);
 
     Inspector::AddHeader("scene", LARGE_HEADER);
     Inspector::AddParam("air density", air_density, (double)0, (double)1000);
@@ -67,19 +81,25 @@ void SoftScene::WidenInspectorContext()
 
 PhysicalBody *SoftScene::GetBodyAt(const QPoint &point) const
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     for(auto body : bodies)
     {
         if(body->ContainsPoint(point))
             return body;
     }
+
     return nullptr;
 }
 
 void SoftScene::Lock()
 {
     synchronizer.lock();
+}
+
+bool SoftScene::TryToLock()
+{
+    return synchronizer.tryLock(SOFT_SCENE_REQUEST_TIME_LIMIT);
 }
 
 void SoftScene::Unlock()

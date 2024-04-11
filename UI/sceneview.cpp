@@ -39,6 +39,7 @@ void SceneView::paintEvent(QPaintEvent * event) {
     QPainter painter(this);
     painter.scale(this->xscale, this->yscale);
     painter.translate(this->translation);
+    this->scene->PrepareToDraw();
     this->scene->Draw(painter);
 
     if (this->inserted_body){
@@ -138,6 +139,6 @@ void SceneView::OnEditingStarted()
 
 void SceneView::OnEditingEnded()
 {
-    update();
     scene->Unlock();
+    this->update();
 }
