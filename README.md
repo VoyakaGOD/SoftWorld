@@ -31,7 +31,7 @@ This simulation runs on **CPU only**.
 If there are a lot of bodies on scene, it is possible,
 that physical thread will cost so much CPU time. 
 In this case you still can change simulation,
-but your **changes may be canceled**.
+but your **changes may be canceled** and **frames may be skipped**.
 
 Threfore in scene settings in **Inspector** you can change time between physics updates.
 Or also you can **stop simulation**, that will interrupt physics calculations.
