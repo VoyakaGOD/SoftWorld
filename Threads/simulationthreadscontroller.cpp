@@ -1,56 +1,99 @@
 #include "simulationthreadscontroller.h"
 
-QMutex SimulationThreadsController::synchronizer;
+QMutex SimulationThreadsController::data_synchronizer;
+QMutex SimulationThreadsController::threads_synchronizer;
 SoftScene *SimulationThreadsController::scene;
 unsigned long SimulationThreadsController::p_udelta;
 PhysicalThread *SimulationThreadsController::p_thread;
+QWidget *SimulationThreadsController::scene_view;
+unsigned long SimulationThreadsController::d_udelta;
+DrawingThread *SimulationThreadsController::d_thread;
 
 SimulationThreadsController::SimulationThreadsController() {}
 
-void SimulationThreadsController::Mount(SoftScene *scene, unsigned long physics_udelta)
+void SimulationThreadsController::Mount(SoftScene *scene, unsigned long physics_udelta, QWidget *scene_view, unsigned long drawing_udelta)
 {
-    QMutexLocker lock(&synchronizer);
+    QMutexLocker data_lock(&data_synchronizer);
+    QMutexLocker threads_lock(&threads_synchronizer);
 
     SimulationThreadsController::scene = scene;
     p_udelta = physics_udelta;
     p_thread = nullptr;
+
+    SimulationThreadsController::scene_view = scene_view;
+    d_udelta = drawing_udelta;
+    d_thread = nullptr;
 }
 
 SoftScene *SimulationThreadsController::GetScene()
 {
+    QMutexLocker lock(&data_synchronizer);
+
     return scene;
+}
+
+QWidget *SimulationThreadsController::GetSceneView()
+{
+    QMutexLocker lock(&data_synchronizer);
+
+    return scene_view;
 }
 
 unsigned long SimulationThreadsController::GetPhysicsDelta()
 {
-    QMutexLocker lock(&synchronizer);
+    QMutexLocker lock(&data_synchronizer);
 
     return p_udelta;
 }
 
 void SimulationThreadsController::SetPhysicsDelta(unsigned long udelta)
 {
-    QMutexLocker lock(&synchronizer);
+    QMutexLocker lock(&data_synchronizer);
 
     p_udelta = udelta;
 }
 
+unsigned long SimulationThreadsController::GetDrawingDelta()
+{
+    QMutexLocker lock(&data_synchronizer);
+
+    return d_udelta;
+}
+
+void SimulationThreadsController::SetDrawingDelta(unsigned long udelta)
+{
+    QMutexLocker lock(&data_synchronizer);
+
+    d_udelta = udelta;
+}
+
 void SimulationThreadsController::Run()
 {
-    QMutexLocker lock(&synchronizer);
+    QMutexLocker lock(&threads_synchronizer);
 
-    if(p_thread)
-        return;
+    if(!p_thread)
+    {
+        p_thread = new PhysicalThread();
+        p_thread->start();
+    }
 
-    p_thread = new PhysicalThread();
-    p_thread->start();
+    if(!d_thread)
+    {
+        d_thread = new DrawingThread();
+        CONNECT(d_thread, &DrawingThread::Draw, scene_view, qOverload<>(&QWidget::update));
+        d_thread->start();
+    }
 }
 
 void SimulationThreadsController::Stop()
 {
-    QMutexLocker lock(&synchronizer);
+    QMutexLocker lock(&threads_synchronizer);
 
     if(p_thread)
         delete p_thread;
     p_thread = nullptr;
+
+    if(d_thread)
+        delete d_thread;
+    d_thread = nullptr;
 }

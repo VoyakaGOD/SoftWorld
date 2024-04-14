@@ -62,6 +62,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Inspector/inspectorstringfield.h Inspector/inspectorstringfield.cpp
         Threads/physicalthread.h Threads/physicalthread.cpp
         Threads/simulationthreadscontroller.h Threads/simulationthreadscontroller.cpp
+        Threads/drawingthread.h Threads/drawingthread.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET SoftWorld APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

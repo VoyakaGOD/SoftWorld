@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, ui->main_view);
-    SimulationThreadsController::Mount(&main_scene, 16000);
+    SimulationThreadsController::Mount(&main_scene, 16000, ui->main_view, 16000);
     Icons::AddIcon("settings", ":/Icons/settings.png");
 
     //temporary *********************************************************************************************
