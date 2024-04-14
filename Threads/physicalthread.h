@@ -8,7 +8,7 @@ class PhysicalThread : public QThread
 {
     Q_OBJECT
 private:
-    bool is_running;
+    QMutex sleepy;
 
 public:
     PhysicalThread();

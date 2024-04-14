@@ -1,23 +1,28 @@
 #include "drawingthread.h"
 #include "simulationthreadscontroller.h"
 
-DrawingThread::DrawingThread() : is_running(true) {}
+DrawingThread::DrawingThread()
+{
+    sleepy.lock();
+}
 
 DrawingThread::~DrawingThread()
 {
     disconnect();
-    is_running = false;
+    sleepy.unlock();
     wait();
 }
 
 void DrawingThread::run()
 {
-    while(is_running)
+    while(true)
     {
         unsigned long udelta = SimulationThreadsController::GetPhysicsDelta();
 
         emit Draw();
-        usleep(udelta);
+        if(sleepy.tryLock(udelta / 1000))
+            break;
     }
+    sleepy.unlock();
 }
 

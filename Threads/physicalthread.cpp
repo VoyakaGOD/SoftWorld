@@ -1,22 +1,27 @@
 #include "physicalthread.h"
 #include "simulationthreadscontroller.h"
 
-PhysicalThread::PhysicalThread() : is_running(true) {}
+PhysicalThread::PhysicalThread()
+{
+    sleepy.lock();
+}
 
 PhysicalThread::~PhysicalThread()
 {
-    is_running = false;
+    sleepy.unlock();
     wait();
 }
 
 void PhysicalThread::run()
 {
-    while(is_running)
+    while(true)
     {
         SoftScene *scene = SimulationThreadsController::GetScene();
         unsigned long udelta = SimulationThreadsController::GetPhysicsDelta();
 
         scene->DoNextStep(udelta);
-        usleep(udelta);
+        if(sleepy.tryLock(udelta / 1000))
+            break;
     }
+    sleepy.unlock();
 }

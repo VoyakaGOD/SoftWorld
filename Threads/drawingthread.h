@@ -2,12 +2,13 @@
 #define DRAWINGTHREAD_H
 
 #include <QThread>
+#include <QMutex>
 
 class DrawingThread: public QThread
 {
     Q_OBJECT
 private:
-    bool is_running;
+    QMutex sleepy;
 
 public:
     DrawingThread();
