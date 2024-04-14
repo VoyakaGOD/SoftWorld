@@ -11,7 +11,7 @@
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
 #include "Physics/softscene.h"
-#include "Threads/physicalthread.h"
+#include "Threads/simulationthreadscontroller.h"
 
 extern SoftScene main_scene;
 
@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
     Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, ui->main_view);
+    SimulationThreadsController::Mount(&main_scene, 16000);
     Icons::AddIcon("settings", ":/Icons/settings.png");
 
     //temporary *********************************************************************************************
@@ -75,7 +76,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     EditOnlyBody *test_body = new EditOnlyBody(QPoint(300,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
-    (new PhysicalThread(main_scene, 16000))->start();
 
     //temporary *********************************************************************************************
 }
@@ -92,6 +92,10 @@ void MainWindow::on_run_stop_btn_clicked()
     ui->run_stop_btn->setIcon(is_running ? stop_icon : run_icon);           //temporary
     ui->run_stop_btn->setText(is_running ? "stop" : "run");                 //temporary
     ui->run_stop_btn->setShortcut(shortcut);                                //fix gt feature
+    if(is_running)
+        SimulationThreadsController::Run();
+    else
+        SimulationThreadsController::Stop();
 }
 
 

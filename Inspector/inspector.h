@@ -11,6 +11,14 @@
 
 using namespace std;
 
+/*
+ * About SetTarget, IsTarget and GetTarget methods:
+ * Target is simply an empty pointer to the last object sent for inspection;
+ * it is not used in any way by the inspector itself. At the same time, you can send several
+ * objects with their own managers for inspection, but before each adding of parameters, do not forget
+ * to call SetTarget, this will replace the manager for the following parameters.
+ */
+
 class Inspector final
 {
 private:

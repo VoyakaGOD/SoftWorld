@@ -4,21 +4,16 @@
 #include <QThread>
 #include "Physics/softscene.h"
 
-//udelta in microseconds
 class PhysicalThread : public QThread
 {
     Q_OBJECT
 private:
-    SoftScene &scene;
-    unsigned long udelta;
+    bool is_running;
 
 public:
-    PhysicalThread(SoftScene &scene, unsigned long udelta);
+    PhysicalThread();
     ~PhysicalThread();
     void run() override;
-
-public slots:
-    void SetDeltaTime(unsigned long udelta);
 };
 
 #endif // PHYSICALTHREAD_H

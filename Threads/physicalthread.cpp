@@ -1,23 +1,22 @@
 #include "physicalthread.h"
+#include "simulationthreadscontroller.h"
 
-PhysicalThread::PhysicalThread(SoftScene &scene, unsigned long udelta) : scene(scene), udelta(udelta) {}
-
-void PhysicalThread::run()
-{
-    while(true)
-    {
-        scene.DoNextStep(udelta);
-        usleep(udelta);
-    }
-}
+PhysicalThread::PhysicalThread() : is_running(true) {}
 
 PhysicalThread::~PhysicalThread()
 {
-    thread()->wait();
-    thread()->quit();
+    is_running = false;
+    wait();
 }
 
-void PhysicalThread::SetDeltaTime(unsigned long udelta)
+void PhysicalThread::run()
 {
-    this->udelta = udelta;
+    while(is_running)
+    {
+        SoftScene *scene = SimulationThreadsController::GetScene();
+        unsigned long udelta = SimulationThreadsController::GetPhysicsDelta();
+
+        scene->DoNextStep(udelta);
+        usleep(udelta);
+    }
 }
