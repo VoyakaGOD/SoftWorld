@@ -15,7 +15,7 @@ QRect EditOnlyBody::GetBoundingRect() const
 void EditOnlyBody::WidenInspectorContext()
 {
     Inspector::AddHeader("edit-only body", LARGE_HEADER);
-    Inspector::AddParam("radius", radius, 0, 250);
+    Inspector::AddParam("radius", radius, 5, 250);
     style.WidenInspectorContext();
 }
 

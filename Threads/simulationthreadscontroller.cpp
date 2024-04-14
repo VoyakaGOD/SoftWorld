@@ -8,8 +8,35 @@ PhysicalThread *SimulationThreadsController::p_thread;
 QWidget *SimulationThreadsController::scene_view;
 unsigned long SimulationThreadsController::d_udelta;
 DrawingThread *SimulationThreadsController::d_thread;
+int SimulationThreadsController::fps_limit;
+
+class SimulationThreadsControllerEditingManager : public EditingManager
+{
+    void OnEditingStarted() override
+    {
+        SimulationThreadsController::data_synchronizer.lock();
+    }
+
+    void OnEditingEnded() override
+    {
+        SimulationThreadsController::d_udelta = 1000000 / SimulationThreadsController::fps_limit;
+        SimulationThreadsController::data_synchronizer.unlock();
+    }
+} STCManager;
 
 SimulationThreadsController::SimulationThreadsController() {}
+
+void SimulationThreadsController::WidenInspectorContext()
+{
+    Inspector::AddHeader("simulation", LARGE_HEADER);
+    Inspector::AddParam("physics dt[mcs]", p_udelta, 0, 1000000);
+    Inspector::AddParam("FPS limit", fps_limit, 1, 1000);
+}
+
+EditingManager *SimulationThreadsController::GetEditingManager()
+{
+    return &STCManager;
+}
 
 void SimulationThreadsController::Mount(SoftScene *scene, unsigned long physics_udelta, QWidget *scene_view, unsigned long drawing_udelta)
 {
@@ -23,6 +50,7 @@ void SimulationThreadsController::Mount(SoftScene *scene, unsigned long physics_
     SimulationThreadsController::scene_view = scene_view;
     d_udelta = drawing_udelta;
     d_thread = nullptr;
+    fps_limit = 1000000 / d_udelta;
 }
 
 SoftScene *SimulationThreadsController::GetScene()

@@ -6,7 +6,7 @@
 #include <QOverload>
 #include "physicalthread.h"
 #include "drawingthread.h"
-#include "Inspector/editingmanager.h"
+#include "Inspector/inspector.h"
 
 #define CONNECT QObject::connect
 
@@ -22,9 +22,11 @@ private:
     static QWidget *scene_view;
     static unsigned long d_udelta;
     static DrawingThread *d_thread;
+    static int fps_limit;               //only for Inspector
 
 public:
-    //static void WidenInspectorContext();
+    static void WidenInspectorContext();
+    static EditingManager *GetEditingManager();
     static void Mount(SoftScene *scene, unsigned long physics_udelta, QWidget *scene_view, unsigned long drawing_udelta);
     static SoftScene *GetScene();
     static QWidget *GetSceneView();
@@ -37,6 +39,8 @@ public:
 
 private:
     SimulationThreadsController();
+
+    friend class SimulationThreadsControllerEditingManager;
 };
 
 #endif // SIMULATIONTHREADSCONTROLLER_H

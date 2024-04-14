@@ -16,9 +16,15 @@ void Inspector::Mount(QWidget *container, QFormLayout *layout, EditingManager *d
     Inspector::target = nullptr;
 }
 
-void Inspector::SetTarget(void *target, EditingManager *manager)
+void Inspector::SetManager(EditingManager *manager)
 {
     Inspector::manager = manager;
+}
+
+void Inspector::SetTarget(void *target, EditingManager *manager)
+{
+    if(manager)
+        Inspector::manager = manager;
     Inspector::target = target;
     Clear();
 }
@@ -51,6 +57,11 @@ void Inspector::AddParam(const char *name, QColor &value)
 }
 
 void Inspector::AddParam(const char *name, int &value, int min, int max)
+{
+    items.push_back(new InspectorIntegerField(container, layout, name, value, min, max, manager));
+}
+
+void Inspector::AddParam(const char *name, unsigned long &value, unsigned long min, unsigned long max)
 {
     items.push_back(new InspectorIntegerField(container, layout, name, value, min, max, manager));
 }

@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <Physics/softscene.h>
 #include "Inspector/editingmanager.h"
+#include "Threads/simulationthreadscontroller.h"
 
 class PalleteItem; // TODO find better way
 

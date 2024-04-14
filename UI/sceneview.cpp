@@ -78,6 +78,8 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
     {
         Inspector::SetTarget(this, this);
         this->scene->WidenInspectorContext();
+        Inspector::SetManager(SimulationThreadsController::GetEditingManager());
+        SimulationThreadsController::WidenInspectorContext();
     }
     this->update();
 }
