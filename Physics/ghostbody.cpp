@@ -7,16 +7,15 @@ struct GhostBodyData {
     obj_fixed_data_len_t size;
     int x, y;
     float radius;
+    DrawingStyle drawing_style;
 };
 
-static GhostBodyData default_data = {.x = 10, .y = 10, .radius = 10};
+static GhostBodyData default_data = {.x = 10, .y = 10, .radius = 10, .drawing_style = DrawingStyle()};
 
-#define GBDATA(reader, field) \
-    ((offsetof(GhostBodyData, field) + sizeof(GhostBodyData::field) <= (((GhostBodyData*)(reader.data))->size)) ? \
-    (((GhostBodyData*)(reader.data))->field) : default_data.field)
+#define GBDATA(reader, field) GETDATA(reader, GhostBodyData, field)
 
 GhostBody::GhostBody(DataStorageReader &reader) :
-    PhysicalBody(reader), origin(GBDATA(reader,x), GBDATA(reader,y)), radius(GBDATA(reader, radius)) {
+    PhysicalBody(reader), origin(GBDATA(reader,x), GBDATA(reader,y)),radius(GBDATA(reader, radius)), drawing_style(GBDATA(reader, drawing_style))  {
     PTR_MOVE_BYTES(reader.data, ((GhostBodyData*)(reader.data))->size);
 }
 
@@ -34,6 +33,7 @@ void GhostBody::SaveData(DataStorageWriter &data) const {
     gdata->x = this->origin.x();
     gdata->y = this->origin.y();
     gdata->radius = this->radius;
+    gdata->drawing_style = this->drawing_style;
     PUT_FIXEDONLY_NUL(data.data)
 }
 
@@ -47,6 +47,7 @@ QRect GhostBody::GetBoundingRect() const {
 void GhostBody::WidenInspectorContext() {
     Inspector::AddHeader("ghost body", LARGE_HEADER);
     Inspector::AddParam("radius", radius, (float)10, (float)250);
+    this->drawing_style.WidenInspectorContext();
 }
 
 bool GhostBody::ContainsPoint(const QPoint &point) const {
@@ -85,7 +86,7 @@ void GhostBody::AddMomentum(const QPoint &momentum) {
 void GhostBody::Draw(QPainter &painter) {
     painter.setBrush(Qt::SolidPattern);
     painter.setBrush(this->drawing_style.main_color);
-    painter.setPen(this->drawing_style.border_color);
+    painter.setPen(QPen(this->drawing_style.border_color, this->drawing_style.border_thickness));
     painter.drawEllipse(this->origin, (int)(this->radius), (int)(this->radius));
     return;
 }

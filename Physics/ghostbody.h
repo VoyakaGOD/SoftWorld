@@ -10,6 +10,7 @@ public:
     GhostBody() : origin(10, 10), radius(10) {
     }
 
+    DrawingStyle drawing_style;
     QPoint origin;
     float radius;
 

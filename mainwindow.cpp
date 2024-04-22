@@ -1,7 +1,12 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <QFileDialog>
+#include <iostream>
+#include <QMessageBox>
 #include <UI/palleteitem.h>
 #include <Physics/ghostbody.h>
+#include <Serialize/deserialize.h>
+#include <Serialize/serialize.h>
 
 //temporary:
 #include "Inspector/inspectorheader.h"
@@ -47,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->palleteContents->PostInit(ui->main_view);
 
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
+
     Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, ui->main_view);
     Icons::AddIcon("settings", ":/Icons/settings.png");
 
@@ -118,10 +124,6 @@ void MainWindow::on_palette_btn_clicked()
         ui->palette_btn->setIcon(hide_icon);
     }
 }
-#include <Serialize/deserialize.h>
-#include <Serialize/serialize.h>
-#include <QFileDialog>
-#include <iostream>
 
 void MainWindow::on_save_palette_btn_clicked() {
     try {
@@ -133,6 +135,7 @@ void MainWindow::on_save_palette_btn_clicked() {
     }
     catch (system_error err) {
         cout << err.what() << endl;
+        QMessageBox::critical(this, "Error", err.what());
     }
 }
 
@@ -142,11 +145,14 @@ void MainWindow::on_load_palette_btn_clicked() {
         if (filename.isNull()) return;
 
         FileReadInterface file_reader = FileReadInterface(filename.toUtf8().data());
-        int ret = palleteDeserialize(this->ui->palleteContents, file_reader);
-        // todo pop up error
+        DeserializeError err = (DeserializeError)palleteDeserialize(this->ui->palleteContents, file_reader);
+        if (err) {
+            QMessageBox::critical(this, "Error", deserrErrorMsg(err));
+        }
     }
-        catch (system_error err) {
+    catch (system_error err) {
         cout << err.what() << endl;
+        QMessageBox::critical(this, "Error", err.what());
     }
 }
 

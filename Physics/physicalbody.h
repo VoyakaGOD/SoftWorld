@@ -4,10 +4,10 @@
 #include <QPoint>
 #include <QRect>
 #include <QPainter>
-#include "drawingstyle.h"
 #include <Serialize/deser_helpers.h>
 #include <Utils/fileworks.h>
 #include "Inspector/inspector.h"
+#include "drawingstyle.h"
 
 ///SERIALIZABLE PhysicalBody SAVED_OBJ_PHYSICALBODY base
 
@@ -37,8 +37,6 @@ public:
 
     virtual void SaveData(DataStorageWriter &data) const override;
 
-
-
 //simulation methods
 public:
     virtual void SolveCollision(PhysicalBody *another) = 0;
@@ -57,8 +55,6 @@ public:
     virtual QPoint GetLocalCoordinate(const QPoint &global_coordinate) const = 0;
     virtual QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const = 0;
 
-public:
-    DrawingStyle drawing_style;
 };
 
 #endif // PHYSICALBODY_H

@@ -6,6 +6,25 @@
 
 DeserializeError last_deserialize_error;
 
+const char* deserrErrorMsg(DeserializeError err) {
+    switch(err) {
+        case DESERR_OK:
+            return "No error";
+        case DESERR_NOCLASS:
+            return "Unknown object type";
+        case DESERR_BOUNDS:
+            return "Unexpected end of file";
+        case DESERR_INVTYPE:
+            return "Incompatible object file";
+        case DESERR_BADDATA:
+            return "File corrupt or incompatible format";
+        case DESERR_ERRNO:
+            return strerror(errno);
+        default:
+            return "Shit happened";
+    }
+}
+
 void DataObjectSkipEnd(DataStorageReader &deser) {
     while (*(saved_obj_id_t*)deser.data != SAVED_OBJ_NONE) {
         DataObjectSkip(deser);
@@ -74,6 +93,11 @@ DeserTblEntry* getDeserEntry(DataStorageReader &reader, void* reader_restore) {
         table = base[obj_class].e_norm;
         base  = base[obj_class].e_base;
     }
+    if (obj_class >= tabl_size) {
+        last_deserialize_error = DESERR_NOCLASS;
+        return nullptr;
+    }
+
     return table + obj_class;
 }
 
@@ -92,9 +116,10 @@ SerializableObject* deserializeSimple(DataStorageReader &reader, DeserTblEntry* 
                 PTR_MOVE_BYTES(reader.data, sizeof(saved_obj_id_t));
                 return ret;
             }
+
         default:
             reader.data = reader_restore;
-            last_deserialize_error = DESERR_INVTYPE;
+            last_deserialize_error = (entry->type == DESER_TBL_NONE) ? DESERR_NOCLASS : DESERR_INVTYPE;
             return nullptr;
     }
 }
@@ -115,7 +140,7 @@ int deserializeInplace(SerializableObject* object, DataStorageReader& reader, De
             }
         default:
             reader.data = reader_restore;
-            return DESERR_INVTYPE;
+            return (entry->type == DESER_TBL_NONE) ? DESERR_NOCLASS : DESERR_INVTYPE;
     }
 }
 

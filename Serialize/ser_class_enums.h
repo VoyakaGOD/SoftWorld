@@ -6,11 +6,11 @@
 /_'_\ DO NOT COMPLAIN FOR UNREADABLE CODE
 */
 
-enum SavedPhysicalBodyId { 
+enum SavedPhysicalBodyId {
     SAVED_PHYSICALBODY_NONE = 0,
     GHOST_BODY_ID = 1,
 };
-enum SavedObjId { 
+enum SavedObjId {
     SAVED_OBJ_NONE = 0,
     SAVED_OBJ_PHYSICALBODY = 128,
     SAVED_OBJ_PALLETE_ITEM = 4,

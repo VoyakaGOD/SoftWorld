@@ -6,6 +6,7 @@
 #include <Serialize/serialize_special.h>
 #include <Serialize/deserialize.h>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <iostream>
 #include <Inspector/inspector.h>
 
@@ -81,6 +82,9 @@ PalleteItem* Pallete::AddPalleteItem(PalleteItem* item) {
 
 void Pallete::RemovePalleteItem(PalleteItem* item) {
     this->layout.removeWidget(item);
+    if (Inspector::IsTarget(item)){
+        Inspector::SetTarget(nullptr, nullptr);
+    }
     delete item;
 }
 
@@ -93,7 +97,8 @@ void Pallete::RemoveThisPalleteItem() {
 
 void Pallete::InspectThisPalleteItem() {
     if (this->context_menu_target) {
-        Inspector::SetTarget(context_menu_target->body, this);
+        Inspector::SetTarget(context_menu_target, this);
+        Inspector::AddParam("name", this->context_menu_target->name);
         this->context_menu_target->body->WidenInspectorContext();
     }
 }
@@ -107,8 +112,9 @@ void Pallete::SaveThisPalleteItem() {
             FileWriteInterface file_writer = FileWriteInterface(filename.toUtf8().data());
             serializeObj(file_writer, *(this->context_menu_target));
         }
-        catch (system_error err) {
+        catch (exception err) {
             cout << err.what() << endl;
+            QMessageBox::critical(this, "Error", err.what());
         }
     }
 }
@@ -120,19 +126,22 @@ void Pallete::LoadNewPalleteItem() {
 
         FileReadInterface file_reader = FileReadInterface(filename.toUtf8().data());
         PalleteItem* new_pi = this->AddPalleteItem(nullptr, QString());
-        if (palleteItemDeserialize(new_pi, file_reader) != 0) {
+        DeserializeError err = (DeserializeError)palleteItemDeserialize(new_pi, file_reader);
+        if (err) {
+            QMessageBox::critical(this, "Error", deserrErrorMsg(err));
             this->RemovePalleteItem(new_pi);
-            //TODO: pop up error
         }
-
     }
-    catch (system_error err) {
+    catch (exception err) {
+        QMessageBox::critical(this, "Error", err.what());
         cout << err.what() << endl;
     }
 }
 
 void Pallete::PickItemFromScene() {
+    sceneview->scene->Lock();
     PhysicalBody* new_body = this->sceneview->selected_body->Clone();
+    sceneview->scene->Unlock();
 
     new_body->MoveBy(new_body->GetBoundingRect().center() * -1);
     this->AddPalleteItem(new_body, "New body");
@@ -156,7 +165,7 @@ void Pallete::ShowContextMenu(const QPoint &pos) {
 void Pallete::OnEditingStarted() {}
 
 void Pallete::OnEditingEnded() {
-    context_menu_target->update();
+    ((PalleteItem*)Inspector::GetTarget())->update();
 }
 
 void Pallete::SaveID(DataStorageWriter &data) const {
