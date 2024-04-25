@@ -40,8 +40,8 @@ class Pallete : public QFrame, public EditingManager {
         void LoadNewPalleteItem();
         void PickItemFromScene();
 
-        void OnEditingStarted() override;
-        void OnEditingEnded() override;
+        bool PrepareForEditing() override;
+        void EndEditing() override;
 };
 
 

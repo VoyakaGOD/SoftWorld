@@ -133,12 +133,12 @@ void Pallete::ShowContextMenu(const QPoint &pos){
     menu->popup(((QWidget*)this)->mapToGlobal(pos));
 }
 
-void Pallete::OnEditingStarted()
+bool Pallete::PrepareForEditing()
 {
-
+    return true;
 }
 
-void Pallete::OnEditingEnded()
+void Pallete::EndEditing()
 {
     context_menu_target->update();
 }

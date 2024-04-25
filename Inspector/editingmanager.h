@@ -4,8 +4,8 @@
 class EditingManager
 {
 public:
-    virtual void OnEditingStarted() = 0;
-    virtual void OnEditingEnded() = 0;
+    virtual bool PrepareForEditing() = 0;
+    virtual void EndEditing() = 0;
 };
 
 #endif // EDITINGMANAGER_H

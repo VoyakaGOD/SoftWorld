@@ -34,8 +34,8 @@ class SceneView : public QFrame, public EditingManager
         void SetInsertion(PalleteItem* item);
         QPoint ToSceneCoordinates(QPoint point);
 
-        void OnEditingStarted() override;
-        void OnEditingEnded() override;
+        bool PrepareForEditing() override;
+        void EndEditing() override;
 
     public slots:
         void ClearCursor();

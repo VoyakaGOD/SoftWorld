@@ -39,15 +39,18 @@ public:
         field->setSpacing(7);
         layout->addRow(label, field);
 
-        manager->OnEditingStarted();
-        value = qBound(min_value, value, max_value);
-        manager->OnEditingEnded();
-        UpdateValue(value);
+        if(manager->PrepareForEditing())
+        {
+            value = qBound(min_value, value, max_value);
+            manager->EndEditing();
+            UpdateValue(value);
+        }
 
         auto update = [&value, manager, this](T new_value){
-            manager->OnEditingStarted();
+            if(!manager->PrepareForEditing())
+                return;
             value = new_value;
-            manager->OnEditingEnded();
+            manager->EndEditing();
             UpdateValue(new_value);
         };
         CONNECT(box, &SpinBoxT::valueChanged, update);
