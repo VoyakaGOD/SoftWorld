@@ -34,6 +34,11 @@ bool Inspector::IsTarget(void *ptr)
     return target == ptr;
 }
 
+void *Inspector::GetTarget()
+{
+    return target;
+}
+
 void Inspector::Clear()
 {
     for(int i = 0; i < items.size(); i++)
