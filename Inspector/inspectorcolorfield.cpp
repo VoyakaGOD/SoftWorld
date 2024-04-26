@@ -21,9 +21,10 @@ InspectorColorField::InspectorColorField(QWidget *container, QFormLayout *layout
     layout->addRow(label, field);
 
     auto update = [&value, manager, this](const QColor &color){
-        manager->OnEditingStarted();
+        if(!manager->PrepareForEditing())
+            return;
         value = color;
-        manager->OnEditingEnded();
+        manager->EndEditing();
         ChangeColor(color);
     };
     CONNECT(input, &QLineEdit::textChanged, [update](const QString &text){

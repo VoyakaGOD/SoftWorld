@@ -133,13 +133,14 @@ void SceneView::DeleteSelected() {
     }
 }
 
-void SceneView::OnEditingStarted()
+bool SceneView::PrepareForEditing()
 {
     //try to lock
     scene->Lock();
+    return true; //if try is successful
 }
 
-void SceneView::OnEditingEnded()
+void SceneView::EndEditing()
 {
     scene->Unlock();
     this->update();

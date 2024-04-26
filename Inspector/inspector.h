@@ -22,7 +22,7 @@ using namespace std;
  * Also you can call Clear method by yourself.
  * And each Inspector's field has his own manager. You can change current manager by calling SetManager.
  * And then each new field will have this new manager, but old fields will save old.
- * Remark: passing nullptr as manager into SetTarger saves old manager.
+ * Remark: passing nullptr as managet into SetTarger saves old manager.
  */
 
 class Inspector final

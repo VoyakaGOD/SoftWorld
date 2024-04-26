@@ -5,9 +5,10 @@ InspectorButton::InspectorButton(QWidget *container, QFormLayout *layout, const 
     button = new QPushButton(name, container);
     layout->addRow(button);
     CONNECT(button, &QPushButton::clicked, [=]() {
-        manager->OnEditingStarted();
+        if(!manager->PrepareForEditing())
+            return;
         action();
-        manager->OnEditingEnded();
+        manager->EndEditing();
     });
 }
 

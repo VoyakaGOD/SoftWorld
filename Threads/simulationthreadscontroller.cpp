@@ -12,12 +12,13 @@ int SimulationThreadsController::fps_limit;
 
 class SimulationThreadsControllerEditingManager : public EditingManager
 {
-    void OnEditingStarted() override
+    bool PrepareForEditing() override
     {
         SimulationThreadsController::data_synchronizer.lock();
+        return true;
     }
 
-    void OnEditingEnded() override
+    void EndEditing() override
     {
         SimulationThreadsController::d_udelta = 1000000 / SimulationThreadsController::fps_limit;
         SimulationThreadsController::data_synchronizer.unlock();

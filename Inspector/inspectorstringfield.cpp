@@ -12,9 +12,10 @@ InspectorStringField::InspectorStringField(QWidget *container, QFormLayout *layo
     layout->addRow(label, input);
 
     CONNECT(input, &QLineEdit::textChanged, [&value, manager](const QString &text){
-        manager->OnEditingStarted();
+        if(!manager->PrepareForEditing())
+            return;
         value = text;
-        manager->OnEditingEnded();
+        manager->EndEditing();
     });
 }
 
