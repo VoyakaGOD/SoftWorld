@@ -324,7 +324,7 @@
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>25</height>
+         <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -341,7 +341,7 @@
          <normaloff>:/Icons/stop.png</normaloff>:/Icons/stop.png</iconset>
        </property>
        <property name="shortcut">
-        <string>U</string>
+        <string>Return</string>
        </property>
       </widget>
      </item>

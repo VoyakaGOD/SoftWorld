@@ -78,6 +78,8 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
     {
         Inspector::SetTarget(this, this);
         this->scene->WidenInspectorContext();
+        Inspector::SetManager(SimulationThreadsController::GetEditingManager());
+        SimulationThreadsController::WidenInspectorContext();
     }
     this->update();
 }
@@ -86,6 +88,7 @@ void SceneView::mouseReleaseEvent(QMouseEvent *event) {
     if (body_grabbed) {
         body_grabbed = false;
     }
+    this->update();
 }
 
 void SceneView::mouseMoveEvent(QMouseEvent *event) {
@@ -132,11 +135,12 @@ void SceneView::DeleteSelected() {
 
 void SceneView::OnEditingStarted()
 {
+    //try to lock
     scene->Lock();
 }
 
 void SceneView::OnEditingEnded()
 {
-    update();
     scene->Unlock();
+    this->update();
 }

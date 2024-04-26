@@ -3,7 +3,8 @@
 SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
     world_rect(world_rect), air_density(air_density), g(g) {}
 
-SoftScene::~SoftScene() {
+SoftScene::~SoftScene()
+{
     for (PhysicalBody* body: bodies) {
         delete body;
     }
@@ -11,17 +12,20 @@ SoftScene::~SoftScene() {
 
 void SoftScene::Draw(QPainter &painter) const
 {
-    lock_guard<mutex> lock(synchronizer);
+    if(!TryToLock())
+        return;
 
     for(auto body : bodies)
     {
         body->Draw(painter);
     }
+
+    synchronizer.unlock();
 }
 
 void SoftScene::DoNextStep(double delta_time)
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     for(auto body1 : bodies)
     {
@@ -44,22 +48,20 @@ void SoftScene::DoNextStep(double delta_time)
 
 void SoftScene::AddBody(PhysicalBody *body)
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     bodies.push_back(body);
 }
 
 void SoftScene::RemoveBody(PhysicalBody *body)
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     bodies.remove(body);
 }
 
 void SoftScene::WidenInspectorContext()
 {
-    //lock_guard<mutex> lock(synchronizer);
-
     Inspector::AddHeader("scene", LARGE_HEADER);
     Inspector::AddParam("air density", air_density, (double)0, (double)1000);
     Inspector::AddParam("g", g, (double)0, (double)100);
@@ -67,22 +69,28 @@ void SoftScene::WidenInspectorContext()
 
 PhysicalBody *SoftScene::GetBodyAt(const QPoint &point) const
 {
-    lock_guard<mutex> lock(synchronizer);
+    QMutexLocker lock(&synchronizer);
 
     for(auto body : bodies)
     {
         if(body->ContainsPoint(point))
             return body;
     }
+
     return nullptr;
 }
 
-void SoftScene::Lock()
+void SoftScene::Lock() const
 {
     synchronizer.lock();
 }
 
-void SoftScene::Unlock()
+bool SoftScene::TryToLock() const
+{
+    return synchronizer.tryLock(SOFT_SCENE_REQUEST_TIME_LIMIT);
+}
+
+void SoftScene::Unlock() const
 {
     synchronizer.unlock();
 }

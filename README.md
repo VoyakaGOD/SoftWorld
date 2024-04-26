@@ -1,12 +1,16 @@
 ## General information
 
-It's simple simulation of soft bodies physics.
+It's simple simulation of soft bodies physics with **Qt** graphical interface.
 
-It is creating only in education purposes.
+You can add bodies from **Palette**. 
 
-And other lines coming soon...
+You can change settings of instantiated bodies or bodies in Palette or scene in **Inspector**.
+
+Also you can select and move bodies by **mouse**.
 
 ## Shortcuts
+
+There are several **shortcuts** to speed up your work with the simulation.
 
 | Keys  | Actions |
 |-------|---------|
@@ -18,4 +22,16 @@ Alt + S | save palette
 Alt + O | load palette
 Q | cancel insertion
 Del | delete body/item/whatever when it selected
-U | run/stop
+Enter | run/stop simulation
+
+## Restrictions
+
+This simulation runs on **CPU only**.
+
+If there are a lot of bodies on scene, it is possible,
+that physical thread will cost so much CPU time. 
+In this case you still can change simulation,
+but your **changes may be canceled** and **frames may be skipped**.
+
+Threfore in scene settings in **Inspector** you can change time between physics updates.
+Or also you can **stop simulation**, that will interrupt physics calculations.

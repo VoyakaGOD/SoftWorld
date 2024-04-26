@@ -6,7 +6,7 @@
 class EditOnlyBody : public PhysicalBody
 {
 private:
-    QPoint origin;
+    QVector2D origin;
     double radius;
     DrawingStyle style;
 public:

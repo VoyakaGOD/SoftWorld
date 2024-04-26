@@ -1,15 +1,18 @@
 #ifndef SOFTSCENE_H
 #define SOFTSCENE_H
 
-#include <mutex>
+#include <QMutex>
 #include "physicalbody.h"
 #include "Inspector/inspector.h"
 #include "Inspector/editingmanager.h"
 
+//time limit for try to lock
+#define SOFT_SCENE_REQUEST_TIME_LIMIT 100 //milliseconds
+
 class SoftScene
 {
 private:
-    mutable mutex synchronizer;
+    mutable QMutex synchronizer;
     QRect world_rect;
     list<PhysicalBody*> bodies;
     double air_density;
@@ -24,8 +27,9 @@ public:
     void RemoveBody(PhysicalBody *body);
     void WidenInspectorContext();
     PhysicalBody *GetBodyAt(const QPoint &point) const;
-    void Lock();
-    void Unlock();
+    void Lock() const;
+    bool TryToLock() const;
+    void Unlock() const;
 };
 
 #endif // SOFTSCENE_H
