@@ -3,7 +3,7 @@
 
 #include <QMutex>
 #include <QWidget>
-#include <QOverload>
+#include <QtGlobal>
 #include "physicalthread.h"
 #include "drawingthread.h"
 #include "Inspector/inspector.h"

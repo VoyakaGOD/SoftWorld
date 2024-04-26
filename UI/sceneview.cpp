@@ -41,11 +41,18 @@ void SceneView::paintEvent(QPaintEvent * event) {
     painter.translate(this->translation);
     this->scene->Draw(painter);
 
+    if (this->selected_body && Inspector::IsTarget(this->selected_body)){
+        painter.setPen(QPen(QBrush(this->palette().highlight()), 1, Qt::DashLine));
+        painter.setBrush(Qt::NoBrush);
+        painter.drawRect(this->selected_body->GetBoundingRect());
+    }
+
     if (this->inserted_body){
         QPoint mouse_pos = ToSceneCoordinates(this->mapFromGlobal(QCursor::pos()));
         painter.translate(mouse_pos);
         this->inserted_body->Draw(painter);
     }
+
     QFrame::paintEvent(event);
 }
 
