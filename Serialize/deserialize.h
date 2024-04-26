@@ -5,6 +5,8 @@
 SerializableObject* deserializeSimple(DataStorageReader &reader, DeserTblEntry* entry, void* reader_restore);
 int deserializeInplace(SerializableObject* object, DataStorageReader& reader, DeserTblEntry* entry, void* reader_restore);
 
+int deserializeInplaceFull(SerializableObject* object, DataStorageReader& reader);
+
 #ifdef PHYSICALBODY_H
 PhysicalBody* physicalBodyDeserialize(DataStorageReader &deser);
 #endif
@@ -14,7 +16,7 @@ int palleteItemDeserialize(PalleteItem* item, DataStorageReader &deser);
 #endif
 
 #ifdef PALLETE_H
-int palleteDeserialize(Pallete* pallete, DataStorageReader &reader);
+int palleteDeserialize(SerializableObject* obj, DataStorageReader &reader); // BADCODE: kostyl
 #endif
 
 void DataObjectSkipEnd(DataStorageReader &deser);

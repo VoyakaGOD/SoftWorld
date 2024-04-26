@@ -6,6 +6,7 @@
 */
 
 #include <Physics/ghostbody.h>
+#include <Physics/softscene.h>
 #include <Physics/physicalbody.h>
 #include <UI/palleteitem.h>
 #include <Serialize/serialize_special.h>

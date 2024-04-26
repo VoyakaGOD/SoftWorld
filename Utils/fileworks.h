@@ -37,8 +37,22 @@ typedef uint16_t obj_fixed_data_len_t;
     WRITER_CHECK_BYTES(writer, 0)        \
 }
 
+#define READER_CHECK_BYTES(reader, size, err) { \
+    if (((uint8_t*)(reader.data)) + (size) > reader.end) \
+        err \
+}
+
+#define READER_MOVE_BYTES(reader, size, err) { \
+    PTR_MOVE_BYTES(reader.data, size)          \
+    READER_CHECK_BYTES(reader, 0, err)         \
+}   \
 
 #define PTR_READVAL(ptr, type, val) {val = (*(type*)(ptr)); (ptr) = ((type*)ptr) + 1;}
+
+#define READER_READVAL(reader, type, val, err) { \
+    READER_CHECK_BYTES(reader, sizeof(type), err) \
+    PTR_READVAL(reader.data, type, val)          \
+}
 
 class DataStorageWriter {
     public:

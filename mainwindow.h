@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_run_stop_btn_clicked();
+    void on_clear_btn_clicked();
 
     void on_inspector_btn_clicked();
 
@@ -26,6 +27,9 @@ private slots:
 
     void on_save_palette_btn_clicked();
     void on_load_palette_btn_clicked();
+
+    void on_load_scene_btn_clicked();
+    void on_save_scene_btn_clicked();
 
 private:
     Ui::MainWindow *ui;

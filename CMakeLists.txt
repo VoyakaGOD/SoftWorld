@@ -36,6 +36,8 @@ set(PROJECT_SOURCES
         Serialize/serialize_special.h
         Serialize/serialize_special.cpp
         Serialize/serialize.h
+        Serialize/serialize_ui.h
+        Serialize/serialize_ui.cpp
         main.cpp
         mainwindow.cpp
         mainwindow.h

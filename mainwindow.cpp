@@ -7,6 +7,7 @@
 #include <Physics/ghostbody.h>
 #include <Serialize/deserialize.h>
 #include <Serialize/serialize.h>
+#include <Serialize/serialize_ui.h>
 
 //temporary:
 #include "Inspector/inspectorheader.h"
@@ -134,33 +135,30 @@ void MainWindow::on_palette_btn_clicked()
 }
 
 void MainWindow::on_save_palette_btn_clicked() {
-    try {
-        QString filename =QFileDialog::getSaveFileName(this, "Open file");
-        if (filename.isNull()) return;
-
-        FileWriteInterface file_writer = FileWriteInterface(filename.toUtf8().data());
-        serializeObj(file_writer, *(this->ui->palleteContents));
-    }
-    catch (system_error err) {
-        cout << err.what() << endl;
-        QMessageBox::critical(this, "Error", err.what());
-    }
+    guiSerializeObj(this, *(this->ui->palleteContents));
 }
 
 void MainWindow::on_load_palette_btn_clicked() {
-    try {
-        QString filename =QFileDialog::getOpenFileName(this, "Open file");
-        if (filename.isNull()) return;
-
-        FileReadInterface file_reader = FileReadInterface(filename.toUtf8().data());
-        DeserializeError err = (DeserializeError)palleteDeserialize(this->ui->palleteContents, file_reader);
-        if (err) {
-            QMessageBox::critical(this, "Error", deserrErrorMsg(err));
-        }
-    }
-    catch (system_error err) {
-        cout << err.what() << endl;
-        QMessageBox::critical(this, "Error", err.what());
-    }
+    guiDeserializeObjInplace(this, this->ui->palleteContents
+        , palleteDeserialize);
 }
 
+void MainWindow::on_save_scene_btn_clicked() {
+    main_scene.Lock();
+    guiSerializeObj(this, main_scene);
+    main_scene.Unlock();
+}
+
+void MainWindow::on_load_scene_btn_clicked() {
+    main_scene.Lock();
+    Inspector::Clear();
+    guiDeserializeObjInplace(this, &main_scene, deserializeInplaceFull);
+    this->ui->centralwidget->update();
+    main_scene.Unlock();
+}
+
+void MainWindow::on_clear_btn_clicked() {
+    Inspector::Clear();
+    main_scene.Clear();
+    this->ui->centralwidget->update();
+}

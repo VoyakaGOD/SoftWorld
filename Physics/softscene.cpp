@@ -1,4 +1,19 @@
 #include "softscene.h"
+#include <Serialize/deserialize.h>
+#include <Serialize/serialize.h>
+
+struct SoftSceneData{
+    obj_fixed_data_len_t size;
+    int bodycnt;
+    double air_density;
+    double g;
+};
+
+static SoftSceneData default_data = {
+    .bodycnt = 0,
+    .air_density = 1,
+    .g = 10
+};
 
 SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
     world_rect(world_rect), air_density(air_density), g(g) {}
@@ -8,6 +23,58 @@ SoftScene::~SoftScene()
     for (PhysicalBody* body: bodies) {
         delete body;
     }
+}
+
+size_t SoftScene::GetSavedSize() const {
+    size_t s = sizeof(saved_obj_id_t) + sizeof(SoftSceneData);
+    for (auto i = this->bodies.begin(); i != this->bodies.end(); i++) {
+        s += (*i)->GetSavedSize();
+    }
+    s += sizeof(saved_obj_id_t);
+    return s;
+}
+
+void SoftScene::SaveData(DataStorageWriter &writer) const {
+
+    SoftSceneData* sdata = (SoftSceneData*)(writer.data);
+    WRITER_MOVE_BYTES(writer, sizeof(*sdata));
+
+    sdata->size = sizeof(*sdata);
+    sdata->bodycnt = this->bodies.size();
+    sdata->air_density = this->air_density;
+    sdata->g = this->g;
+
+    for (auto i = this->bodies.begin(); i != this->bodies.end(); i++) {
+        saveObj(writer, *(*i));
+    }
+    PTR_APPEND(writer.data, saved_obj_id_t, SAVED_OBJ_NONE)
+}
+
+int SoftScene::Deserialize(SerializableObject* obj, DataStorageReader & reader) {
+    SoftScene* scene = dynamic_cast<SoftScene*>(obj);
+
+    if (!scene) {
+        return DESERR_INVTYPE;
+    }
+
+    READER_CHECK_FIXEDDATA_RET(reader, SoftSceneData)
+
+    scene->g = GETDATA(reader, SoftSceneData, g);
+    scene->air_density = GETDATA(reader, SoftSceneData, air_density);
+    int bodycnt = GETDATA(reader, SoftSceneData, bodycnt);
+
+    PTR_MOVE_BYTES(reader.data, ((SoftSceneData*)(reader.data))->size);
+
+    scene->Clear();
+
+    for (int i = 0; i < bodycnt; i++) {
+        PhysicalBody* body = physicalBodyDeserialize(reader);
+        if (!body)
+            return last_deserialize_error;
+        scene->AddBody(body);
+    }
+
+    return DESERR_OK;
 }
 
 void SoftScene::Draw(QPainter &painter) const
@@ -58,6 +125,11 @@ void SoftScene::RemoveBody(PhysicalBody *body)
     QMutexLocker lock(&synchronizer);
 
     bodies.remove(body);
+}
+
+void SoftScene::Clear() {
+    QMutexLocker lock(&synchronizer);
+    bodies.clear();
 }
 
 void SoftScene::WidenInspectorContext()

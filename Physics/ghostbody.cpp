@@ -29,6 +29,8 @@ void GhostBody::SaveData(DataStorageWriter &data) const {
     PhysicalBody::SaveData(data);
 
     GhostBodyData* gdata = (GhostBodyData*)(data.data);
+    WRITER_CHECK_BYTES(data, sizeof(*gdata))
+
     gdata->size = sizeof(*gdata);
     gdata->x = this->origin.x();
     gdata->y = this->origin.y();

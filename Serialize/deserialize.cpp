@@ -38,7 +38,7 @@ void DataObjectSkip(DataStorageReader &deser) {
 
     if (obj_class == SAVED_OBJ_STR) {
         size_t len = readShortLength(deser);
-        PTR_MOVE_BYTES(deser.data, len);
+        READER_MOVE_BYTES(deser, len, return;)
         return;
     }
     if (obj_class == SAVED_OBJ_PKG) {
@@ -53,7 +53,7 @@ void DataObjectSkip(DataStorageReader &deser) {
         PTR_READVAL(deser.data, saved_obj_id_t, obj_class);
         if (obj_class == SAVED_OBJ_NONE) {
             if (depth > 0)
-                PTR_MOVE_BYTES(deser.data, 1)
+                READER_MOVE_BYTES(deser, sizeof(saved_obj_id_t), return;)
             break;
         }
         PTR_MOVE_BYTES(deser.data, 1)
@@ -76,8 +76,9 @@ DeserTblEntry* getDeserEntry(DataStorageReader &reader, void* reader_restore) {
     saved_obj_id_t obj_class;
 
     while (true) {
+        READER_READVAL(reader, saved_obj_id_t, obj_class,
+             {last_deserialize_error = DESERR_BOUNDS; return nullptr;})
 
-        PTR_READVAL(reader.data, saved_obj_id_t, obj_class);
         if (obj_class < 128) {
             break;
         }
@@ -113,7 +114,8 @@ SerializableObject* deserializeSimple(DataStorageReader &reader, DeserTblEntry* 
             {
                 SerializableObject* ret = entry->e_simple(reader);
                 DataObjectSkipEnd(reader);
-                PTR_MOVE_BYTES(reader.data, sizeof(saved_obj_id_t));
+                READER_MOVE_BYTES(reader, sizeof(saved_obj_id_t),
+                    {last_deserialize_error = DESERR_BOUNDS; return nullptr;})
                 return ret;
             }
 
@@ -134,8 +136,12 @@ int deserializeInplace(SerializableObject* object, DataStorageReader& reader, De
         case DESER_TBL_INPLACE:
             {
                 int ret = entry->e_inplace(object, reader);
+                if (ret) {
+                    reader.data = reader_restore;
+                    return ret;
+                }
                 DataObjectSkipEnd(reader);
-                PTR_MOVE_BYTES(reader.data, sizeof(saved_obj_id_t));
+                READER_MOVE_BYTES(reader, sizeof(saved_obj_id_t), return DESERR_BOUNDS;)
                 return ret;
             }
         default:
@@ -144,7 +150,14 @@ int deserializeInplace(SerializableObject* object, DataStorageReader& reader, De
     }
 }
 
+int deserializeInplaceFull(SerializableObject* object, DataStorageReader& reader) {
+    void* reader_restore = reader.data;
+    DeserTblEntry* entry = getDeserEntry(reader, reader_restore);
+    return deserializeInplace(object, reader, entry, reader_restore);
+}
+
 PhysicalBody* physicalBodyDeserialize(DataStorageReader &reader) {
+    READER_CHECK_BYTES(reader, sizeof(saved_obj_id_t), {last_deserialize_error = DESERR_BOUNDS; return nullptr;})
     saved_obj_id_t obj_class = *(saved_obj_id_t*)(reader.data);
 
     if (obj_class != SAVED_OBJ_PHYSICALBODY){
@@ -162,7 +175,8 @@ PhysicalBody* physicalBodyDeserialize(DataStorageReader &reader) {
             return nullptr;
         }
         DataObjectSkipEnd(reader);
-        PTR_MOVE_BYTES(reader.data, sizeof(saved_obj_id_t));
+        READER_MOVE_BYTES(reader, sizeof(saved_obj_id_t),
+                    {last_deserialize_error = DESERR_BOUNDS; return nullptr;})
         return ret;
     }
     last_deserialize_error = DESERR_INVTYPE;
@@ -170,6 +184,7 @@ PhysicalBody* physicalBodyDeserialize(DataStorageReader &reader) {
 }
 
 int palleteItemDeserialize(PalleteItem* item, DataStorageReader &reader) {
+    READER_CHECK_BYTES(reader, sizeof(saved_obj_id_t), return DESERR_BOUNDS;)
     saved_obj_id_t obj_class = *(saved_obj_id_t*)(reader.data);
     if (obj_class == SAVED_OBJ_PHYSICALBODY) {
         PhysicalBody* body = physicalBodyDeserialize(reader);
@@ -190,7 +205,10 @@ int palleteItemDeserialize(PalleteItem* item, DataStorageReader &reader) {
     return deserializeInplace(item, reader, entry, reader_restore);
 }
 
-int palleteDeserialize(Pallete* pallete, DataStorageReader &reader) {
+int palleteDeserialize(SerializableObject* obj, DataStorageReader &reader) {
+    Pallete* pallete = static_cast<Pallete*>(obj);
+
+    READER_CHECK_BYTES(reader, sizeof(saved_obj_id_t), return DESERR_BOUNDS;)
     saved_obj_id_t obj_class = *(saved_obj_id_t*)(reader.data);
     if (obj_class == SAVED_OBJ_PKG) {
         size_t size = 0;

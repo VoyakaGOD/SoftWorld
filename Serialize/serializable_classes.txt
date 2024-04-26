@@ -3,6 +3,7 @@
 3 Package SAVED_OBJ_PKG special
 128 PhysicalBody SAVED_OBJ_PHYSICALBODY base
 4 PalleteItem SAVED_OBJ_PALLETE_ITEM inplace
+5 SoftScene SAVED_OBJ_SCENE inplace
 PhysicalBody:
 1 GhostBody GHOST_BODY_ID simple
 :

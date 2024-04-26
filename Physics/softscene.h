@@ -3,13 +3,16 @@
 
 #include <QMutex>
 #include "physicalbody.h"
+#include <Serialize/deser_helpers.h>
 #include "Inspector/inspector.h"
 #include "Inspector/editingmanager.h"
+
+///SERIALIZABLE SoftScene SAVED_OBJ_SCENE inplace
 
 //time limit for try to lock
 #define SOFT_SCENE_REQUEST_TIME_LIMIT 100 //milliseconds
 
-class SoftScene
+class SoftScene: public SerializableObject
 {
 private:
     mutable QMutex synchronizer;
@@ -18,13 +21,23 @@ private:
     double air_density;
     double g;
 
+public: // serialize
+    virtual void SaveID(DataStorageWriter &data) const;
+    virtual size_t GetSavedSize() const;
+    virtual void SaveData(DataStorageWriter &data) const;
+    static int Deserialize(SerializableObject*, DataStorageReader &);
+
 public:
     SoftScene(const QRect &world_rect, double air_density, double g);
     ~SoftScene();
+
+
+
     void Draw(QPainter &painter) const;
     void DoNextStep(double delta_time);
     void AddBody(PhysicalBody *body);
     void RemoveBody(PhysicalBody *body);
+    void Clear();
     void WidenInspectorContext();
     PhysicalBody *GetBodyAt(const QPoint &point) const;
     void Lock() const;

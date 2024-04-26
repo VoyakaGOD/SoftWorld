@@ -12,6 +12,9 @@ void GhostBody::SaveID(DataStorageWriter &data) const {
     PhysicalBody::SaveID(data);
     WRITER_APPEND(data, saved_obj_id_t, GHOST_BODY_ID);
 }
+void SoftScene::SaveID(DataStorageWriter &data) const {
+    WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_SCENE);
+}
 void PhysicalBody::SaveID(DataStorageWriter &data) const {
     WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_PHYSICALBODY);
 }
