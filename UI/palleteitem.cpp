@@ -84,7 +84,7 @@ void PalleteItem::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     this->style()->drawItemText(&painter,
                                 this->rect().adjusted(height + framewidth + ITEM_MARGIN, framewidth, -framewidth, -framewidth),
-                                Qt::AlignHCenter, this->palette(), 1, this->name);
+                                Qt::AlignJustify, this->palette(), 1, this->name);
 
     if (this->body) {
         QRect rect = this->body->GetBoundingRect();

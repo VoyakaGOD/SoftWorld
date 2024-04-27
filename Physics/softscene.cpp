@@ -7,12 +7,14 @@ struct SoftSceneData{
     int bodycnt;
     double air_density;
     double g;
+    QRect world_rect;
 };
 
 static SoftSceneData default_data = {
     .bodycnt = 0,
     .air_density = 1,
-    .g = 10
+    .g = 10,
+    .world_rect = QRect(0,0,500,500)
 };
 
 SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
@@ -43,6 +45,7 @@ void SoftScene::SaveData(DataStorageWriter &writer) const {
     sdata->bodycnt = this->bodies.size();
     sdata->air_density = this->air_density;
     sdata->g = this->g;
+    sdata->world_rect = this->world_rect;
 
     for (auto i = this->bodies.begin(); i != this->bodies.end(); i++) {
         saveObj(writer, *(*i));
@@ -61,6 +64,8 @@ int SoftScene::Deserialize(SerializableObject* obj, DataStorageReader & reader) 
 
     scene->g = GETDATA(reader, SoftSceneData, g);
     scene->air_density = GETDATA(reader, SoftSceneData, air_density);
+    scene->world_rect = GETDATA(reader, SoftSceneData, world_rect);
+
     int bodycnt = GETDATA(reader, SoftSceneData, bodycnt);
 
     PTR_MOVE_BYTES(reader.data, ((SoftSceneData*)(reader.data))->size);

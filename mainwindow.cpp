@@ -150,15 +150,13 @@ void MainWindow::on_save_scene_btn_clicked() {
 }
 
 void MainWindow::on_load_scene_btn_clicked() {
-    main_scene.Lock();
-    Inspector::Clear();
+    Inspector::SetTarget(nullptr, nullptr);
     guiDeserializeObjInplace(this, &main_scene, deserializeInplaceFull);
     this->ui->centralwidget->update();
-    main_scene.Unlock();
 }
 
 void MainWindow::on_clear_btn_clicked() {
-    Inspector::Clear();
+    Inspector::SetTarget(nullptr, nullptr);
     main_scene.Clear();
     this->ui->centralwidget->update();
 }

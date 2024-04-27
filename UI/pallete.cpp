@@ -82,6 +82,9 @@ PalleteItem* Pallete::AddPalleteItem(PalleteItem* item) {
 
 void Pallete::RemovePalleteItem(PalleteItem* item) {
     this->layout.removeWidget(item);
+    if (this->sceneview->inserted_body == item->body) {
+        this->sceneview->ClearCursor();
+    }
     if (Inspector::IsTarget(item)){
         Inspector::SetTarget(nullptr, nullptr);
     }

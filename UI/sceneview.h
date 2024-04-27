@@ -17,6 +17,8 @@ class SceneView : public QFrame, public EditingManager
         QPoint translation = QPoint();
         qreal xscale = 1;
         qreal yscale = 1;
+        QRect viewport;
+        bool preserve_aspect_ratio = true;
         SoftScene* scene = NULL;
 
         PhysicalBody* selected_body = nullptr;
@@ -30,6 +32,7 @@ class SceneView : public QFrame, public EditingManager
         ~SceneView();
 
         void SetViewport(QRect &rect);
+        void UpdateScaling();
         void SetInsertion(PhysicalBody* body);
         void SetInsertion(PalleteItem* item);
         QPoint ToSceneCoordinates(QPoint point);
@@ -46,6 +49,7 @@ class SceneView : public QFrame, public EditingManager
         void mousePressEvent(QMouseEvent *event) override;
         void mouseReleaseEvent(QMouseEvent *event) override;
         void mouseMoveEvent(QMouseEvent *event) override;
+        void resizeEvent(QResizeEvent* event) override;
 
         QAction delete_action;
         QAction clear_cursor_action;

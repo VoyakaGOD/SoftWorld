@@ -4,6 +4,8 @@
 
 #include "palleteitem.h" // TODO remove
 
+static const int scene_border_linewidth = 4;
+
 extern SoftScene main_scene;
 
 SceneView::SceneView(QWidget *parent)
@@ -22,7 +24,7 @@ SceneView::SceneView(QWidget *parent)
 
     this->setFrameStyle(QFrame::Panel | QFrame::Raised);
     this->setLineWidth(2);
-    //this->SetViewport(this->scene->world_rect);
+    this->SetViewport(this->scene->world_rect);
 }
 
 SceneView::~SceneView() {
@@ -30,9 +32,31 @@ SceneView::~SceneView() {
 }
 
 void SceneView::SetViewport(QRect &rect) {
-    this->translation = -rect.topLeft();
-    this->xscale = this->width() / rect.width();
-    this->yscale = this->height() / rect.height();
+    this->viewport = rect;
+    this->UpdateScaling();
+}
+
+void SceneView::UpdateScaling() {
+    if (this->preserve_aspect_ratio) {
+        double scale = min(((double)(this->width())) / this->viewport.width(), ((double)(this->height())) / this->viewport.height());
+        this->xscale = scale;
+        this->yscale = scale;
+    }
+    else {
+        this->xscale = this->width() / this->viewport.width();
+        this->yscale = this->height() / this->viewport.height();
+    }
+
+    this->translation = QPoint(this->width() / 2 / this->xscale, this->height() / 2 / this->yscale) - this->viewport.center();
+
+
+    /*
+    this->setFrameRect(QRect((this->viewport.left() + this->translation.x()) / this->xscale,
+                             (this->viewport.top()  + this->translation.y()) / this->yscale,
+                             (this->viewport.width() / this->xscale ),
+                             (this->viewport.height() / this->yscale)));
+    */
+
 }
 
 void SceneView::paintEvent(QPaintEvent * event) {
@@ -40,6 +64,10 @@ void SceneView::paintEvent(QPaintEvent * event) {
     painter.scale(this->xscale, this->yscale);
     painter.translate(this->translation);
     this->scene->Draw(painter);
+
+    painter.setPen(QPen(Qt::black, scene_border_linewidth));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(this->viewport);
 
     if (this->selected_body && Inspector::IsTarget(this->selected_body)){
         painter.setPen(QPen(QBrush(this->palette().highlight()), 1, Qt::DashLine));
@@ -58,8 +86,8 @@ void SceneView::paintEvent(QPaintEvent * event) {
 
 QPoint SceneView::ToSceneCoordinates(QPoint point) {
     return QPoint(
-        (point.x() - this->translation.x())/(this->xscale),
-        (point.y() - this->translation.y())/(this->yscale)
+        (point.x()/this->xscale) - this->translation.x(),
+        (point.y()/this->yscale) - this->translation.y()
     );
 }
 
@@ -112,6 +140,11 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
+void SceneView::resizeEvent(QResizeEvent* event) {
+    this->UpdateScaling();
+    QFrame::resizeEvent(event);
+}
+
 void SceneView::SetInsertion(PhysicalBody* body) {
     if (this->inserted_body_pi) {
         this->inserted_body_pi->SetInactive();
@@ -134,6 +167,9 @@ void SceneView::DeleteSelected() {
     if (this->selected_body) {
         this->body_grabbed = false;
         this->scene->RemoveBody(this->selected_body);
+        if (Inspector::IsTarget(this->selected_body)) {
+            Inspector::Clear();
+        }
         delete this->selected_body;
         this->selected_body = nullptr;
         this->update();

@@ -16,7 +16,6 @@ class SoftScene: public SerializableObject
 {
 private:
     mutable QMutex synchronizer;
-    QRect world_rect;
     list<PhysicalBody*> bodies;
     double air_density;
     double g;
@@ -28,10 +27,10 @@ public: // serialize
     static int Deserialize(SerializableObject*, DataStorageReader &);
 
 public:
+    QRect world_rect;
+
     SoftScene(const QRect &world_rect, double air_density, double g);
     ~SoftScene();
-
-
 
     void Draw(QPainter &painter) const;
     void DoNextStep(double delta_time);
