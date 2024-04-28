@@ -14,11 +14,11 @@ InspectorLabel::InspectorLabel(QWidget *container, QFormLayout *layout, const ch
 
 InspectorLabel::~InspectorLabel()
 {
-    delete name_label;
-    delete text_label;
-
     if(manager_valid_ptr)
         *manager_valid_ptr = false;
+
+    delete name_label;
+    delete text_label;
 }
 
 void InspectorLabel::ChangeText(const QString &text)

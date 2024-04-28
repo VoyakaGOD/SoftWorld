@@ -30,7 +30,7 @@ SimulationThreadsController::SimulationThreadsController() {}
 void SimulationThreadsController::WidenInspectorContext()
 {
     Inspector::AddHeader("simulation", LARGE_HEADER);
-    Inspector::AddParam("physics dt[mcs]", p_udelta, 0, 1000000);
+    Inspector::AddParam("physics dt[mcs]", p_udelta, 500, 1000000);
     Inspector::AddParam("FPS limit", fps_limit, 1, 1000);
 }
 

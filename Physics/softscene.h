@@ -20,6 +20,9 @@ private:
     double g;
     InspectorLabelManager count_label_manager;
 
+private:
+    void RemoveAllBodies();
+
 public: // serialize
     virtual void SaveID(DataStorageWriter &data) const;
     virtual size_t GetSavedSize() const;

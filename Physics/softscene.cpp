@@ -20,11 +20,21 @@ static SoftSceneData default_data = {
 SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
     world_rect(world_rect), air_density(air_density), g(g) {}
 
-SoftScene::~SoftScene()
+void SoftScene::RemoveAllBodies()
 {
-    for (PhysicalBody* body: bodies) {
+    QMutexLocker lock(&synchronizer);
+
+    for (PhysicalBody* body: bodies)
+    {
         delete body;
     }
+
+    bodies.clear();
+}
+
+SoftScene::~SoftScene()
+{
+    RemoveAllBodies();
 }
 
 size_t SoftScene::GetSavedSize() const {
@@ -131,15 +141,16 @@ void SoftScene::RemoveBody(PhysicalBody *body)
     QMutexLocker lock(&synchronizer);
 
     bodies.remove(body);
+    delete body;
+
     count_label_manager.ChangeText(QString::number(bodies.size()));
 }
 
 void SoftScene::Clear()
 {
-    QMutexLocker lock(&synchronizer);
+    RemoveAllBodies();
 
-    bodies.clear();
-    count_label_manager.ChangeText(QString::number(bodies.size()));
+    count_label_manager.ChangeText("0");
 }
 
 void SoftScene::WidenInspectorContext()
