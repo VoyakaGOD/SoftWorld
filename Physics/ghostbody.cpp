@@ -53,7 +53,7 @@ void GhostBody::WidenInspectorContext() {
 }
 
 bool GhostBody::ContainsPoint(const QPoint &point) const {
-    return (point - this->origin).manhattanLength() < radius;
+    return (QVector2D(point) - QVector2D(this->origin)).lengthSquared() < this->radius * this->radius;
 }
 
 PhysicalBody* GhostBody::Clone() const {

@@ -21,7 +21,7 @@ void EditOnlyBody::WidenInspectorContext()
 
 bool EditOnlyBody::ContainsPoint(const QPoint &point) const
 {
-    return (point - this->origin.toPoint()).manhattanLength() < radius;
+    return (QVector2D(point) - this->origin).lengthSquared() < this->radius * this->radius;
 }
 
 PhysicalBody *EditOnlyBody::Clone() const

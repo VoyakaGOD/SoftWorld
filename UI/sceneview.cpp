@@ -67,7 +67,7 @@ void SceneView::paintEvent(QPaintEvent * event) {
 
     painter.setPen(QPen(Qt::black, scene_border_linewidth));
     painter.setBrush(Qt::NoBrush);
-    painter.drawRect(this->viewport);
+    painter.drawRect(this->scene->world_rect);
 
     if (this->selected_body && Inspector::IsTarget(this->selected_body)){
         painter.setPen(QPen(QBrush(this->palette().highlight()), 1, Qt::DashLine));
