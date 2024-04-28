@@ -96,7 +96,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
 
     if (inserted_body) {
         PhysicalBody* new_body = this->inserted_body->Clone();
-        new_body->MoveBy(event->pos());
+        new_body->MoveBy(pos);
         this->scene->AddBody(new_body);
         this->ClearCursor();
     }
@@ -115,6 +115,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
         this->scene->WidenInspectorContext();
         Inspector::SetManager(SimulationThreadsController::GetEditingManager());
         SimulationThreadsController::WidenInspectorContext();
+        this->selected_body = nullptr;
     }
     this->update();
 }
