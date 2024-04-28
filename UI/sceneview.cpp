@@ -67,7 +67,7 @@ void SceneView::paintEvent(QPaintEvent * event) {
 
     painter.setPen(QPen(Qt::black, scene_border_linewidth));
     painter.setBrush(Qt::NoBrush);
-    painter.drawRect(this->viewport);
+    painter.drawRect(this->scene->world_rect);
 
     if (this->selected_body && Inspector::IsTarget(this->selected_body)){
         painter.setPen(QPen(QBrush(this->palette().highlight()), 1, Qt::DashLine));
@@ -96,7 +96,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
 
     if (inserted_body) {
         PhysicalBody* new_body = this->inserted_body->Clone();
-        new_body->MoveBy(event->pos());
+        new_body->MoveBy(pos);
         this->scene->AddBody(new_body);
         this->ClearCursor();
     }
@@ -115,6 +115,7 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
         this->scene->WidenInspectorContext();
         Inspector::SetManager(SimulationThreadsController::GetEditingManager());
         SimulationThreadsController::WidenInspectorContext();
+        this->selected_body = nullptr;
     }
     this->update();
 }

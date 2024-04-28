@@ -143,6 +143,10 @@ void Pallete::LoadNewPalleteItem() {
 
 void Pallete::PickItemFromScene() {
     sceneview->scene->Lock();
+    if (!(this->sceneview->selected_body)) {
+        sceneview->scene->Unlock();
+        return;
+    }
     PhysicalBody* new_body = this->sceneview->selected_body->Clone();
     sceneview->scene->Unlock();
 
@@ -161,6 +165,7 @@ void Pallete::ShowContextMenu(const QPoint &pos) {
         menu->addAction(&(this->save_item_action));
     }
     menu->addAction(&(this->load_item_action));
+    this->pick_item_action.setEnabled(this->sceneview->selected_body);
     menu->addAction(&(this->pick_item_action));
     menu->popup(((QWidget*)this)->mapToGlobal(pos));
 }

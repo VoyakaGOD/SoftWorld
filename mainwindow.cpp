@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //Inspector::Clear();
     Inspector::AddHeader("----------------------", SMALL_HEADER);
 
-    EditOnlyBody *test_body = new EditOnlyBody(QPoint(300,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
+    EditOnlyBody *test_body = new EditOnlyBody(QPoint(150,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
 
