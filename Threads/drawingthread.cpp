@@ -17,7 +17,7 @@ void DrawingThread::run()
 {
     while(true)
     {
-        unsigned long udelta = SimulationThreadsController::GetPhysicsDelta();
+        unsigned long udelta = SimulationThreadsController::GetDrawingDelta();
 
         emit Draw();
         if(sleepy.tryLock(udelta / 1000))
@@ -25,4 +25,3 @@ void DrawingThread::run()
     }
     sleepy.unlock();
 }
-

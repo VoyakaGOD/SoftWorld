@@ -3,6 +3,7 @@
 EditOnlyBody::EditOnlyBody(const QPoint &origin, double radius, DrawingStyle style) : style(style)
 {
     this->origin = QVector2D(origin);
+    velocity = QVector2D(100, -250);
     this->radius = radius;
 }
 
@@ -21,7 +22,7 @@ void EditOnlyBody::WidenInspectorContext()
 
 bool EditOnlyBody::ContainsPoint(const QPoint &point) const
 {
-    return (point - this->origin.toPoint()).manhattanLength() < radius;
+    return (QVector2D(point) - this->origin).length() < radius;
 }
 
 PhysicalBody *EditOnlyBody::Clone() const
@@ -41,15 +42,26 @@ void EditOnlyBody::KeepSceneBorders(const QRect &world_rect)
     if(origin.y() - radius < world_rect.top())
         origin.setY(world_rect.top() + radius);
     if(origin.y() + radius > world_rect.bottom())
+    {
         origin.setY(world_rect.bottom() - radius);
+        velocity.setY(-0.7 * velocity.y());
+    }
 }
 
-void EditOnlyBody::ApplyInternalRestrictions(double delta_time) {}
-void EditOnlyBody::ApplyGravity(double air_density, double g, double delta_time) {}
+void EditOnlyBody::ApplyInternalRestrictions(double delta_time)
+{
+    origin += velocity * delta_time;
+}
+
+void EditOnlyBody::ApplyGravity(double air_density, double g, double delta_time)
+{
+    velocity += QVector2D(0, 50) * g * delta_time;
+}
 
 void EditOnlyBody::MoveBy(const QPoint &offset)
 {
     this->origin = this->origin + QVector2D(offset);
+    velocity = QVector2D(0, 0);
 }
 
 void EditOnlyBody::AddMomentum(const QPoint &momentum) {}
