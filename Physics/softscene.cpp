@@ -123,6 +123,7 @@ void SoftScene::AddBody(PhysicalBody *body)
     QMutexLocker lock(&synchronizer);
 
     bodies.push_back(body);
+    count_label_manager.ChangeText(QString::number(bodies.size()));
 }
 
 void SoftScene::RemoveBody(PhysicalBody *body)
@@ -130,11 +131,15 @@ void SoftScene::RemoveBody(PhysicalBody *body)
     QMutexLocker lock(&synchronizer);
 
     bodies.remove(body);
+    count_label_manager.ChangeText(QString::number(bodies.size()));
 }
 
-void SoftScene::Clear() {
+void SoftScene::Clear()
+{
     QMutexLocker lock(&synchronizer);
+
     bodies.clear();
+    count_label_manager.ChangeText(QString::number(bodies.size()));
 }
 
 void SoftScene::WidenInspectorContext()
@@ -142,6 +147,7 @@ void SoftScene::WidenInspectorContext()
     Inspector::AddHeader("scene", LARGE_HEADER);
     Inspector::AddParam("air density", air_density, (double)0, (double)1000);
     Inspector::AddParam("g", g, (double)0, (double)100);
+    Inspector::AddLabel("bodies count:", QString::number(bodies.size()), &count_label_manager);
 }
 
 PhysicalBody *SoftScene::GetBodyAt(const QPoint &point) const

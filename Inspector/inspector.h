@@ -8,6 +8,7 @@
 #include "inspectorcolorfield.h"
 #include "inspectornumericfield.h"
 #include "inspectorstringfield.h"
+#include "inspectorlabelmanager.h"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ using namespace std;
  * This class provides UI to change simulation values.
  * To do it you should call one of AddParam methods.
  * Aslo you can attach actions by calling AddAction method.
- * Coming soon: You can create text labels by calling AddLabel method, which return controller of new label.
+ * You can create text labels by calling AddLabel method, which return controller of new label.
  * You can store pointer to current target by calling SetTarget method, which change target and manager and also clear Inspector.
  * Also you can call Clear method by yourself.
  * And each Inspector's field has his own manager. You can change current manager by calling SetManager.
@@ -43,6 +44,7 @@ public:
     static void Clear();
     static void AddHeader(const char *text, int size);
     static void AddAction(const char *name, Action action);
+    static void AddLabel(const char *name, const QString &text, InspectorLabelManager *manager = nullptr);
     static void AddParam(const char *name, QColor &value);
     static void AddParam(const char *name, int &value, int min = INT_MIN, int max = INT_MAX);
     static void AddParam(const char *name, unsigned long &value, unsigned long min = 0, unsigned long max = 4294967295);

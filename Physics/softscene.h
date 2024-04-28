@@ -5,7 +5,6 @@
 #include "physicalbody.h"
 #include <Serialize/deser_helpers.h>
 #include "Inspector/inspector.h"
-#include "Inspector/editingmanager.h"
 
 ///SERIALIZABLE SoftScene SAVED_OBJ_SCENE inplace
 
@@ -19,6 +18,7 @@ private:
     list<PhysicalBody*> bodies;
     double air_density;
     double g;
+    InspectorLabelManager count_label_manager;
 
 public: // serialize
     virtual void SaveID(DataStorageWriter &data) const;
