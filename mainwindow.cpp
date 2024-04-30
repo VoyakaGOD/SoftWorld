@@ -10,23 +10,12 @@
 #include <Serialize/serialize_ui.h>
 
 //temporary:
-#include "Inspector/inspectorheader.h"
-#include "Inspector/inspectornumericfield.h"
-#include "Inspector/inspectorcolorfield.h"
-#include "Inspector/inspectorbutton.h"
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
 #include "Physics/softscene.h"
 #include "Threads/simulationthreadscontroller.h"
 
 extern SoftScene main_scene;
-
-static bool is_running = true;
-QIcon run_icon;
-QIcon stop_icon;
-
-QIcon hide_icon;
-QIcon show_icon;
 
 QString dev = "everything was deleted!";
 
@@ -52,20 +41,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
     ui->palleteContents->PostInit(ui->main_view);
-
     ui->topButtonsDock->setTitleBarWidget(new QWidget());
-
     Inspector::Mount(ui->inspectorContents, ui->inspectorLayout, ui->main_view);
     SimulationThreadsController::Mount(&main_scene, 16000, ui->main_view, 16000);
     Icons::AddIcon("settings", ":/Icons/settings.png");
 
-    //temporary *********************************************************************************************
-    run_icon.addFile(QString::fromUtf8(":/Icons/run.png"), QSize(), QIcon::Normal, QIcon::Off);
-    stop_icon.addFile(QString::fromUtf8(":/Icons/stop.png"), QSize(), QIcon::Normal, QIcon::Off);
-    hide_icon.addFile(QString::fromUtf8(":/Icons/closed_lock.png"), QSize(), QIcon::Normal, QIcon::Off);
-    show_icon.addFile(QString::fromUtf8(":/Icons/opened_lock.png"), QSize(), QIcon::Normal, QIcon::Off);
-    MainWindow::on_run_stop_btn_clicked();
 
+    //temporary *********************************************************************************************
     Inspector::AddHeader("some object", LARGE_HEADER);
     Inspector::AddParam("color", color_param_value);
     Inspector::AddParam("integer", int_param_value, 12, 25);
@@ -85,6 +67,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     test_body->WidenInspectorContext();
 
     //temporary *********************************************************************************************
+
+    ui->run_stop_btn->SetUp();
+    ui->inspector_btn->SetUp();
+    ui->palette_btn->SetUp();
 }
 
 MainWindow::~MainWindow()
@@ -92,46 +78,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_run_stop_btn_clicked()
+void MainWindow::on_run_stop_btn_StateChanged(bool state)
 {
-    QKeySequence shortcut = ui->run_stop_btn->shortcut();                   //fix gt feature
-    is_running = !is_running;                                               //temporary
-    ui->run_stop_btn->setIcon(is_running ? stop_icon : run_icon);           //temporary
-    ui->run_stop_btn->setText(is_running ? "stop" : "run");                 //temporary
-    ui->run_stop_btn->setShortcut(shortcut);                                //fix gt feature
-    if(is_running)
+    qDebug() << state;
+    if(state)
         SimulationThreadsController::Run();
     else
         SimulationThreadsController::Stop();
 }
 
-
-void MainWindow::on_inspector_btn_clicked()
+void MainWindow::on_inspector_btn_StateChanged(bool state)
 {
-    if(ui->inspectorDock->isHidden())
-    {
-        ui->inspectorDock->show();
-        ui->inspector_btn->setIcon(show_icon);
-    }
-    else
-    {
+    if(state)
         ui->inspectorDock->hide();
-        ui->inspector_btn->setIcon(hide_icon);
-    }
+    else
+        ui->inspectorDock->show();
 }
 
-void MainWindow::on_palette_btn_clicked()
+void MainWindow::on_palette_btn_StateChanged(bool state)
 {
-    if(ui->palleteDock->isHidden())
-    {
-        ui->palleteDock->show();
-        ui->palette_btn->setIcon(show_icon);
-    }
-    else
-    {
+    if(state)
         ui->palleteDock->hide();
-        ui->palette_btn->setIcon(hide_icon);
-    }
+    else
+        ui->palleteDock->show();
 }
 
 void MainWindow::on_save_palette_btn_clicked() {

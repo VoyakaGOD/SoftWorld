@@ -292,7 +292,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="inspector_btn">
+      <widget class="StateButton" name="inspector_btn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -310,6 +310,23 @@
         <string>I</string>
        </property>
        <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <property name="text0" stdset="0">
+        <string/>
+       </property>
+       <property name="text1" stdset="0">
+        <string/>
+       </property>
+       <property name="icon0" stdset="0">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/opened_lock.png</normaloff>:/Icons/opened_lock.png</iconset>
+       </property>
+       <property name="icon1" stdset="0">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/closed_lock.png</normaloff>:/Icons/closed_lock.png</iconset>
+       </property>
+       <property name="state" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -388,7 +405,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="run_stop_btn">
+      <widget class="StateButton" name="run_stop_btn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -416,6 +433,23 @@
        </property>
        <property name="shortcut">
         <string>Return</string>
+       </property>
+       <property name="text0" stdset="0">
+        <string>run</string>
+       </property>
+       <property name="text1" stdset="0">
+        <string>stop</string>
+       </property>
+       <property name="icon0" stdset="0">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/run.png</normaloff>:/Icons/run.png</iconset>
+       </property>
+       <property name="icon1" stdset="0">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/stop.png</normaloff>:/Icons/stop.png</iconset>
+       </property>
+       <property name="state" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -479,7 +513,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="palette_btn">
+      <widget class="StateButton" name="palette_btn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -498,6 +532,23 @@
        </property>
        <property name="shortcut">
         <string>P</string>
+       </property>
+       <property name="text0" stdset="0">
+        <string/>
+       </property>
+       <property name="text1" stdset="0">
+        <string/>
+       </property>
+       <property name="icon0" stdset="0">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/opened_lock.png</normaloff>:/Icons/opened_lock.png</iconset>
+       </property>
+       <property name="icon1" stdset="0">
+        <iconset resource="icons.qrc">
+         <normaloff>:/Icons/closed_lock.png</normaloff>:/Icons/closed_lock.png</iconset>
+       </property>
+       <property name="state" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -529,14 +580,22 @@
   <customwidget>
    <class>SceneView</class>
    <extends>QWidget</extends>
-   <header>UI/sceneview.h</header>
+   <header location="global">UI/sceneview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Pallete</class>
    <extends>QWidget</extends>
-   <header>UI/pallete.h</header>
+   <header location="global">UI/pallete.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StateButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CozyWidgets/statebutton.h</header>
+   <slots>
+    <signal>StateChanged(bool)</signal>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>

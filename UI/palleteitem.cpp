@@ -82,6 +82,7 @@ void PalleteItem::paintEvent(QPaintEvent *event) {
         height = 30;
     }
     QPainter painter(this);
+
     this->style()->drawItemText(&painter,
                                 this->rect().adjusted(height + framewidth + ITEM_MARGIN, framewidth, -framewidth, -framewidth),
                                 Qt::AlignJustify, this->palette(), 1, this->name);
