@@ -101,6 +101,7 @@ void Pallete::RemoveThisPalleteItem() {
 void Pallete::InspectThisPalleteItem() {
     if (this->context_menu_target) {
         Inspector::SetTarget(context_menu_target, this);
+        Inspector::AddHeader("palette item", NORMAL_HEADER);
         Inspector::AddParam("name", this->context_menu_target->name);
         this->context_menu_target->body->WidenInspectorContext();
     }
