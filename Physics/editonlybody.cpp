@@ -35,12 +35,20 @@ void EditOnlyBody::SolveCollision(PhysicalBody *another) {}
 void EditOnlyBody::KeepSceneBorders(const QRect &world_rect)
 {
     if(origin.x() + radius > world_rect.right())
+    {
         origin.setX(world_rect.right() - radius);
+        velocity.setX(-0.7 * velocity.x());
+    }
     if(origin.x() - radius < world_rect.left())
+    {
         origin.setX(world_rect.left() + radius);
-
+        velocity.setX(-0.7 * velocity.x());
+    }
     if(origin.y() - radius < world_rect.top())
+    {
         origin.setY(world_rect.top() + radius);
+        velocity.setY(-0.7 * velocity.y());
+    }
     if(origin.y() + radius > world_rect.bottom())
     {
         origin.setY(world_rect.bottom() - radius);
@@ -70,7 +78,8 @@ void EditOnlyBody::Draw(QPainter &painter)
 {
     painter.setBrush(Qt::SolidPattern);
     painter.setBrush(style.main_color);
-    painter.setPen(QPen(style.border_color, style.border_thickness));
+    double border_thickness = min(style.border_thickness, radius);
+    painter.setPen(QPen(style.border_color, border_thickness));
     painter.drawEllipse(this->origin.toPoint(), (int)this->radius, (int)this->radius);
 }
 

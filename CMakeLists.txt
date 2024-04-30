@@ -23,8 +23,8 @@ set(PROJECT_SOURCES
         Physics/physicalbody.cpp
         Physics/ghostbody.h
         Physics/ghostbody.cpp
-        Physics/drawingstyle.h
-        Physics/drawingstyle.cpp
+
+
         Utils/fileworks.h
         Utils/fileworks.cpp
         Serialize/ser_class_enums.h
@@ -49,7 +49,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
 
-        Physics/drawingstyle.h Physics/drawingstyle.cpp
+
         Physics/softscene.h Physics/softscene.cpp
         Inspector/action.h
         icons.qrc
@@ -74,6 +74,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Threads/drawingthread.h Threads/drawingthread.cpp
         Inspector/inspectorlabel.h Inspector/inspectorlabel.cpp
         Inspector/inspectorlabelmanager.h Inspector/inspectorlabelmanager.cpp
+        Utils/drawingstyle.cpp Utils/drawingstyle.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET SoftWorld APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

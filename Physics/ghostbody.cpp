@@ -88,7 +88,8 @@ void GhostBody::AddMomentum(const QPoint &momentum) {
 void GhostBody::Draw(QPainter &painter) {
     painter.setBrush(Qt::SolidPattern);
     painter.setBrush(this->drawing_style.main_color);
-    painter.setPen(QPen(this->drawing_style.border_color, this->drawing_style.border_thickness));
+    double border_thickness = min(drawing_style.border_thickness, (double)radius);
+    painter.setPen(QPen(this->drawing_style.border_color, border_thickness));
     painter.drawEllipse(this->origin, (int)(this->radius), (int)(this->radius));
     return;
 }

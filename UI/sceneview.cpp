@@ -171,7 +171,6 @@ void SceneView::DeleteSelected() {
         if (Inspector::IsTarget(this->selected_body)) {
             Inspector::Clear();
         }
-        delete this->selected_body;
         this->selected_body = nullptr;
         this->update();
     }
@@ -179,9 +178,7 @@ void SceneView::DeleteSelected() {
 
 bool SceneView::PrepareForEditing()
 {
-    //try to lock
-    scene->Lock();
-    return true; //if try is successful
+    return scene->TryToLock();
 }
 
 void SceneView::EndEditing()

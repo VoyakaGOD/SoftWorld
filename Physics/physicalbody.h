@@ -8,7 +8,7 @@
 #include <Serialize/deser_helpers.h>
 #include <Utils/fileworks.h>
 #include "Inspector/inspector.h"
-#include "drawingstyle.h"
+#include "Utils/drawingstyle.h"
 
 ///SERIALIZABLE PhysicalBody SAVED_OBJ_PHYSICALBODY base
 
