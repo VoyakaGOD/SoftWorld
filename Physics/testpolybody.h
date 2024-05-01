@@ -11,7 +11,7 @@ private:
     PolygonPhysicalShape shape;
 
 public:
-    TestPolyBody(DrawingStyle style);
+    TestPolyBody(QVector2D in_pos, DrawingStyle style);
 
     //general methods
 public:

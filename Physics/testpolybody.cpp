@@ -1,11 +1,11 @@
 #include "testpolybody.h"
 
-TestPolyBody::TestPolyBody(DrawingStyle style) : style(style)
+TestPolyBody::TestPolyBody(QVector2D in_pos, DrawingStyle style) : style(style)
 {
-    shape.GetPoints().push_back(PolyPoint(QVector2D(100, 100), QVector2D(0, 0)));
-    shape.GetPoints().push_back(PolyPoint(QVector2D(200, 120), QVector2D(0, 0)));
-    shape.GetPoints().push_back(PolyPoint(QVector2D(190, 170), QVector2D(0, 0)));
-    shape.GetPoints().push_back(PolyPoint(QVector2D(100, 200), QVector2D(0, 0)));
+    shape.GetPoints().push_back(PolyPoint(QVector2D(100, 100) + in_pos, QVector2D(0, 0)));
+    shape.GetPoints().push_back(PolyPoint(QVector2D(200, 120) + in_pos, QVector2D(0, 0)));
+    shape.GetPoints().push_back(PolyPoint(QVector2D(190, 170) + in_pos, QVector2D(0, 0)));
+    shape.GetPoints().push_back(PolyPoint(QVector2D(100, 200) + in_pos, QVector2D(0, 0)));
 }
 
 QRect TestPolyBody::GetBoundingRect() const
@@ -26,10 +26,21 @@ bool TestPolyBody::ContainsPoint(const QPoint &point) const
 
 PhysicalBody *TestPolyBody::Clone() const
 {
-    return new TestPolyBody(style);
+    return new TestPolyBody(QVector2D(0, 0), style);
 }
 
-void TestPolyBody::SolveCollision(PhysicalBody *another) {}
+void TestPolyBody::SolveCollision(PhysicalBody *another)
+{
+    TestPolyBody *tpb = dynamic_cast<TestPolyBody *>(another);
+    if(tpb == NULL)
+        return;
+
+    vector<QVector2D> int_points;
+    shape.GetSideBySideIntersectionPoints(tpb->shape, int_points);
+    if(int_points.size() > 0)
+        shape.MoveBy(QVector2D(0, 0.5f));
+}
+
 void TestPolyBody::KeepSceneBorders(const QRect &world_rect) {}
 void TestPolyBody::ApplyInternalRestrictions(double delta_time) {}
 void TestPolyBody::ApplyGravity(double air_density, double g, double delta_time) {}

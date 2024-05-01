@@ -1,5 +1,4 @@
 #include "statebutton.h"
-#include <iostream>
 
 StateButton::StateButton(QWidget *parent) : QPushButton(parent)
 {

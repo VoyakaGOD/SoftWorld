@@ -50,6 +50,9 @@ bool PolygonPhysicalShape::ContainsPoint(const QVector2D &point) const
     if(points.size() < 3)
         return false;
 
+    if(!GetBoundingRect().contains(point.x(), point.y()))
+        return false;
+
     bool result = false;
 
     result ^= CheckUppperRaycast(point, points[0].position, points[points.size() - 1].position);
@@ -59,9 +62,43 @@ bool PolygonPhysicalShape::ContainsPoint(const QVector2D &point) const
     return result;
 }
 
+static inline float XProduct(QVector2D left, QVector2D right)
+{
+    return left.x() * right.y() - left.y() * right.x();
+}
+
+static void GetTwoLinesIntersectionPoint(QVector2D l1s, QVector2D l1e, QVector2D l2s, QVector2D l2e, vector<QVector2D> &points)
+{
+    QVector2D b = l2s - l1s;
+    QVector2D a1 = l1e - l1s;
+    QVector2D a2 = l2e - l2s;
+
+    float x = XProduct(a1, a2);
+    if(x == 0)
+        return;
+
+    float t1 = XProduct(b, a2) / x;
+    float t2 = XProduct(b, a1) / x;
+
+    if((t1 > 0) && (t1 < 1) && (t2 > 0) && (t2 < 1))
+        points.push_back(l1s + t1 * a1);
+}
+
 void PolygonPhysicalShape::GetSideBySideIntersectionPoints(const PolygonPhysicalShape &another, vector<QVector2D> &points) const
 {
-    return;
+    for(int i = 0; i < this->points.size(); i++)
+    {
+        for(int j = 0; j < another.points.size(); j++)
+        {
+            GetTwoLinesIntersectionPoint(
+                this->points[i == 0 ? this->points.size() - 1 : i - 1].position,
+                this->points[i].position,
+                another.points[j == 0 ? another.points.size() - 1 : j - 1].position,
+                another.points[j].position,
+                points
+                );
+        }
+    }
 }
 
 void PolygonPhysicalShape::Draw(QPainter &painter, const DrawingStyle &style) const
