@@ -9,6 +9,8 @@ class TestPolyBody : public PhysicalBody
 private:
     DrawingStyle style;
     PolygonPhysicalShape shape;
+    double density;
+    float bounce;
 
 public:
     TestPolyBody(QVector2D in_pos, DrawingStyle style);

@@ -6,6 +6,8 @@ TestPolyBody::TestPolyBody(QVector2D in_pos, DrawingStyle style) : style(style)
     shape.GetPoints().push_back(PolyPoint(QVector2D(200, 120) + in_pos, QVector2D(0, 0)));
     shape.GetPoints().push_back(PolyPoint(QVector2D(190, 170) + in_pos, QVector2D(0, 0)));
     shape.GetPoints().push_back(PolyPoint(QVector2D(100, 200) + in_pos, QVector2D(0, 0)));
+    density = 100;
+    bounce = 0.5;
 }
 
 QRect TestPolyBody::GetBoundingRect() const
@@ -16,6 +18,8 @@ QRect TestPolyBody::GetBoundingRect() const
 void TestPolyBody::WidenInspectorContext()
 {
     Inspector::AddHeader("test poly body", LARGE_HEADER);
+    Inspector::AddParam("density", density, 1.0, 1000.0);
+    Inspector::AddParam("bounce", bounce, 0.0f, 0.99f);
     style.WidenInspectorContext();
 }
 
@@ -41,9 +45,23 @@ void TestPolyBody::SolveCollision(PhysicalBody *another)
         shape.MoveBy(QVector2D(0, 0.5f));
 }
 
-void TestPolyBody::KeepSceneBorders(const QRect &world_rect) {}
-void TestPolyBody::ApplyInternalRestrictions(double delta_time) {}
-void TestPolyBody::ApplyGravity(double air_density, double g, double delta_time) {}
+void TestPolyBody::KeepSceneBorders(const QRect &world_rect)
+{
+    for(auto &point : shape.GetPoints())
+    {
+        point.KeepBorders(world_rect, bounce);
+    }
+}
+
+void TestPolyBody::ApplyInternalRestrictions(double delta_time)
+{
+    shape.UpdatePositions(delta_time);
+}
+
+void TestPolyBody::ApplyGravity(double air_density, double g, double delta_time)
+{
+    shape.AddVelocity(QVector2D(0, (1 - air_density / density) * g * delta_time));
+}
 
 void TestPolyBody::MoveBy(const QPoint &offset)
 {

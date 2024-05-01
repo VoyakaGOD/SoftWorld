@@ -25,6 +25,7 @@ public:
     void Draw(QPainter &painter, const DrawingStyle &style) const;
     void UpdatePositions(double delta_time);
     void MoveBy(const QVector2D &offset);
+    void AddVelocity(const QVector2D &delta_velocity);
 };
 
 #endif // POLYGONPHYSICALSHAPE_H

@@ -4,7 +4,7 @@
 
 #include <QApplication>
 
-SoftScene main_scene = SoftScene(QRect(0,0,500,500), 0, 10);
+SoftScene main_scene = SoftScene(QRect(0,0,500,500), 1.22, 10);
 MainWindow* main_window = NULL;
 
 int main(int argc, char *argv[])

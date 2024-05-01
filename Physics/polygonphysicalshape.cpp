@@ -128,3 +128,9 @@ void PolygonPhysicalShape::MoveBy(const QVector2D &offset)
     for(auto &point : points)
         point.position += offset;
 }
+
+void PolygonPhysicalShape::AddVelocity(const QVector2D &delta_velocity)
+{
+    for(auto &point : points)
+        point.velocity += delta_velocity;
+}
