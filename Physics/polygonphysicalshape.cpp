@@ -7,6 +7,11 @@ vector<PolyPoint> &PolygonPhysicalShape::GetPoints()
     return points;
 }
 
+const vector<PolyPoint> &PolygonPhysicalShape::GetConstPoints() const
+{
+    return points;
+}
+
 QRectF PolygonPhysicalShape::GetBoundingRect() const
 {
     if(points.size() == 0)
@@ -40,7 +45,7 @@ static bool CheckUppperRaycast(QVector2D origin, QVector2D p1, QVector2D p2)
     return proj_y < origin.y();
 }
 
-bool PolygonPhysicalShape::ContainsPoint(QVector2D point) const
+bool PolygonPhysicalShape::ContainsPoint(const QVector2D &point) const
 {
     if(points.size() < 3)
         return false;
@@ -79,4 +84,10 @@ void PolygonPhysicalShape::UpdatePositions(double delta_time)
 {
     for(auto &point : points)
         point.position += point.velocity * delta_time;
+}
+
+void PolygonPhysicalShape::MoveBy(const QVector2D &offset)
+{
+    for(auto &point : points)
+        point.position += offset;
 }

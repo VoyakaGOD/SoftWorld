@@ -12,6 +12,7 @@
 //temporary:
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
+#include "Physics/testpolybody.h"
 #include "Physics/softscene.h"
 #include "Threads/simulationthreadscontroller.h"
 
@@ -65,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     EditOnlyBody *test_body = new EditOnlyBody(QPoint(150,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
+
+    main_scene.AddBody(new TestPolyBody(DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
 
     //temporary *********************************************************************************************
 
