@@ -13,6 +13,7 @@ class PolygonPhysicalShape
 {
 private:
     vector<PolyPoint> points;
+    mutable vector<QPoint> drawing_points;
 
 public:
     PolygonPhysicalShape();

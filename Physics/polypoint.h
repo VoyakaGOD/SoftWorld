@@ -7,7 +7,7 @@ struct PolyPoint
 {
     QVector2D position;
     QVector2D velocity;
-    PolyPoint();
+    PolyPoint(QVector2D position, QVector2D velocity);
 };
 
 #endif // POLYPOINT_H
