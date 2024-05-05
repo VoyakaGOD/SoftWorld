@@ -13,13 +13,15 @@ IGBall::IGBall(QVector2D position, double radius, int detailing, DrawingStyle st
     for(int i = 0; i < detailing; i++)
         points.push_back(PolyPoint(position + QVector2D(cos(dphi * i), sin(dphi * i)) * radius, QVector2D(0, 0)));
 
-    current_area = shape.GetArea();
-
     this->style = style;
     this->mass = mass;
     this->gas_const = gas_const;
     this->shell_bounce = shell_bounce;
     this->shell_rigidity = shell_rigidity;
+
+    current_area = shape.GetArea();
+    current_density = -1;
+    initial_part_length = radius * sqrt(2 - 2*cos(dphi));
 }
 
 IGBall::IGBall() {}
@@ -33,15 +35,17 @@ void IGBall::WidenInspectorContext()
 {
     Inspector::AddHeader("ideal gas ball", LARGE_HEADER);
     Inspector::AddParam("m/d", mass, 1e3d, 1e6d);
-    Inspector::AddParam("GC", gas_const, 1.0, 1000.0);
+    Inspector::AddParam("GC", gas_const, 1.0, 10000.0);
     Inspector::AddParam("SB", shell_bounce, 0.0, 1.0);
     Inspector::AddParam("SR", shell_rigidity, 1.0, 1000.0);
+    style.WidenInspectorContext();
     Inspector::AddHeader("volatile parameters", NORMAL_HEADER);
     Inspector::AddLabel("area", get_label_string(current_area), &area_label_manager);
     Inspector::AddLabel("density", get_label_string(current_density), &density_label_manager);
     Inspector::AddHeader("reconstruction", NORMAL_HEADER);
-
-    style.WidenInspectorContext();
+    //target radius
+    //target detailing
+    //apply button
 }
 
 bool IGBall::ContainsPoint(const QPoint &point) const
@@ -60,6 +64,7 @@ PhysicalBody *IGBall::Clone() const
     clone->shell_rigidity = shell_rigidity;
     clone->current_area = -1;
     clone->current_density = -1;
+    clone->initial_part_length = initial_part_length;
     return clone;
 }
 
@@ -77,11 +82,27 @@ void IGBall::KeepSceneBorders(const QRect &world_rect)
 void IGBall::ApplyInternalRestrictions(double delta_time)
 {
     shape.UpdatePositions(delta_time);
+
+    vector<PolyPoint> &points = shape.GetPoints();
+    points.push_back(points[0]);
+    points[points.size() - 1].velocity = QVector2D(0, 0);
+    for(int i = 0; i < points.size() - 1; i++)
+    {
+        QVector2D tangent = points[i + 1].position - points[i].position;
+        double a_n = gas_const * tangent.length() / current_area;
+        double a_t = shell_rigidity * (tangent.length() / initial_part_length - 1);
+        tangent.normalize();
+        QVector2D normal(tangent.y(), -tangent.x());
+        points[i].velocity += (normal * a_n + tangent * a_t) * delta_time;
+        points[i + 1].velocity += (normal * a_n - tangent * a_t) * delta_time;
+    }
+    points[0].velocity += points[points.size() - 1].velocity;
+    points.pop_back();
 }
 
 void IGBall::ApplyGravity(double air_density, double g, double delta_time)
 {
-    current_area = shape.GetArea();
+    current_area = shape.GetArea() + 1;//to avoid division by zero
     area_label_manager.ChangeText(get_label_string(current_area));
     current_density = mass / current_area;
     density_label_manager.ChangeText(get_label_string(current_density));

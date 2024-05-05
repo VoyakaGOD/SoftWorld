@@ -1,3 +1,8 @@
+# Soft World
+
+![physical simulation](https://img.shields.io/badge/physical%20simulation-F3A505)
+![LGPL-3.0 license](https://img.shields.io/badge/license-LGPL--3.0-green)
+
 ## General information
 
 It's simple simulation of soft bodies physics with **Qt** graphical interface.
@@ -42,11 +47,11 @@ Or also you can **stop simulation**, that will interrupt physics calculations.
 
 The main idea is ideal gas law: $PV = nRT$
 
-It provides normal points acceleration: $a_n = \frac{GC}{m/d} * \frac{l}{S}$
+It provides normal points acceleration: $a_n = GC * \frac{l}{S}$
 
 $S$ is (visible)area of the ball 
 $d$ is (invisible)depth of the ball
-$m/d$ is mass of the ball devided by $d$
+$m/d$ is mass of the ball divided by $d$
 $l$ is length of shell's part
 $GC$ is gas constant
 
@@ -55,6 +60,7 @@ Shell also have rigidity to keep the shape of body:
 It provides tangential points acceleration: $a_t = SR * (\frac{l}{l_0} - 1)$
 
 $SR$ is shell rigidity
+$l_0$ is initial length of shell's part
 
 The density of the ball depends on $S$:
 

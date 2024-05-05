@@ -15,6 +15,7 @@ private:
     double shell_rigidity;
     double current_area;
     double current_density;
+    double initial_part_length;
     InspectorLabelManager area_label_manager;
     InspectorLabelManager density_label_manager;
 
