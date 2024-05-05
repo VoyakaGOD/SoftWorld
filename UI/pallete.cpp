@@ -150,7 +150,7 @@ void Pallete::PickItemFromScene() {
     PhysicalBody* new_body = this->sceneview->selected_body->Clone();
     sceneview->scene->Unlock();
 
-    new_body->MoveBy(new_body->GetBoundingRect().center() * -1);
+    new_body->MoveBy(new_body->GetBoundingRect().center().toPoint() * -1);
     this->AddPalleteItem(new_body, "New body");
 }
 

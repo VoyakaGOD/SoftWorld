@@ -24,9 +24,9 @@ IGBall::IGBall(QVector2D position, double radius, int detailing, DrawingStyle st
 
 IGBall::IGBall() {}
 
-QRect IGBall::GetBoundingRect() const
+QRectF IGBall::GetBoundingRect() const
 {
-    return shape.GetBoundingRect().toRect();
+    return shape.GetBoundingRect();
 }
 
 void IGBall::WidenInspectorContext()
@@ -36,8 +36,11 @@ void IGBall::WidenInspectorContext()
     Inspector::AddParam("GC", gas_const, 1.0, 1000.0);
     Inspector::AddParam("SB", shell_bounce, 0.0, 1.0);
     Inspector::AddParam("SR", shell_rigidity, 1.0, 1000.0);
+    Inspector::AddHeader("volatile parameters", NORMAL_HEADER);
     Inspector::AddLabel("area", get_label_string(current_area), &area_label_manager);
     Inspector::AddLabel("density", get_label_string(current_density), &density_label_manager);
+    Inspector::AddHeader("reconstruction", NORMAL_HEADER);
+
     style.WidenInspectorContext();
 }
 

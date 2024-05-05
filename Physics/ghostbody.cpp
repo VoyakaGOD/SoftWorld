@@ -39,8 +39,8 @@ void GhostBody::SaveData(DataStorageWriter &data) const {
     PUT_FIXEDONLY_NUL(data.data)
 }
 
-QRect GhostBody::GetBoundingRect() const {
-    return QRect(this->origin.x() - this->radius,
+QRectF GhostBody::GetBoundingRect() const {
+    return QRectF(this->origin.x() - this->radius,
                  this->origin.y() - this->radius,
                  2 * this->radius,
                  2 * this->radius);

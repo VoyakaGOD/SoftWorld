@@ -10,9 +10,9 @@ TestPolyBody::TestPolyBody(QVector2D in_pos, DrawingStyle style) : style(style)
     bounce = 0.5;
 }
 
-QRect TestPolyBody::GetBoundingRect() const
+QRectF TestPolyBody::GetBoundingRect() const
 {
-    return shape.GetBoundingRect().toRect();
+    return shape.GetBoundingRect();
 }
 
 void TestPolyBody::WidenInspectorContext()

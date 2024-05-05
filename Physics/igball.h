@@ -21,7 +21,7 @@ private:
 public:
     IGBall(QVector2D position, double radius, int detailing, DrawingStyle style,
            double mass, double gas_const, double shell_bounce, double shell_rigidity);
-    QRect GetBoundingRect() const;
+    QRectF GetBoundingRect() const;
     void WidenInspectorContext();
     bool ContainsPoint(const QPoint &point) const;
     PhysicalBody *Clone() const;

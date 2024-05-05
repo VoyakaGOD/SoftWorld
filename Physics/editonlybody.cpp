@@ -7,9 +7,9 @@ EditOnlyBody::EditOnlyBody(const QPoint &origin, double radius, DrawingStyle sty
     this->radius = radius;
 }
 
-QRect EditOnlyBody::GetBoundingRect() const
+QRectF EditOnlyBody::GetBoundingRect() const
 {
-    return QRect(this->origin.x() - this->radius, this->origin.y() - this->radius,
+    return QRectF(this->origin.x() - this->radius, this->origin.y() - this->radius,
         2*this->radius, 2*this->radius);
 }
 
