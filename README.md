@@ -58,7 +58,7 @@ $SR$ is shell rigidity
 
 The density of the ball depends on $S$:
 
-$rho = \frac{m/c}{d}$
+$\rho = \frac{m/c}{d}$
 
 The ball also bounces off the walls, maintaining some part of the speed:
 
