@@ -40,20 +40,30 @@ Or also you can **stop simulation**, that will interrupt physics calculations.
 
 ### 1.Soft ball with ideal gas
 
-Ideal gas law: $PV = nRT$
+The main idea is ideal gas law: $PV = nRT$
 
-Volume: V = $S * d$, where S = (visible)area of ball, d = (invisible)depth of ball
+It provides normal points acceleration: $a_n = \frac{GC}{m/d} * \frac{l}{S}$
 
-Area of linear approach: $S_2 = l * d$, where l = length of part
+$S$ is (visible)area of the ball 
+$d$ is (invisible)depth of the ball
+$m/d$ is mass of the ball devided by $d$
+$l$ is length of shell's part
+$GC$ is gas constant
 
-Force impacts the part: $F = S_2 * P = \frac{S_2}{V} * nRT$
+Shell also have rigidity to keep the shape of body:
 
-Then $F = nRT * l/S$
+It provides tangential points acceleration: $a_t = SR * (\frac{l}{l_0} - 1)$
 
-Surface points acceleration: $a = F/m = l/S * nRT / m = GC * l / S$, where GC = const
+$SR$ is shell rigidity
 
-SR = shell rigidity
+The density of the ball depends on $S$:
 
+$rho = \frac{m/c}{d}$
 
+The ball also bounces off the walls, maintaining some part of the speed:
+
+$v_{new} = SB * v_{old}$
+
+$SB$ is shell bounce
 
 ### 2........
