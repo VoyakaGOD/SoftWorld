@@ -35,3 +35,25 @@ but your **changes may be canceled** and **frames may be skipped**.
 
 Threfore in scene settings in **Inspector** you can change time between physics updates.
 Or also you can **stop simulation**, that will interrupt physics calculations.
+
+## Implemented algorithms
+
+### 1.Soft ball with ideal gas
+
+Ideal gas law: $PV = nRT$
+
+Volume: V = $S * d$, where S = (visible)area of ball, d = (invisible)depth of ball
+
+Area of linear approach: $S_2 = l * d$, where l = length of part
+
+Force impacts the part: $F = S_2 * P = \frac{S_2}{V} * nRT$
+
+Then $F = nRT * l/S$
+
+Surface points acceleration: $a = F/m = l/S * nRT / m = GC * l / S$, where GC = const
+
+SR = shell rigidity
+
+
+
+### 2........

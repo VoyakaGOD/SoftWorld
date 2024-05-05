@@ -134,3 +134,16 @@ void PolygonPhysicalShape::AddVelocity(const QVector2D &delta_velocity)
     for(auto &point : points)
         point.velocity += delta_velocity;
 }
+
+float PolygonPhysicalShape::GetArea()
+{
+    if(points.size() < 3)
+        return 0;
+
+    float S = points[points.size() - 1].x * points[0].y - points[0].x * points[points.size() - 1].y;
+
+    for(int i = 1; i < this->points.size(); i++)
+        S += points[i - 1].x * points[i].y - points[i].x * points[i - 1].y;
+
+    return abs(S);
+}

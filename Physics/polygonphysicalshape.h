@@ -26,6 +26,7 @@ public:
     void UpdatePositions(double delta_time);
     void MoveBy(const QVector2D &offset);
     void AddVelocity(const QVector2D &delta_velocity);
+    float GetArea();
 };
 
 #endif // POLYGONPHYSICALSHAPE_H
