@@ -59,6 +59,7 @@ void Inspector::AddAction(const char *name, Action action)
 void Inspector::AddLabel(const char *name, const QString &text, InspectorLabelManager *manager)
 {
     InspectorLabel *label = new InspectorLabel(container, layout, name, text, manager ? &(manager->valid) : nullptr);
+    CONNECT(manager, &InspectorLabelManager::TextChanged, label, &InspectorLabel::ChangeText);
     items.push_back(label);
 
     if(manager)

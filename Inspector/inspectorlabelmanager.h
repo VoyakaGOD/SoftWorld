@@ -3,8 +3,10 @@
 
 #include "inspectorlabel.h"
 
-class InspectorLabelManager
+class InspectorLabelManager : public QObject
 {
+    Q_OBJECT
+
 private:
     bool valid;
     InspectorLabel *label;
@@ -12,7 +14,10 @@ private:
 public:
     InspectorLabelManager();
     bool IsValid() const;
-    void ChangeText(const QString &text) const;
+    void ChangeText(const QString &text);
+
+signals:
+    void TextChanged(const QString &text);
 
     friend class Inspector;
 };

@@ -13,6 +13,7 @@
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
 #include "Physics/testpolybody.h"
+#include "Physics/igball.h"
 #include "Physics/softscene.h"
 #include "Threads/simulationthreadscontroller.h"
 
@@ -67,8 +68,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
 
-    main_scene.AddBody(new TestPolyBody(QVector2D(0, 0), DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
-    main_scene.AddBody(new TestPolyBody(QVector2D(200, 100), DrawingStyle(Qt::darkRed, Qt::magenta, 2)));
+    //main_scene.AddBody(new TestPolyBody(QVector2D(0, 0), DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
+    //main_scene.AddBody(new TestPolyBody(QVector2D(200, 100), DrawingStyle(Qt::darkRed, Qt::magenta, 2)));
+    main_scene.AddBody(new IGBall(QVector2D(300, 350), 100, 16, DrawingStyle(Qt::darkRed, Qt::black, 1), 1, 1, 0.5, 1));
 
     //temporary *********************************************************************************************
 

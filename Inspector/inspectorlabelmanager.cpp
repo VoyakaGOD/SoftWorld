@@ -11,10 +11,10 @@ bool InspectorLabelManager::IsValid() const
     return valid;
 }
 
-void InspectorLabelManager::ChangeText(const QString &text) const
+void InspectorLabelManager::ChangeText(const QString &text)
 {
     if(!valid)
         return;
 
-    label->ChangeText(text);
+    emit TextChanged(text);
 }

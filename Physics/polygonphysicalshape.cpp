@@ -140,10 +140,12 @@ float PolygonPhysicalShape::GetArea()
     if(points.size() < 3)
         return 0;
 
-    float S = points[points.size() - 1].x * points[0].y - points[0].x * points[points.size() - 1].y;
+    float S = points[points.size() - 1].position.x() * points[0].position.y()
+              - points[0].position.x() * points[points.size() - 1].position.y();
 
     for(int i = 1; i < this->points.size(); i++)
-        S += points[i - 1].x * points[i].y - points[i].x * points[i - 1].y;
+        S += points[i - 1].position.x() * points[i].position.y()
+            - points[i].position.x() * points[i - 1].position.y();
 
-    return abs(S);
+    return abs(S) / 2;
 }

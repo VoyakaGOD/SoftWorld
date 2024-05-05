@@ -6,8 +6,10 @@
 #include "inspectoritem.h"
 #include "editingmanager.h"
 
-class InspectorLabel : public InspectorItem
+class InspectorLabel : public QObject, public InspectorItem
 {
+    Q_OBJECT
+
 private:
     QLabel *name_label;
     QLabel *text_label;
@@ -16,6 +18,8 @@ private:
 public:
     InspectorLabel(QWidget *container, QFormLayout *layout, const char *name, const QString &text, bool *manager_valid_ptr);
     ~InspectorLabel();
+
+public slots:
     void ChangeText(const QString &text);
 };
 
