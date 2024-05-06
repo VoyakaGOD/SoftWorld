@@ -41,9 +41,9 @@ void IGBall::WidenInspectorContext()
 {
     Inspector::AddHeader("ideal gas ball", LARGE_HEADER);
     Inspector::AddParam("m/d", mass, 1e3d, 1e6d);
-    Inspector::AddParam("GC", gas_const, 1.0, 10000.0);
+    Inspector::AddParam("GC", gas_const, 1.0, 1e5d);
     Inspector::AddParam("SB", shell_bounce, 0.0, 1.0);
-    Inspector::AddParam("SR", shell_rigidity, 1.0, 1000.0);
+    Inspector::AddParam("SR", shell_rigidity, 1.0, 3500.0);
     style.WidenInspectorContext();
     Inspector::AddHeader("volatile parameters", NORMAL_HEADER);
     Inspector::AddLabel("area", get_label_string(current_area), &area_label_manager);
@@ -95,7 +95,7 @@ void IGBall::ApplyInternalRestrictions(double delta_time)
     for(int i = 0; i < points.size() - 1; i++)
     {
         QVector2D tangent = points[i + 1].position - points[i].position;
-        double a_n = gas_const * tangent.length() / current_area;
+        double a_n = gas_const * tangent.length() / current_area / current_area * gas_const / current_area * gas_const;
         double a_t = shell_rigidity * (tangent.length() / initial_part_length - 1);
         tangent.normalize();
         QVector2D normal(tangent.y(), -tangent.x());

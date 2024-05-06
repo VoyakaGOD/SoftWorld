@@ -6,6 +6,11 @@ InspectorLabelManager::InspectorLabelManager()
     label = nullptr;
 }
 
+InspectorLabelManager::~InspectorLabelManager()
+{
+    //disconnect(this, nullptr, nullptr, nullptr);
+}
+
 bool InspectorLabelManager::IsValid() const
 {
     return valid;

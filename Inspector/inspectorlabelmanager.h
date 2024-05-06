@@ -13,6 +13,7 @@ private:
 
 public:
     InspectorLabelManager();
+    ~InspectorLabelManager();
     bool IsValid() const;
     void ChangeText(const QString &text);
 

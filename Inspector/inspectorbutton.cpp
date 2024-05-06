@@ -14,5 +14,6 @@ InspectorButton::InspectorButton(QWidget *container, QFormLayout *layout, const 
 
 InspectorButton::~InspectorButton()
 {
+    //button->disconnect(button, nullptr, nullptr, nullptr);
     delete button;
 }
