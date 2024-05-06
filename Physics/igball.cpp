@@ -8,23 +8,29 @@ static QString get_label_string(double value)
 IGBall::IGBall(QVector2D position, double radius, int detailing, DrawingStyle style,
     double mass, double gas_const, double shell_bounce, double shell_rigidity)
 {
-    vector<PolyPoint> &points = shape.GetPoints();
-    double dphi = 2 * M_PI / detailing;
-    for(int i = 0; i < detailing; i++)
-        points.push_back(PolyPoint(position + QVector2D(cos(dphi * i), sin(dphi * i)) * radius, QVector2D(0, 0)));
+    Reconstruct(position, radius, detailing);
 
     this->style = style;
     this->mass = mass;
     this->gas_const = gas_const;
     this->shell_bounce = shell_bounce;
     this->shell_rigidity = shell_rigidity;
+}
+
+IGBall::IGBall() {}
+
+void IGBall::Reconstruct(QVector2D position, double radius, int detailing)
+{
+    vector<PolyPoint> &points = shape.GetPoints();
+    points.clear();
+    double dphi = 2 * M_PI / detailing;
+    for(int i = 0; i < detailing; i++)
+        points.push_back(PolyPoint(position + QVector2D(cos(dphi * i), sin(dphi * i)) * radius, QVector2D(0, 0)));
 
     current_area = shape.GetArea();
     current_density = -1;
     initial_part_length = radius * sqrt(2 - 2*cos(dphi));
 }
-
-IGBall::IGBall() {}
 
 QRectF IGBall::GetBoundingRect() const
 {
@@ -43,9 +49,9 @@ void IGBall::WidenInspectorContext()
     Inspector::AddLabel("area", get_label_string(current_area), &area_label_manager);
     Inspector::AddLabel("density", get_label_string(current_density), &density_label_manager);
     Inspector::AddHeader("reconstruction", NORMAL_HEADER);
-    //target radius
-    //target detailing
-    //apply button
+    Inspector::AddParam("new radius", reconstruction_radius, 10.0, 200.0);
+    Inspector::AddParam("new detailing", reconstruction_detailing, 6, 100);
+    Inspector::AddAction("apply", [this](){ Reconstruct(shape.GetCenter(), reconstruction_radius, reconstruction_detailing); });
 }
 
 bool IGBall::ContainsPoint(const QPoint &point) const

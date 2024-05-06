@@ -18,6 +18,8 @@ private:
     double initial_part_length;
     InspectorLabelManager area_label_manager;
     InspectorLabelManager density_label_manager;
+    double reconstruction_radius;
+    int reconstruction_detailing;
 
 public:
     IGBall(QVector2D position, double radius, int detailing, DrawingStyle style,
@@ -38,6 +40,7 @@ public:
 
 private:
     IGBall();
+    void Reconstruct(QVector2D position, double radius, int detailing);
 };
 
 #endif // IGBALL_H

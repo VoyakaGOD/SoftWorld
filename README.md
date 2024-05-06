@@ -49,10 +49,14 @@ The main idea is ideal gas law: $PV = nRT$
 
 It provides normal points acceleration: $a_n = GC * \frac{l}{S}$
 
-$S$ is (visible)area of the ball 
+$S$ is (visible)area of the ball
+
 $d$ is (invisible)depth of the ball
+
 $m/d$ is mass of the ball divided by $d$
+
 $l$ is length of shell's part
+
 $GC$ is gas constant
 
 Shell also have rigidity to keep the shape of body:
@@ -60,6 +64,7 @@ Shell also have rigidity to keep the shape of body:
 It provides tangential points acceleration: $a_t = SR * (\frac{l}{l_0} - 1)$
 
 $SR$ is shell rigidity
+
 $l_0$ is initial length of shell's part
 
 The density of the ball depends on $S$:

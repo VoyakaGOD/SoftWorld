@@ -149,3 +149,13 @@ float PolygonPhysicalShape::GetArea()
 
     return abs(S) / 2;
 }
+
+QVector2D PolygonPhysicalShape::GetCenter()
+{
+    QVector2D center(0, 0);
+
+    for(auto &point : points)
+        center += point.position;
+
+    return center / points.size();
+}

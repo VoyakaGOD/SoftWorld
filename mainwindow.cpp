@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //main_scene.AddBody(new TestPolyBody(QVector2D(0, 0), DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
     //main_scene.AddBody(new TestPolyBody(QVector2D(200, 100), DrawingStyle(Qt::darkRed, Qt::magenta, 2)));
-    main_scene.AddBody(new IGBall(QVector2D(300, 350), 100, 32, DrawingStyle(Qt::darkRed, Qt::black, 1), 1000, 200, 0.5, 1));
+    main_scene.AddBody(new IGBall(QVector2D(300, 350), 100, 500, DrawingStyle(Qt::darkRed, Qt::black, 1), 1000, 200, 0.5, 1));
 
     //temporary *********************************************************************************************
 

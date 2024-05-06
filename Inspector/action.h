@@ -1,6 +1,8 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-typedef void (*Action)();
+#include <functional>
+
+typedef std::function<void()> Action;
 
 #endif // ACTION_H
