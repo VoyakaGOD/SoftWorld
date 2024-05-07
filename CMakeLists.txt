@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         Physics/physicalbody.cpp
         Physics/ghostbody.h
         Physics/ghostbody.cpp
+        Physics/springmassbody.h
+        Physics/springmassbody.cpp
 
 
         Utils/fileworks.h

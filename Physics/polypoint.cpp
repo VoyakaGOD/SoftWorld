@@ -1,10 +1,9 @@
 #include "polypoint.h"
 
+PolyPoint::PolyPoint() {}
+
 PolyPoint::PolyPoint(const QVector2D &position, const QVector2D &velocity)
-{
-    this->position = position;
-    this->velocity = velocity;
-}
+ : position(position), velocity(velocity) {}
 
 void PolyPoint::KeepBorders(const QRect &rect, float bounce)
 {

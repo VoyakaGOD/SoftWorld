@@ -45,6 +45,9 @@ class SceneView : public QFrame, public EditingManager
         void DeleteSelected();
 
     protected:
+        uint64_t last_move_time_ms = 0;
+        QVector2D last_mouse_speed;
+
         void paintEvent(QPaintEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
         void mouseReleaseEvent(QMouseEvent *event) override;
