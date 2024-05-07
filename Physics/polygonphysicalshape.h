@@ -29,7 +29,7 @@ public:
     void UpdatePositions(double delta_time);
     void MoveBy(const QVector2D &offset);
     void AddVelocity(const QVector2D &delta_velocity);
-    double getArea();
+    double GetArea();
     double getIntersectionArea(PolygonPhysicalShape& other);
     QVector2D GetCenter();
     void GetSideBySideIntersectionInfo(PolygonPhysicalShape &another, vector<LinesIntersectionInfo> &info);

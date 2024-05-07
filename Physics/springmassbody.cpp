@@ -177,8 +177,8 @@ static void expandrect(QPoint point, QRect &rect) {
     rect.setBottom(max(rect.bottom(), point.y()));
 }
 
-QRect SpringMassBody::GetBoundingRect() const {
-  return PolygonPhysicalShape::GetBoundingRect().toRect();
+QRectF SpringMassBody::GetBoundingRect() const {
+  return PolygonPhysicalShape::GetBoundingRect();
 }
 
 bool SpringMassBody::ContainsPoint(const QPoint &point) const {
@@ -294,7 +294,6 @@ QPoint SpringMassBody::GetGlobalCoordinate(const QPoint &local_coordinate) const
   QVector2D yvector = this->rows[pointy+1].atoms[pointx - rows[pointy+1].startx].position -
     this->rows[pointy].atoms[pointx - rows[pointy+1].startx].position;
 
-    std::cout << pointx << "#" << pointy << endl;
   return (this->rows[pointy].atoms[pointx].position + (xvector * rel_point.x() / this->xscale) + (yvector * rel_point.y() / this->yscale)).toPoint();
 };
 
