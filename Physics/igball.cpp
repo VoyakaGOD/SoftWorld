@@ -47,7 +47,7 @@ void IGBall::WidenInspectorContext()
     style.WidenInspectorContext();
     Inspector::AddHeader("volatile parameters", NORMAL_HEADER);
     Inspector::AddLabel("area", get_label_string(current_area), &area_label_manager);
-    Inspector::AddLabel("density", get_label_string(current_density), &density_label_manager);
+    //Inspector::AddLabel("density", get_label_string(current_density), &density_label_manager);
     Inspector::AddHeader("reconstruction", NORMAL_HEADER);
     Inspector::AddParam("new radius", reconstruction_radius, 10.0, 200.0);
     Inspector::AddParam("new detailing", reconstruction_detailing, 6, 100);
