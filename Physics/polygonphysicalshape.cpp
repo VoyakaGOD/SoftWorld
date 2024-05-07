@@ -68,7 +68,7 @@ static inline float XProduct(QVector2D left, QVector2D right)
     return left.x() * right.y() - left.y() * right.x();
 }
 
-static bool GetTwoLinesIntersectionPoint(QVector2D l1s, QVector2D l1e, QVector2D l2s, QVector2D l2e, vector<QVector2D> &points)
+static bool GetTwoLinesIntersectionPoint(QVector2D l1s, QVector2D l1e, QVector2D l2s, QVector2D l2e, QVector2D &intersection_point)
 {
     QVector2D b = l2s - l1s;
     QVector2D a1 = l1e - l1s;
@@ -81,33 +81,27 @@ static bool GetTwoLinesIntersectionPoint(QVector2D l1s, QVector2D l1e, QVector2D
     float t1 = XProduct(b, a2) / x;
     float t2 = XProduct(b, a1) / x;
 
-    if((t1 > 0) && (t1 < 1) && (t2 > 0) && (t2 < 1)) {
-        points.push_back(l1s + t1 * a1);
-        return true;
-    }
-    return false;
-}
-
-void PolygonPhysicalShape::GetIntersectionWithLine(QVector2D s, QVector2D e, vector<QVector2D> &points) const {
-    for(int i = 1; i < this->points.size(); i++) {
-        GetTwoLinesIntersectionPoint(s, e, this->points[i-1].position, this->points[i].position, points);
-    }
-    GetTwoLinesIntersectionPoint(s, e, this->points[0].position, this->points[this->points.size()-1].position, points);
+    intersection_point = l1s + t1 * a1;
+    return (t1 > 0) && (t1 < 1) && (t2 > 0) && (t2 < 1);
 }
 
 void PolygonPhysicalShape::GetSideBySideIntersectionPoints(const PolygonPhysicalShape &another, vector<QVector2D> &points) const
 {
+    QVector2D intersection_point;
     for(int i = 0; i < this->points.size(); i++)
     {
         for(int j = 0; j < another.points.size(); j++)
         {
-            GetTwoLinesIntersectionPoint(
+            if(GetTwoLinesIntersectionPoint(
                 this->points[i == 0 ? this->points.size() - 1 : i - 1].position,
                 this->points[i].position,
                 another.points[j == 0 ? another.points.size() - 1 : j - 1].position,
                 another.points[j].position,
-                points
-                );
+                intersection_point
+                ))
+            {
+                points.push_back(intersection_point);
+            }
         }
     }
 }
@@ -289,4 +283,75 @@ double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
     cout << abs(r) << endl;
 
     return abs(r);
+
+/*
+float PolygonPhysicalShape::GetArea()
+{
+    if(points.size() < 3)
+        return 0;
+
+    float S = points[points.size() - 1].position.x() * points[0].position.y()
+              - points[0].position.x() * points[points.size() - 1].position.y();
+
+    for(int i = 1; i < this->points.size(); i++)
+        S += points[i - 1].position.x() * points[i].position.y()
+            - points[i].position.x() * points[i - 1].position.y();
+
+    return abs(S) / 2;
+}*/
+
+QVector2D PolygonPhysicalShape::GetCenter()
+{
+    QVector2D center(0, 0);
+
+    for(auto &point : points)
+        center += point.position;
+
+    return center / points.size();
+}
+
+void PolygonPhysicalShape::GetSideBySideIntersectionInfo(PolygonPhysicalShape &another, vector<LinesIntersectionInfo> &info)
+{
+    QVector2D intersection_point;
+    for(int i = 0; i < points.size(); i++)
+    {
+        for(int j = 0; j < another.points.size(); j++)
+        {
+            PolyPoint &fls = points[i == 0 ? points.size() - 1 : i - 1];
+            PolyPoint &fle = points[i];
+            PolyPoint &sls = another.points[j == 0 ? another.points.size() - 1 : j - 1];
+            PolyPoint &sle = another.points[j];
+            if(GetTwoLinesIntersectionPoint(fls.position, fle.position, sls.position, sle.position, intersection_point))
+            {
+                info.push_back(LinesIntersectionInfo(fls, fle, sls, sle, intersection_point));
+            }
+        }
+    }
+}
+void PolygonPhysicalShape::GetSelfIntersectionInfo(vector<LinesIntersectionInfo> &info)
+{
+    QVector2D intersection_point;
+    for(int i = 0; i < points.size(); i++)
+    {
+        //skip adjacent sides
+        for(int j = i + 2; j < points.size(); j++)
+        {
+            PolyPoint &fls = points[i == 0 ? points.size() - 1 : i - 1];
+            PolyPoint &fle = points[i];
+            PolyPoint &sls = points[j == 0 ? points.size() - 1 : j - 1];
+            PolyPoint &sle = points[j];
+            if(GetTwoLinesIntersectionPoint(fls.position, fle.position, sls.position, sle.position, intersection_point))
+            {
+                info.push_back(LinesIntersectionInfo(fls, fle, sls, sle, intersection_point));
+            }
+        }
+    }
+}
+
+void PolygonPhysicalShape::LimitVelocity(double limit)
+{
+    double limit2 = limit * limit;
+    for(auto &point : points)
+        if(point.velocity.lengthSquared() > limit2)
+            point.velocity *= limit / point.velocity.length();
 }

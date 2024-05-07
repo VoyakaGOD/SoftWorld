@@ -88,7 +88,7 @@ void PalleteItem::paintEvent(QPaintEvent *event) {
                                 Qt::AlignJustify, this->palette(), 1, this->name);
 
     if (this->body) {
-        QRect rect = this->body->GetBoundingRect();
+        QRect rect = this->body->GetBoundingRect().toRect();
         qreal scale = min(((qreal)height) / rect.height(), ((qreal)height) / rect.width());
         painter.translate(framewidth, framewidth);
         painter.scale(scale, scale);

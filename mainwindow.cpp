@@ -13,6 +13,7 @@
 #include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
 #include "Physics/testpolybody.h"
+#include "Physics/igshell.h"
 #include "Physics/softscene.h"
 #include "Threads/simulationthreadscontroller.h"
 #include <Physics/springmassbody.h>
@@ -72,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //main_scene.AddBody(new TestPolyBody(QVector2D(200, 100), DrawingStyle(Qt::darkRed, Qt::magenta, 2)));
 
     ui->palleteContents->AddPalleteItem(new SpringMassBody(), "Spring");
+    main_scene.AddBody(new IGShell(QVector2D(300, 350), 100, 50, DrawingStyle(Qt::darkRed, Qt::black, 1), 1000, 200, 0.5, 1));
 
     //temporary *********************************************************************************************
 

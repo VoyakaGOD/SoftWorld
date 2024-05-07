@@ -22,7 +22,7 @@ class PhysicalBody : public SerializableObject
 //general methods
 public:
 PhysicalBody() {}
-    virtual QRect GetBoundingRect() const = 0;
+    virtual QRectF GetBoundingRect() const = 0;
     virtual void WidenInspectorContext() = 0;
     virtual bool ContainsPoint(const QPoint &point) const = 0;
     virtual PhysicalBody *Clone() const = 0;

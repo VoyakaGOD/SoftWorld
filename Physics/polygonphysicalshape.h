@@ -4,7 +4,7 @@
 #include <vector>
 #include <QRectF>
 #include <QPainter>
-#include "polypoint.h"
+#include "linesintersectioninfo.h"
 #include "Utils/drawingstyle.h"
 
 using namespace std;
@@ -31,6 +31,10 @@ public:
     void AddVelocity(const QVector2D &delta_velocity);
     double getArea();
     double getIntersectionArea(PolygonPhysicalShape& other);
+    QVector2D GetCenter();
+    void GetSideBySideIntersectionInfo(PolygonPhysicalShape &another, vector<LinesIntersectionInfo> &info);
+    void GetSelfIntersectionInfo(vector<LinesIntersectionInfo> &info);
+    void LimitVelocity(double limit);
 };
 
 #endif // POLYGONPHYSICALSHAPE_H

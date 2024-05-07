@@ -15,7 +15,7 @@ public:
 
     //general methods
 public:
-    QRect GetBoundingRect() const;
+    QRectF GetBoundingRect() const;
     void WidenInspectorContext();
     bool ContainsPoint(const QPoint &point) const;
     PhysicalBody *Clone() const;

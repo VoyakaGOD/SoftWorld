@@ -1,3 +1,8 @@
+# Soft World
+
+![physical simulation](https://img.shields.io/badge/physical%20simulation-F3A505)
+![LGPL-3.0 license](https://img.shields.io/badge/license-LGPL--3.0-green)
+
 ## General information
 
 It's simple simulation of soft bodies physics with **Qt** graphical interface.
@@ -35,3 +40,41 @@ but your **changes may be canceled** and **frames may be skipped**.
 
 Threfore in scene settings in **Inspector** you can change time between physics updates.
 Or also you can **stop simulation**, that will interrupt physics calculations.
+
+## Implemented algorithms
+
+### 1.Soft shell with ideal gas
+
+The main idea is ideal gas law: $PV = nRT$
+
+It provides normal points acceleration: $a_n = GC * \frac{l}{S}$
+
+$S$ is (visible)area of the shell contents
+
+$d$ is (invisible)depth of the contents
+
+$m/d$ is mass of the body divided by $d$
+
+$l$ is length of shell's part
+
+$GC$ is gas constant
+
+Shell also have rigidity to keep the shape of body:
+
+It provides tangential points acceleration: $a_t = SR * (\frac{l}{l_0} - 1)$
+
+$SR$ is shell rigidity
+
+$l_0$ is initial length of shell's part
+
+The density of the gas depends on $S$:
+
+$\rho = \frac{m/d}{S}$
+
+The shell also bounces off the walls, maintaining some part of the speed:
+
+$v_{new} = SB * v_{old}$
+
+$SB$ is shell bounce
+
+### 2........
