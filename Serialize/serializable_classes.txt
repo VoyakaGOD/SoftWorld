@@ -6,4 +6,5 @@
 5 SoftScene SAVED_OBJ_SCENE inplace
 PhysicalBody:
 1 GhostBody GHOST_BODY_ID simple
+2 SpringMassBody SPRMSS_BODY_ID simple
 :

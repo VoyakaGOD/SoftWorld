@@ -13,6 +13,7 @@
 DeserTblEntry physicalbody_deser_tbl[] = {
 /*0*/ {},
 /*1*/ {.name = "GhostBody", .type = DESER_TBL_SIMPLE, .e_simple = GhostBody::Deserialize},
+/*2*/ {.name = "SpringMassBody", .type = DESER_TBL_SIMPLE, .e_simple = SpringMassBody::Deserialize},
 };
 DeserTblBaseEntry physicalbody_deser_tbl_b[] = {
 };

@@ -124,7 +124,12 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
 void SceneView::mouseReleaseEvent(QMouseEvent *event) {
     if (body_grabbed) {
         uint64_t delta_time = event->timestamp() - this->last_move_time_ms;
-        this->selected_body->AddMomentum(last_mouse_speed.toPoint() / 1000);
+        if (delta_time < max_yeet_delta_time) {
+            this->selected_body->AddMomentum((last_mouse_speed) - this->selected_body->GetCenterVelocity());
+        }
+        else {
+            this->selected_body->AddMomentum(-this->selected_body->GetCenterVelocity());
+        }
         this->body_grabbed = false;
     }
     this->update();
@@ -136,12 +141,11 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
         QPoint pos = this->ToSceneCoordinates(event->pos());
         QPoint offset = pos - this->selected_body->GetGlobalCoordinate(this->grabded_point);
         this->selected_body->MoveBy(offset);
-        this->selected_body->AddMomentum(offset);
         this->update();
 
         uint64_t delta_time = event->timestamp() - this->last_move_time_ms;
-        if (delta_time < max_yeet_delta_time && delta_time > 0);
-            this->last_mouse_speed = QVector2D(offset) / delta_time;
+        if (delta_time > 0)
+            this->last_mouse_speed = (500 * QVector2D(offset) / delta_time) + this->last_mouse_speed / 2;
 
         this->last_move_time_ms = event->timestamp();
     }

@@ -72,7 +72,7 @@ void EditOnlyBody::MoveBy(const QPoint &offset)
     //velocity = QVector2D(0, 0);
 }
 
-void EditOnlyBody::AddMomentum(const QPoint &momentum) {
+void EditOnlyBody::AddMomentum(const QVector2D &momentum) {
     this->velocity += QVector2D(momentum);
 }
 

@@ -44,7 +44,7 @@ public:
     virtual void ApplyInternalRestrictions(double delta_time) = 0;
     virtual void ApplyGravity(double air_density, double g, double delta_time) = 0;
     virtual void MoveBy(const QPoint &offset) = 0;
-    virtual void AddMomentum(const QPoint &momentum) = 0;
+    virtual void AddMomentum(const QVector2D &momentum) = 0;
 
 //drawing methods
 public:
@@ -52,6 +52,7 @@ public:
 
 //debugging methods
 public:
+    virtual QVector2D GetCenterVelocity() const {return QVector2D(0, 0);}
     virtual QPoint GetLocalCoordinate(const QPoint &global_coordinate) const = 0;
     virtual QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const = 0;
 

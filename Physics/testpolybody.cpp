@@ -68,7 +68,7 @@ void TestPolyBody::MoveBy(const QPoint &offset)
     shape.MoveBy(QVector2D(offset));
 }
 
-void TestPolyBody::AddMomentum(const QPoint &momentum){}
+void TestPolyBody::AddMomentum(const QVector2D &momentum){}
 
 void TestPolyBody::Draw(QPainter &painter)
 {
@@ -83,4 +83,8 @@ QPoint TestPolyBody::GetLocalCoordinate(const QPoint &global_coordinate) const
 QPoint TestPolyBody::GetGlobalCoordinate(const QPoint &local_coordinate) const
 {
     return local_coordinate + shape.GetConstPoints()[0].position.toPoint();
+}
+
+QVector2D TestPolyBody::GetCenterVelocity() const {
+    return shape.GetCenterVelocity();
 }

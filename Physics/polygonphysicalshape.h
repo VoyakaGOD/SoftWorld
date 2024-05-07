@@ -35,6 +35,7 @@ public:
     void GetSideBySideIntersectionInfo(PolygonPhysicalShape &another, vector<LinesIntersectionInfo> &info);
     void GetSelfIntersectionInfo(vector<LinesIntersectionInfo> &info);
     void LimitVelocity(double limit);
+    virtual QVector2D GetCenterVelocity() const;
 };
 
 #endif // POLYGONPHYSICALSHAPE_H

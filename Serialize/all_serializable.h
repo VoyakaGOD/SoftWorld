@@ -5,6 +5,7 @@
 /_'_\ DO NOT COMPLAIN FOR UNREADABLE CODE
 */
 
+#include <Physics/springmassbody.h>
 #include <Physics/ghostbody.h>
 #include <Physics/softscene.h>
 #include <Physics/physicalbody.h>

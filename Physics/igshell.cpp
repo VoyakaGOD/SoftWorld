@@ -162,7 +162,7 @@ void IGShell::MoveBy(const QPoint &offset)
     shape.MoveBy(QVector2D(offset));
 }
 
-void IGShell::AddMomentum(const QPoint &momentum)
+void IGShell::AddMomentum(const QVector2D &momentum)
 {
 
 }
@@ -182,3 +182,6 @@ QPoint IGShell::GetGlobalCoordinate(const QPoint &local_coordinate) const
     return local_coordinate + shape.GetConstPoints()[0].position.toPoint();
 }
 
+QVector2D IGShell::GetCenterVelocity() const {
+    return shape.GetCenterVelocity();
+}

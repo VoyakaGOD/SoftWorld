@@ -1,6 +1,26 @@
 
 #include "springmassbody.h"
 #include <iostream>
+#include <Serialize/ser_class_enums.h>
+#include <Serialize/serialize.h>
+#include <Serialize/serialize_special.h>
+
+struct SpringMassBodyData {
+    obj_fixed_data_len_t size;
+    DrawingStyle drawing_style;
+    double xscale, yscale, stiffness, resistance, density;
+};
+
+static SpringMassBodyData default_data {
+    .size = 0, .drawing_style = DrawingStyle(),
+    .xscale = 10, .yscale = 10, .stiffness = 500, .resistance = 10,
+    .density = 1
+};
+
+struct SavedSpringBodyRow {
+    int y; int startx; int size;
+    PolyPoint points[];
+};
 
 const double collision_hardness_factor = 100;
 
@@ -20,6 +40,93 @@ SpringMassBody::SpringMassBody() {
     }
     this->points = vector<PolyPoint>(this->rows[0].size() + this->rows[this->rows.size()-1].size() + ((this->rows.size() - 1) * 2));
     this->RecalculatePolyPoints();
+}
+
+size_t SpringMassBody::GetSavedSize() const {
+    size_t res = sizeof(SpringMassBodyData) + sizeof(saved_obj_id_t);
+    res += sizeof(SAVED_OBJ_PKG) + lenAsShortLength(this->rows.size());
+    for (int i = 0; i < this->rows.size(); i++) {
+        size_t row_size = sizeof(SavedSpringBodyRow) + (sizeof(PolyPoint) * this->rows[i].size());
+        res += sizeof(SAVED_OBJ_STR) + lenAsShortLength(row_size) + row_size;
+    }
+    res += sizeof(SAVED_OBJ_NONE);
+    return res;
+}
+
+SpringMassBody::SpringMassBody(DataStorageReader &reader):
+    PhysicalBody(reader),
+    xscale(GETDATA(reader, SpringMassBodyData, xscale)), yscale(GETDATA(reader, SpringMassBodyData, yscale)),
+    stiffness(GETDATA(reader, SpringMassBodyData, stiffness)), resistance(GETDATA(reader, SpringMassBodyData, resistance)),
+    density(GETDATA(reader, SpringMassBodyData, density)), style(GETDATA(reader, SpringMassBodyData, drawing_style))
+    {
+    this->diagscale = sqrt(this->xscale*this->xscale + this->yscale * this->yscale);
+
+    READER_MOVE_BYTES(reader, ((SpringMassBodyData*)reader.data)->size, {last_deserialize_error = DESERR_BOUNDS; return;});
+    size_t row_cnt = 0;
+    int res;
+    if ((res = readPkgHeader(reader, &row_cnt))) {
+        last_deserialize_error = (DeserializeError)res;
+        return;
+    }
+    for (int i = 0; i < row_cnt; i++) {
+        size_t row_size_bytes = 0;
+        saved_obj_id_t id;
+        READER_READVAL(reader, saved_obj_id_t, id, {last_deserialize_error = DESERR_BOUNDS; return; })
+        if (id != SAVED_OBJ_STR) {
+            last_deserialize_error = DESERR_INVTYPE;
+            return;
+        }
+        row_size_bytes = readShortLength(reader);
+        SavedSpringBodyRow* s_row = (SavedSpringBodyRow*)reader.data;
+
+        READER_MOVE_BYTES(reader, row_size_bytes, {last_deserialize_error = DESERR_BOUNDS; return; })
+
+        if (sizeof(SavedSpringBodyRow) + (sizeof(PolyPoint) * s_row->size) != row_size_bytes) {
+            last_deserialize_error = DESERR_BADDATA;
+            return;
+        }
+        this->rows.push_back(SpringBodyRow());
+        this->rows[i].startx = s_row->startx;
+        this->rows[i].y = s_row->y;
+        for (int j = 0; j < s_row->size; j++) {
+            this->rows[i].atoms.push_back(s_row->points[j]);
+        }
+    }
+    this->points = vector<PolyPoint>(this->rows[0].size() + this->rows[this->rows.size()-1].size() + ((this->rows.size() - 1) * 2));
+    this->RecalculatePolyPoints();
+}
+
+void SpringMassBody::SaveData(DataStorageWriter &writer) const {
+    PhysicalBody::SaveData(writer);
+    SpringMassBodyData* data = (SpringMassBodyData*)(writer.data);
+    WRITER_MOVE_BYTES(writer, sizeof(*data));
+
+    *data = (SpringMassBodyData){
+        .size = sizeof(*data),
+        .drawing_style = this->style,
+        .xscale = this->xscale, .yscale = this->yscale,
+        .stiffness = this->stiffness, .resistance = this->resistance,
+        .density = this->density,
+    };
+
+    savePkgHeader(this->rows.size(), writer);
+    for (int i = 0; i < this->rows.size(); i++) {
+        WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_STR);
+        size_t len = sizeof(SavedSpringBodyRow)
+             + (this->rows[i].size() * sizeof(PolyPoint));
+
+        writeShortLength(writer,len);
+        SavedSpringBodyRow* saved_row = (SavedSpringBodyRow*)writer.data;
+        saved_row->y = this->rows[i].y;
+        saved_row->startx = this->rows[i].startx;
+        saved_row->size = this->rows[i].size();
+
+        for (int j = 0; j < this->rows[i].size(); j++) {
+            saved_row->points[j] = this->rows[i].atoms[j];
+        }
+        WRITER_MOVE_BYTES(writer, len);
+    }
+    WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_NONE);
 }
 
 void SpringMassBody::RecalculatePolyPoints() {
@@ -162,7 +269,7 @@ void SpringMassBody::MoveBy(const QPoint &offset) {
     this->RecalculatePolyPoints();
 }
 
-void SpringMassBody::AddMomentum(const QPoint &momentum) {
+void SpringMassBody::AddMomentum(const QVector2D &momentum) {
     for (int i = 0; i < this->rows.size(); i++) {
         for (int j = 0; j < this->rows[i].size(); j++) {
             this->rows[i][j].velocity += QVector2D(momentum);
@@ -199,7 +306,6 @@ void SpringMassBody::SolveCollision(PhysicalBody *another) {
     if (intpoints.size() < 2) {
         return;
     }
-
     QVector2D collision_vector(intpoints[0].y() - intpoints[1].y(), intpoints[1].x() - intpoints[0].x());
 
     PolyPoint* colliding_point = nullptr;
@@ -218,6 +324,10 @@ void SpringMassBody::SolveCollision(PhysicalBody *another) {
     collision_vector.normalize();
 
     double total_impulse = PolygonPhysicalShape::getIntersectionArea(*p_another)*collision_hardness_factor;
+    this->debuglines.push_back(QLine(intpoints[0].toPoint(), (intpoints[0] + collision_vector * 100).toPoint()));
+    std::cout << "I" << total_impulse << std::endl;
+    return;
+
 
     double total_factor = 0;
 
@@ -303,4 +413,16 @@ void SpringMassBody::WidenInspectorContext() {
   Inspector::AddParam("Resistance", this->resistance, 0, 100);
   Inspector::AddParam("Density", this->density, 1, 100);
   this->style.WidenInspectorContext();
+}
+
+QVector2D SpringMassBody::GetCenterVelocity() const {
+    QVector2D res(0, 0);
+    int div = 0;
+    for (int i = 0; i < this->rows.size(); i++) {
+        div += this->rows[i].size();
+        for (int j = 0; j < this->rows[i].size(); j++) {
+            res += this->rows[i].atoms[j].velocity;
+        }
+    }
+    return res / div;
 }

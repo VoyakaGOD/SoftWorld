@@ -5,6 +5,8 @@
 #include "polygonphysicalshape.h"
 #include <vector>
 
+///SERIALIZABLE SpringMassBody:PhysicalBody SPRMSS_BODY_ID simple
+
 struct SpringBodyRow {
     int y;
     int startx;
@@ -29,6 +31,16 @@ class SpringMassBody : public PhysicalBody, public PolygonPhysicalShape {
         SpringMassBody();
 
     public:
+        virtual size_t GetSavedSize() const override;
+
+        SpringMassBody(DataStorageReader &data);
+        static SerializableObject* Deserialize(DataStorageReader& reader) {return new SpringMassBody(reader);}
+
+        virtual void SaveID(DataStorageWriter &data) const override;
+
+        virtual void SaveData(DataStorageWriter &data) const override;
+
+    public:
 
         virtual void WidenInspectorContext() override;
         virtual QRectF GetBoundingRect() const override;
@@ -43,7 +55,7 @@ class SpringMassBody : public PhysicalBody, public PolygonPhysicalShape {
         virtual void ApplyInternalRestrictions(double delta_time) override;
         virtual void ApplyGravity(double air_density, double g, double delta_time) override;
         virtual void MoveBy(const QPoint &offset) override;
-        virtual void AddMomentum(const QPoint &momentum) override;
+        virtual void AddMomentum(const QVector2D &momentum) override;
 
     //drawing methods
     public:
@@ -53,6 +65,7 @@ class SpringMassBody : public PhysicalBody, public PolygonPhysicalShape {
     public:
         virtual QPoint GetLocalCoordinate(const QPoint &global_coordinate) const override;
         virtual QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const override;
+        virtual QVector2D GetCenterVelocity() const override;
 
     protected:
         void RecalculatePolyPoints();

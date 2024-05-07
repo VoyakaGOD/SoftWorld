@@ -81,7 +81,7 @@ void GhostBody::MoveBy(const QPoint &offset) {
     return;
 }
 
-void GhostBody::AddMomentum(const QPoint &momentum) {
+void GhostBody::AddMomentum(const QVector2D &momentum) {
     return;
 }
 

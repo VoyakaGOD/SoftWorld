@@ -76,11 +76,11 @@ void StringSerialize(std::string str, DataStorageWriter &writer){
     WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_STR)
     writeShortLength(writer, str.length()+1);
     char* cbuff = (char*)writer.data;
+    WRITER_MOVE_BYTES(writer, str.length() + 1)
     for (int i = 0; i < str.length(); i++) {
         cbuff[i] = str[i];
     }
     cbuff[str.length()] = '\0';
-    WRITER_MOVE_BYTES(writer, str.length() + 1)
 }
 
 void savePkgHeader(size_t count, DataStorageWriter &writer) {

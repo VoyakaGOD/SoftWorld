@@ -8,6 +8,10 @@
 #include <Serialize/ser_class_enums.h>
 #include <Serialize/all_serializable.h>
 
+void SpringMassBody::SaveID(DataStorageWriter &data) const {
+    PhysicalBody::SaveID(data);
+    WRITER_APPEND(data, saved_obj_id_t, SPRMSS_BODY_ID);
+}
 void GhostBody::SaveID(DataStorageWriter &data) const {
     PhysicalBody::SaveID(data);
     WRITER_APPEND(data, saved_obj_id_t, GHOST_BODY_ID);

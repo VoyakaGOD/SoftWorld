@@ -37,7 +37,7 @@ public:
     virtual void ApplyInternalRestrictions(double delta_time) override;
     virtual void ApplyGravity(double air_density, double g, double delta_time) override;
     virtual void MoveBy(const QPoint &offset) override;
-    virtual void AddMomentum(const QPoint &momentum) override;
+    virtual void AddMomentum(const QVector2D &momentum) override;
 
 //drawing methods
 public:

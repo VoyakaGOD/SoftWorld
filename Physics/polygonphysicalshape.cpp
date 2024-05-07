@@ -144,7 +144,7 @@ void PolygonPhysicalShape::AddVelocity(const QVector2D &delta_velocity)
         point.velocity += delta_velocity;
 }
 
-long long crossProduct(QVector2D a, QVector2D b) {
+double crossProduct(QVector2D a, QVector2D b) {
     return (a.x() * b.y()) - (a.y() * b.x());
 }
 
@@ -280,7 +280,7 @@ double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
         r -= crossProduct(other.points[other_inh].position - xpoint_l, xpoint_h - xpoint_l);
 
     }
-    //cout << abs(r) << endl;
+    cout << abs(r) << endl;
 
     return abs(r);
 }
@@ -355,4 +355,13 @@ void PolygonPhysicalShape::LimitVelocity(double limit)
     for(auto &point : points)
         if(point.velocity.lengthSquared() > limit2)
             point.velocity *= limit / point.velocity.length();
+}
+
+QVector2D PolygonPhysicalShape::GetCenterVelocity() const {
+    QVector2D res(0,0);
+    int div;
+    for(auto &point : points) {
+        res += point.velocity;
+    }
+    return res / div;
 }

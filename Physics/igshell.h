@@ -33,10 +33,11 @@ public:
     void ApplyInternalRestrictions(double delta_time);
     void ApplyGravity(double air_density, double g, double delta_time);
     void MoveBy(const QPoint &offset);
-    void AddMomentum(const QPoint &momentum);
+    void AddMomentum(const QVector2D &momentum);
     void Draw(QPainter &painter);
     QPoint GetLocalCoordinate(const QPoint &global_coordinate) const;
     QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const;
+    QVector2D GetCenterVelocity() const override;
 
 private:
     IGShell();
