@@ -1,10 +1,10 @@
-#ifndef IGBALL_H
-#define IGBALL_H
+#ifndef IGSHELL_H
+#define IGSHELL_H
 
 #include "physicalbody.h"
 #include "polygonphysicalshape.h"
 
-class IGBall : public PhysicalBody
+class IGShell : public PhysicalBody
 {
 private:
     DrawingStyle style;
@@ -22,7 +22,7 @@ private:
     int reconstruction_detailing;
 
 public:
-    IGBall(QVector2D position, double radius, int detailing, DrawingStyle style,
+    IGShell(QVector2D position, double radius, int detailing, DrawingStyle style,
            double mass, double gas_const, double shell_bounce, double shell_rigidity);
     QRectF GetBoundingRect() const;
     void WidenInspectorContext();
@@ -39,8 +39,8 @@ public:
     QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const;
 
 private:
-    IGBall();
+    IGShell();
     void Reconstruct(QVector2D position, double radius, int detailing);
 };
 
-#endif // IGBALL_H
+#endif // IGSHELL_H

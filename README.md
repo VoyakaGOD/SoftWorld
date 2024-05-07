@@ -43,17 +43,17 @@ Or also you can **stop simulation**, that will interrupt physics calculations.
 
 ## Implemented algorithms
 
-### 1.Soft ball with ideal gas
+### 1.Soft shell with ideal gas
 
 The main idea is ideal gas law: $PV = nRT$
 
 It provides normal points acceleration: $a_n = GC * \frac{l}{S}$
 
-$S$ is (visible)area of the ball
+$S$ is (visible)area of the shell contents
 
-$d$ is (invisible)depth of the ball
+$d$ is (invisible)depth of the contents
 
-$m/d$ is mass of the ball divided by $d$
+$m/d$ is mass of the body divided by $d$
 
 $l$ is length of shell's part
 
@@ -67,11 +67,11 @@ $SR$ is shell rigidity
 
 $l_0$ is initial length of shell's part
 
-The density of the ball depends on $S$:
+The density of the gas depends on $S$:
 
 $\rho = \frac{m/d}{S}$
 
-The ball also bounces off the walls, maintaining some part of the speed:
+The shell also bounces off the walls, maintaining some part of the speed:
 
 $v_{new} = SB * v_{old}$
 

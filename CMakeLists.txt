@@ -79,7 +79,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Physics/polypoint.h Physics/polypoint.cpp
         Physics/polygonphysicalshape.h Physics/polygonphysicalshape.cpp
         Physics/testpolybody.h Physics/testpolybody.cpp
-        Physics/igball.h Physics/igball.cpp
+        Physics/igshell.h Physics/igshell.cpp
         Physics/linesintersectioninfo.h Physics/linesintersectioninfo.cpp
     )
 # Define target properties for Android with Qt 6 as:

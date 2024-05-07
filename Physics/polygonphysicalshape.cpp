@@ -187,11 +187,9 @@ void PolygonPhysicalShape::GetSelfIntersectionInfo(vector<LinesIntersectionInfo>
     QVector2D intersection_point;
     for(int i = 0; i < points.size(); i++)
     {
-        for(int j = 0; j < points.size(); j++)
+        //skip adjacent sides
+        for(int j = i + 2; j < points.size(); j++)
         {
-            if((j >= (i - 1)) && (j <= (i + 1)))
-                continue;  //skip adjacent sides
-
             PolyPoint &fls = points[i == 0 ? points.size() - 1 : i - 1];
             PolyPoint &fle = points[i];
             PolyPoint &sls = points[j == 0 ? points.size() - 1 : j - 1];
@@ -202,4 +200,12 @@ void PolygonPhysicalShape::GetSelfIntersectionInfo(vector<LinesIntersectionInfo>
             }
         }
     }
+}
+
+void PolygonPhysicalShape::LimitVelocity(double limit)
+{
+    double limit2 = limit * limit;
+    for(auto &point : points)
+        if(point.velocity.lengthSquared() > limit2)
+            point.velocity *= limit / point.velocity.length();
 }
