@@ -40,10 +40,10 @@ QRectF IGShell::GetBoundingRect() const
 void IGShell::WidenInspectorContext()
 {
     Inspector::AddHeader("shell with ideal gas", LARGE_HEADER);
-    Inspector::AddParam("m/d", mass, 1e4d, 1e7d);
+    Inspector::AddParam("m/d", mass, 1e2d, 1e7d);
     Inspector::AddParam("GC", gas_const, 1e4d, 5e5d);
     Inspector::AddParam("SB", shell_bounce, 0.0, 3.0);
-    Inspector::AddParam("SR", shell_rigidity, 250.0, 3500.0);
+    Inspector::AddParam("SR", shell_rigidity, 250.0, 20000.0);
     style.WidenInspectorContext();
     Inspector::AddHeader("volatile parameters", NORMAL_HEADER);
     Inspector::AddLabel("area", get_label_string(current_area), &area_label_manager);
@@ -138,7 +138,7 @@ void IGShell::ApplyInternalRestrictions(double delta_time)
         PolyPoint &current = points[i];
         PolyPoint &next = points[(i + 1) % points.size()];
         QVector2D tangent = next.position - current.position;
-        double a_n = gas_const * tangent.length() / current_area / current_area * gas_const / current_area * gas_const;
+        double a_n = tangent.length() * pow(gas_const / current_area, 3);
         double a_t = shell_rigidity * (tangent.length() / initial_part_length - 1);
         tangent.normalize();
         QVector2D normal(tangent.y(), -tangent.x());
@@ -164,7 +164,7 @@ void IGShell::MoveBy(const QPoint &offset)
 
 void IGShell::AddMomentum(const QPoint &momentum)
 {
-
+    shape.AddVelocity(QVector2D(momentum));
 }
 
 void IGShell::Draw(QPainter &painter)
