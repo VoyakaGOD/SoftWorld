@@ -76,7 +76,37 @@ PhysicalBody *IGShell::Clone() const
 
 void IGShell::SolveCollision(PhysicalBody *another)
 {
+    IGShell *shell = dynamic_cast<IGShell *>(another);
+    if(shell == NULL)
+        return;
 
+    vector<LinesIntersectionInfo> intersections;
+    shape.GetSideBySideIntersectionInfo(shell->shape, intersections);
+    QVector2D center = shape.GetCenter();
+    QVector2D another_center = shell->shape.GetCenter();
+
+    for(auto intersection : intersections)
+    {
+        QVector2D avg = (intersection.first_line_start.velocity + intersection.first_line_end.velocity +
+                         intersection.second_line_start.velocity + intersection.second_line_end.velocity) / 4;
+        intersection.first_line_start.velocity = avg;
+        intersection.first_line_end.velocity = avg;
+        intersection.second_line_start.velocity = avg;
+        intersection.second_line_end.velocity = avg;
+
+        QVector2D tangent1 = intersection.first_line_end.position - intersection.first_line_start.position;
+        QVector2D tangent2 = intersection.second_line_end.position - intersection.second_line_start.position;
+        QVector2D normal1(-tangent1.y(), tangent1.x());
+        QVector2D normal2(-tangent2.y(), tangent2.x());
+        normal1.normalize();
+        normal2.normalize();
+
+        //bad solution, but some times we should use simple approaches
+        intersection.first_line_start.position -= normal2;
+        intersection.first_line_end.position -= normal2;
+        intersection.second_line_start.position -= normal1;
+        intersection.second_line_end.position -= normal1;
+    }
 }
 
 void IGShell::KeepSceneBorders(const QRect &world_rect)
