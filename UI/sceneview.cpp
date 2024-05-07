@@ -5,6 +5,7 @@
 #include "palleteitem.h" // TODO remove
 
 static const int scene_border_linewidth = 4;
+static const int max_yeet_delta_time = 100;
 
 extern SoftScene main_scene;
 
@@ -122,7 +123,9 @@ void SceneView::mousePressEvent(QMouseEvent *event) {
 
 void SceneView::mouseReleaseEvent(QMouseEvent *event) {
     if (body_grabbed) {
-        body_grabbed = false;
+        uint64_t delta_time = event->timestamp() - this->last_move_time_ms;
+        this->selected_body->AddMomentum(last_mouse_speed.toPoint() / 1000);
+        this->body_grabbed = false;
     }
     this->update();
 }
@@ -133,7 +136,14 @@ void SceneView::mouseMoveEvent(QMouseEvent *event) {
         QPoint pos = this->ToSceneCoordinates(event->pos());
         QPoint offset = pos - this->selected_body->GetGlobalCoordinate(this->grabded_point);
         this->selected_body->MoveBy(offset);
+        this->selected_body->AddMomentum(offset);
         this->update();
+
+        uint64_t delta_time = event->timestamp() - this->last_move_time_ms;
+        if (delta_time < max_yeet_delta_time && delta_time > 0);
+            this->last_mouse_speed = QVector2D(offset) / delta_time;
+
+        this->last_move_time_ms = event->timestamp();
     }
     if (inserted_body) {
         this->setFocus();

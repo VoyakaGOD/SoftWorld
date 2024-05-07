@@ -69,10 +69,12 @@ void EditOnlyBody::ApplyGravity(double air_density, double g, double delta_time)
 void EditOnlyBody::MoveBy(const QPoint &offset)
 {
     this->origin = this->origin + QVector2D(offset);
-    velocity = QVector2D(0, 0);
+    //velocity = QVector2D(0, 0);
 }
 
-void EditOnlyBody::AddMomentum(const QPoint &momentum) {}
+void EditOnlyBody::AddMomentum(const QPoint &momentum) {
+    this->velocity += QVector2D(momentum);
+}
 
 void EditOnlyBody::Draw(QPainter &painter)
 {

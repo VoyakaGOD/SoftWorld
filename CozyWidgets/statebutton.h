@@ -8,11 +8,12 @@ class StateButton : public QPushButton
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString text0 WRITE SetText0)
-    Q_PROPERTY(QString text1 WRITE SetText1)
-    Q_PROPERTY(QIcon icon0 WRITE SetIcon0)
-    Q_PROPERTY(QIcon icon1 WRITE SetIcon1)
-    Q_PROPERTY(bool state WRITE SetState)
+    /*
+    Q_PROPERTY(QString, text0, WRITE, SetText0)
+    Q_PROPERTY(QString, text1, WRITE, SetText1)
+    Q_PROPERTY(QIcon, icon0, WRITE, SetIcon0)
+    Q_PROPERTY(QIcon, icon1, WRITE, SetIcon1)
+    Q_PROPERTY(bool, state, WRITE, SetState)*/
 
 private:
     QString text0;

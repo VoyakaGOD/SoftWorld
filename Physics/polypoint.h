@@ -7,6 +7,7 @@ struct PolyPoint
 {
     QVector2D position;
     QVector2D velocity;
+    PolyPoint();
     PolyPoint(const QVector2D &position, const QVector2D &velocity);
 
     //bounce should be in [0,1]

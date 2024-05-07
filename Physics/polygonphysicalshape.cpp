@@ -1,4 +1,5 @@
 #include "polygonphysicalshape.h"
+#include <iostream>
 
 PolygonPhysicalShape::PolygonPhysicalShape() : points() {}
 
@@ -119,6 +120,10 @@ void PolygonPhysicalShape::Draw(QPainter &painter, const DrawingStyle &style) co
     for(int i = 0; i < points.size(); i++)
         drawing_points[i] = points[i].position.toPoint();
     painter.drawPolygon(drawing_points.data(), points.size());
+    painter.setPen(QPen(Qt::red, 3));
+    for (int i = 0; i < debuglines.size(); i++) {
+        painter.drawLine(debuglines[i]);
+    }
 }
 
 void PolygonPhysicalShape::UpdatePositions(double delta_time)
@@ -139,6 +144,148 @@ void PolygonPhysicalShape::AddVelocity(const QVector2D &delta_velocity)
         point.velocity += delta_velocity;
 }
 
+long long crossProduct(QVector2D a, QVector2D b) {
+    return (a.x() * b.y()) - (a.y() * b.x());
+}
+
+double PolygonPhysicalShape::GetArea() {
+    double r;
+    for (int i = 2; i < this->points.size(); i++) {
+        r += crossProduct(this->points[i-1].position - this->points[0].position, this->points[i].position - this->points[0].position);
+    }
+    return abs(r);
+}
+
+double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
+    int start_point = 0;
+    for (; start_point < this->points.size(); start_point++) {
+        if (other.ContainsPoint(this->points[start_point].position)) {
+            break;
+        }
+    }
+    if (start_point == this->points.size()) {
+        return this->ContainsPoint(other.points[0].position) ? other.GetArea() : 0;
+    }
+
+    int in_l = start_point-1, in_h = start_point+1;
+
+    if (in_l < 0) {
+        in_l = this->points.size() - 1;
+        for (; in_l >= 0; in_l--) {
+            if (!other.ContainsPoint(this->points[in_l].position)) {
+                break;
+            }
+        }
+        if (in_l == 0) {
+            return this->GetArea();
+        }
+    }
+
+    while (in_h < this->points.size() && other.ContainsPoint(this->points[in_h].position)) {
+        in_h++;
+    }
+    QVector2D in_h_point = this->points[in_h-1].position;
+    QVector2D out_h_point = this->points[in_h % this->points.size()].position;
+    in_h--;
+
+    QVector2D out_l_point = this->points[in_l].position;
+    in_l = (in_l+1) % this->points.size();
+    QVector2D in_l_point = this->points[in_l].position;
+
+    QVector2D xpoint_l;
+    QVector2D xpoint_h;
+
+    int other_inh = -1, other_inl = -1;
+
+    for(int i = 1; i < other.points.size(); i++) {
+        if (GetTwoLinesIntersectionPoint(in_l_point, out_l_point, other.points[i-1].position, other.points[i].position, xpoint_l)) {
+            other_inl = i;
+        }
+        if (GetTwoLinesIntersectionPoint(in_h_point, out_h_point, other.points[i-1].position, other.points[i].position, xpoint_h)) {
+            other_inh = i;
+        }
+
+    }
+    if (GetTwoLinesIntersectionPoint(in_l_point, out_l_point, other.points[0].position, other.points[other.points.size()-1].position, xpoint_l)) {
+        other_inl = 0;
+    }
+    if (GetTwoLinesIntersectionPoint(in_h_point, out_h_point, other.points[0].position, other.points[other.points.size()-1].position, xpoint_h)) {
+        other_inh = 0;
+    }
+
+    if (other_inl == -1 || other_inh == -1) {
+        return 0;
+    }
+
+    this->debuglines.clear();
+    this->debuglines.push_back(QLine(this->points[in_l].position.toPoint(), this->points[in_h].position.toPoint()));
+    //this->debuglines.push_back(QLine(in_l_point.toPoint(), out_l_point.toPoint()));
+
+    //this->debuglines.push_back(QLine(xpoint_l.toPoint(), xpoint_h.toPoint()));
+
+    double r = 0;
+    for (int i  = in_l; i < in_h; i++) {
+        if (!other.ContainsPoint(this->points[i].position)) {
+            std::cout << "BUG DETECTED" << std::endl;
+            return 0;
+        }
+        r += crossProduct(this->points[i].position - xpoint_l, this->points[i+1].position - xpoint_l);
+    }
+    r += crossProduct(this->points[in_h].position - xpoint_l, xpoint_h - xpoint_l);
+
+    if (other_inl == other_inh) {
+        return abs(r);
+    }
+
+    if (this->ContainsPoint(other.points[other_inl].position)) {
+        //cout << "<" << (other_inh - other_inl + other.points.size()) % other.points.size() << " " << other.points.size() << " ";;
+        other_inh = other_inh - 1;
+        if (other_inh < 0) {
+            other_inh = other.points.size() - 1;
+        }
+
+        for (int i = other_inl; i != other_inh;) {
+            int new_i = (i + 1) % other.points.size();
+            if (!this->ContainsPoint(other.points[new_i].position)) {
+                std::cout << "BUG DETECTED" << std::endl;
+                return abs(r);
+            }
+            this->debuglines.push_back(QLine(other.points[i].position.toPoint(), other.points[new_i].position.toPoint()));
+            r -= crossProduct(other.points[i].position - xpoint_l, other.points[new_i].position - xpoint_l);
+            i = new_i;
+        }
+        r -= crossProduct(other.points[other_inh].position - xpoint_l, xpoint_h - xpoint_l);
+    }
+    else {
+        //cout << ">" << (other_inl - other_inh + other.points.size()) % other.points.size() << " " << other.points.size() << " ";
+        other_inl = other_inl - 1;
+        if (other_inl < 0) {
+            other_inl = other.points.size() - 1;
+        }
+        if (!this->ContainsPoint(other.points[other_inl].position)) {
+            std::cout << "BUG DETECTED" << std::endl;
+            return abs(r);
+        }
+        for (int i = other_inl; i != other_inh;) {
+            int new_i = (i == 0) ? other.points.size()-1 : (i - 1);
+            if (!this->ContainsPoint(other.points[new_i].position)) {
+                std::cout << "BUG DETECTED" << std::endl;
+                return abs(r);
+            }
+
+            this->debuglines.push_back(QLine(other.points[i].position.toPoint(), other.points[new_i].position.toPoint()));
+            r -= crossProduct(other.points[i].position - xpoint_l, other.points[new_i].position - xpoint_l);
+            i = new_i;
+        }
+        r -= crossProduct(other.points[other_inh].position - xpoint_l, xpoint_h - xpoint_l);
+
+    }
+    //cout << abs(r) << endl;
+
+    return abs(r);
+}
+
+/*
 float PolygonPhysicalShape::GetArea()
 {
     if(points.size() < 3)
@@ -152,10 +299,9 @@ float PolygonPhysicalShape::GetArea()
             - points[i].position.x() * points[i - 1].position.y();
 
     return abs(S) / 2;
-}
+}*/
 
-QVector2D PolygonPhysicalShape::GetCenter()
-{
+QVector2D PolygonPhysicalShape::GetCenter() {
     QVector2D center(0, 0);
 
     for(auto &point : points)
@@ -182,6 +328,7 @@ void PolygonPhysicalShape::GetSideBySideIntersectionInfo(PolygonPhysicalShape &a
         }
     }
 }
+
 void PolygonPhysicalShape::GetSelfIntersectionInfo(vector<LinesIntersectionInfo> &info)
 {
     QVector2D intersection_point;
