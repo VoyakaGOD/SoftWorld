@@ -5,22 +5,19 @@
 #include <QFormLayout>
 #include "inspectoritem.h"
 #include "editingmanager.h"
+#include "inspectorlabelmanager.h"
 
-class InspectorLabel : public QObject, public InspectorItem
+class InspectorLabel : public InspectorItem
 {
-    Q_OBJECT
-
 private:
     QLabel *name_label;
     QLabel *text_label;
-    bool *manager_valid_ptr;
+    QMetaObject::Connection connection;
 
 public:
-    InspectorLabel(QWidget *container, QFormLayout *layout, const char *name, const QString &text, bool *manager_valid_ptr);
+    InspectorLabel(QWidget *container, QFormLayout *layout, const char *name, const QString &text);
     ~InspectorLabel();
-
-public slots:
-    void ChangeText(const QString &text);
+    void SetSignal(InspectorLabelManager *sender);
 };
 
 #endif // INSPECTORLABEL_H

@@ -181,10 +181,10 @@ void SceneView::ClearCursor() {
 void SceneView::DeleteSelected() {
     if (this->selected_body) {
         this->body_grabbed = false;
-        this->scene->RemoveBody(this->selected_body);
         if (Inspector::IsTarget(this->selected_body)) {
             Inspector::Clear();
         }
+        this->scene->RemoveBody(this->selected_body);
         this->selected_body = nullptr;
         this->update();
     }

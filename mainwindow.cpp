@@ -28,11 +28,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->palleteContents->AddPalleteItem(new SpringMassBody(), "spring");
     IGShell *example_shell = new IGShell(QVector2D(0, 0), 100, 50, DrawingStyle(Qt::darkRed, Qt::black, 3), 10000, 28000, 1, 1450);
     ui->palleteContents->AddPalleteItem(example_shell, "soft shell");
+    ui->palleteContents->AddPalleteItem(new GhostBody(), "ghost");
 
     EditOnlyBody *ball = new EditOnlyBody(QPoint(100,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
     main_scene.AddBody(ball);
-    example_shell = new IGShell(QVector2D(320, 300), 100, 50, DrawingStyle(QColor("#00be7d"), QColor("#027290"), 3), 10000, 28000, 3, 1450);
+    example_shell = new IGShell(QVector2D(320, 300), 100, 50, DrawingStyle(QColor(0x00be7du), QColor(0x027290u), 3), 10000, 28000, 3, 1450);
     main_scene.AddBody(example_shell);
+    GhostBody *example_ghost_body = new GhostBody();
+    example_ghost_body->MoveBy(QPoint(410, 50));
+    main_scene.AddBody(example_ghost_body);
 
     ball->WidenInspectorContext();
     ui->run_stop_btn->SetUp();

@@ -58,15 +58,11 @@ void Inspector::AddAction(const char *name, Action action)
 
 void Inspector::AddLabel(const char *name, const QString &text, InspectorLabelManager *manager)
 {
-    InspectorLabel *label = new InspectorLabel(container, layout, name, text, manager ? &(manager->valid) : nullptr);
-    CONNECT(manager, &InspectorLabelManager::TextChanged, label, &InspectorLabel::ChangeText);
+    InspectorLabel *label = new InspectorLabel(container, layout, name, text);
     items.push_back(label);
 
     if(manager)
-    {
-        manager->label = label;
-        manager->valid = true;
-    }
+        label->SetSignal(manager);
 }
 
 void Inspector::AddParam(const char *name, QColor &value)

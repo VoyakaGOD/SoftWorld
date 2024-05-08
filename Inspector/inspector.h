@@ -8,7 +8,7 @@
 #include "inspectorcolorfield.h"
 #include "inspectornumericfield.h"
 #include "inspectorstringfield.h"
-#include "inspectorlabelmanager.h"
+#include "inspectorlabel.h"
 
 using namespace std;
 

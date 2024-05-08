@@ -7,7 +7,7 @@
 class GhostBody: public PhysicalBody {
 
 public:
-    GhostBody() : origin(10, 10), radius(10) {
+    GhostBody() : origin(0, 0), radius(10) {
     }
 
     DrawingStyle drawing_style;
