@@ -22,7 +22,7 @@ struct SpringBodyRow {
 };
 
 class SpringMassBody : public PhysicalBody, public PolygonPhysicalShape {
-    double xscale = 10, yscale = 10, stiffness = 500, resistance = 1, density = 1;
+    double xscale = 10, yscale = 10, stiffness = 500, resistance = 10, density = 1;
     double diagscale = sqrt((xscale * xscale) + (yscale * yscale));
     vector<SpringBodyRow> rows;
     DrawingStyle style;
