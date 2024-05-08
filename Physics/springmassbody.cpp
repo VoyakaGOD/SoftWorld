@@ -189,9 +189,7 @@ void SpringMassBody::ApplyInternalRestrictions(double delta_time) {
             QVector2D v2 = this->rows[i][j-1].position - this->rows[i-1][prev_start_j + j-1].position;
             QVector2D v1 = this->rows[i-1][prev_start_j + j].position - this->rows[i-1][prev_start_j + j-1].position;
 
-            //double effective_stiffnesss = ((v1.x() * v2.y()) - (v2.x() * v1.y()) >= 0) ? this->stiffness : -1;
-
-            if ((v1.x() * v2.y()) - (v2.x() * v1.y()) >= 0 || 1) {
+            if ((v1.x() * v2.y()) - (v2.x() * v1.y()) >= 0) {
                 applyforce(this->rows[i][j-1], this->rows[i-1][prev_start_j + j], this->diagscale, this->stiffness, this->resistance, this->density / delta_time);
                 applyforce(this->rows[i-1][prev_start_j + j-1], this->rows[i][j], this->diagscale, this->stiffness, this->resistance, this->density / delta_time);
             }
