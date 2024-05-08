@@ -117,7 +117,7 @@ void IGShell::KeepSceneBorders(const QRect &world_rect)
 
 void IGShell::ApplyInternalRestrictions(double delta_time)
 {
-    shape.LimitVelocity(100);
+    shape.LimitVelocity(500);
     shape.UpdatePositions(delta_time);
 
     vector<LinesIntersectionInfo> self_intersections;
@@ -174,14 +174,15 @@ void IGShell::Draw(QPainter &painter)
 
 QPoint IGShell::GetLocalCoordinate(const QPoint &global_coordinate) const
 {
-    return global_coordinate - shape.GetConstPoints()[0].position.toPoint();
+    return global_coordinate - shape.GetCenter().toPoint();
 }
 
 QPoint IGShell::GetGlobalCoordinate(const QPoint &local_coordinate) const
 {
-    return local_coordinate + shape.GetConstPoints()[0].position.toPoint();
+    return local_coordinate + shape.GetCenter().toPoint();
 }
 
-QVector2D IGShell::GetCenterVelocity() const {
+QVector2D IGShell::GetCenterVelocity() const
+{
     return shape.GetCenterVelocity();
 }

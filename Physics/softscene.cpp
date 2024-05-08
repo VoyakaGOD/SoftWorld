@@ -17,8 +17,8 @@ static SoftSceneData default_data = {
     .world_rect = QRect(0,0,500,500)
 };
 
-SoftScene::SoftScene(const QRect &world_rect, double air_density, double g):
-    world_rect(world_rect), air_density(air_density), g(g) {}
+SoftScene::SoftScene(const QRect &world_rect, double air_density, double g, double throwing_scale):
+    world_rect(world_rect), air_density(air_density), g(g), throwing_scale(throwing_scale) {}
 
 void SoftScene::RemoveAllBodies()
 {
@@ -158,6 +158,7 @@ void SoftScene::WidenInspectorContext()
     Inspector::AddHeader("scene", LARGE_HEADER);
     Inspector::AddParam("air density", air_density, (double)1, (double)1000);
     Inspector::AddParam("g", g, (double)0, (double)100);
+    Inspector::AddParam("throwing scale", throwing_scale, (double)0.1, (double)1);
     Inspector::AddLabel("bodies count:", QString::number(bodies.size()), &count_label_manager);
 }
 
@@ -187,4 +188,9 @@ bool SoftScene::TryToLock() const
 void SoftScene::Unlock() const
 {
     synchronizer.unlock();
+}
+
+double SoftScene::GetThrowingScale()
+{
+    return throwing_scale;
 }

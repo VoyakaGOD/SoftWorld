@@ -29,9 +29,9 @@ public:
     void UpdatePositions(double delta_time);
     void MoveBy(const QVector2D &offset);
     void AddVelocity(const QVector2D &delta_velocity);
-    double GetArea();
+    double GetArea() const;
     double getIntersectionArea(PolygonPhysicalShape& other);
-    QVector2D GetCenter();
+    QVector2D GetCenter() const;
     void GetSideBySideIntersectionInfo(PolygonPhysicalShape &another, vector<LinesIntersectionInfo> &info);
     void GetSelfIntersectionInfo(vector<LinesIntersectionInfo> &info);
     void LimitVelocity(double limit);

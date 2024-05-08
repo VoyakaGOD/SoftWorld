@@ -148,13 +148,13 @@ double crossProduct(QVector2D a, QVector2D b) {
     return (a.x() * b.y()) - (a.y() * b.x());
 }
 
-double PolygonPhysicalShape::GetArea() {
+/*double PolygonPhysicalShape::GetArea() {
     double r;
     for (int i = 2; i < this->points.size(); i++) {
         r += crossProduct(this->points[i-1].position - this->points[0].position, this->points[i].position - this->points[0].position);
     }
     return abs(r);
-}
+}*/
 
 double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
     int start_point = 0;
@@ -285,8 +285,8 @@ double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
     return abs(r);
 }
 
-/*
-float PolygonPhysicalShape::GetArea()
+
+double PolygonPhysicalShape::GetArea() const
 {
     if(points.size() < 3)
         return 0;
@@ -299,9 +299,10 @@ float PolygonPhysicalShape::GetArea()
             - points[i].position.x() * points[i - 1].position.y();
 
     return abs(S) / 2;
-}*/
+}
 
-QVector2D PolygonPhysicalShape::GetCenter() {
+QVector2D PolygonPhysicalShape::GetCenter() const
+{
     QVector2D center(0, 0);
 
     for(auto &point : points)
@@ -357,11 +358,14 @@ void PolygonPhysicalShape::LimitVelocity(double limit)
             point.velocity *= limit / point.velocity.length();
 }
 
-QVector2D PolygonPhysicalShape::GetCenterVelocity() const {
-    QVector2D res(0,0);
-    int div;
-    for(auto &point : points) {
-        res += point.velocity;
-    }
-    return res / div;
+QVector2D PolygonPhysicalShape::GetCenterVelocity() const
+{
+    if(points.size() == 0)
+        return QVector2D(0, 0);
+
+    QVector2D result(0, 0);
+    for(auto &point : points)
+        result += point.velocity;
+
+    return result / points.size();
 }

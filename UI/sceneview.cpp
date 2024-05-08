@@ -125,7 +125,7 @@ void SceneView::mouseReleaseEvent(QMouseEvent *event) {
     if (body_grabbed) {
         uint64_t delta_time = event->timestamp() - this->last_move_time_ms;
         if (delta_time < max_yeet_delta_time) {
-            this->selected_body->AddMomentum((last_mouse_speed) - this->selected_body->GetCenterVelocity());
+            this->selected_body->AddMomentum(scene->GetThrowingScale() * last_mouse_speed - this->selected_body->GetCenterVelocity());
         }
         else {
             this->selected_body->AddMomentum(-this->selected_body->GetCenterVelocity());

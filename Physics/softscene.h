@@ -18,6 +18,7 @@ private:
     list<PhysicalBody*> bodies;
     double air_density;
     double g;
+    double throwing_scale;
     InspectorLabelManager count_label_manager;
 
 private:
@@ -32,7 +33,7 @@ public: // serialize
 public:
     QRect world_rect;
 
-    SoftScene(const QRect &world_rect, double air_density, double g);
+    SoftScene(const QRect &world_rect, double air_density, double g, double throwing_scale);
     ~SoftScene();
 
     void Draw(QPainter &painter) const;
@@ -45,6 +46,7 @@ public:
     void Lock() const;
     bool TryToLock() const;
     void Unlock() const;
+    double GetThrowingScale();
 };
 
 #endif // SOFTSCENE_H
