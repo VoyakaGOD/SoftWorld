@@ -17,7 +17,7 @@ QRectF EditOnlyBody::GetBoundingRect() const
 void EditOnlyBody::WidenInspectorContext()
 {
     Inspector::AddHeader("edit-only body", LARGE_HEADER);
-    Inspector::AddParam("radius", radius, 5, 250);
+    Inspector::AddParam("radius", radius, 15, 250);
     Inspector::AddParam("bounce", bounce, 0, 0.95);
     style.WidenInspectorContext();
 }
@@ -65,7 +65,7 @@ void EditOnlyBody::ApplyInternalRestrictions(double delta_time)
 
 void EditOnlyBody::ApplyGravity(double air_density, double g, double delta_time)
 {
-    velocity += QVector2D(0, 50) * g * delta_time;
+    velocity += QVector2D(0, g * delta_time);
 }
 
 void EditOnlyBody::MoveBy(const QPoint &offset)

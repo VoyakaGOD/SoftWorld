@@ -50,7 +50,7 @@ void IGShell::WidenInspectorContext()
     Inspector::AddLabel("density", get_label_string(current_density), &density_label_manager);
     Inspector::AddHeader("reconstruction", NORMAL_HEADER);
     Inspector::AddParam("new radius", reconstruction_radius, 40.0, 200.0);
-    Inspector::AddParam("new detailing", reconstruction_detailing, 6, 100);
+    Inspector::AddParam("new detailing", reconstruction_detailing, 11, 100);
     Inspector::AddAction("apply", [this](){ Reconstruct(shape.GetCenter(), reconstruction_radius, reconstruction_detailing); });
 }
 

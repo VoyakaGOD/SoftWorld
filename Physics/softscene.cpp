@@ -157,7 +157,7 @@ void SoftScene::WidenInspectorContext()
 {
     Inspector::AddHeader("scene", LARGE_HEADER);
     Inspector::AddParam("air density", air_density, (double)1, (double)1000);
-    Inspector::AddParam("g", g, (double)0, (double)100);
+    Inspector::AddParam("g", g, (double)0, (double)500);
     Inspector::AddParam("throwing scale", throwing_scale, (double)0.1, (double)1);
     Inspector::AddLabel("bodies count:", QString::number(bodies.size()), &count_label_manager);
 }
