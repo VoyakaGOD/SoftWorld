@@ -21,20 +21,19 @@ IGShell::IGShell() {}
 
 void IGShell::Reconstruct(QVector2D position, double radius, int detailing)
 {
-    vector<PolyPoint> &points = shape.GetPoints();
     points.clear();
     double dphi = 2 * M_PI / detailing;
     for(int i = 0; i < detailing; i++)
         points.push_back(PolyPoint(position + QVector2D(cos(dphi * i), sin(dphi * i)) * radius, QVector2D(0, 0)));
 
-    current_area = shape.GetArea();
+    current_area = GetArea();
     current_density = -1;
     initial_part_length = radius * sqrt(2 - 2*cos(dphi));
 }
 
 QRectF IGShell::GetBoundingRect() const
 {
-    return shape.GetBoundingRect();
+    return PolygonPhysicalShape::GetBoundingRect();
 }
 
 void IGShell::WidenInspectorContext()
@@ -51,19 +50,19 @@ void IGShell::WidenInspectorContext()
     Inspector::AddHeader("reconstruction", NORMAL_HEADER);
     Inspector::AddParam("new radius", reconstruction_radius, 40.0, 200.0);
     Inspector::AddParam("new detailing", reconstruction_detailing, 11, 100);
-    Inspector::AddAction("apply", [this](){ Reconstruct(shape.GetCenter(), reconstruction_radius, reconstruction_detailing); });
+    Inspector::AddAction("apply", [this](){ Reconstruct(GetCenter(), reconstruction_radius, reconstruction_detailing); });
 }
 
 bool IGShell::ContainsPoint(const QPoint &point) const
 {
-    return shape.ContainsPoint(QVector2D(point));
+    return PolygonPhysicalShape::ContainsPoint(QVector2D(point));
 }
 
 PhysicalBody *IGShell::Clone() const
 {
     IGShell *clone = new IGShell();
     clone->style = style;
-    clone->shape = shape;
+    clone->points = points;
     clone->mass = mass;
     clone->gas_const = gas_const;
     clone->shell_bounce = shell_bounce;
@@ -76,15 +75,12 @@ PhysicalBody *IGShell::Clone() const
 
 void IGShell::SolveCollision(PhysicalBody *another)
 {
-    IGShell *shell = dynamic_cast<IGShell *>(another);
-    if(shell == NULL)
+    PolygonPhysicalShape *poly = dynamic_cast<PolygonPhysicalShape *>(another);
+    if(poly == NULL)
         return;
 
     vector<LinesIntersectionInfo> intersections;
-    shape.GetSideBySideIntersectionInfo(shell->shape, intersections);
-    QVector2D center = shape.GetCenter();
-    QVector2D another_center = shell->shape.GetCenter();
-
+    GetSideBySideIntersectionInfo(*poly, intersections);
     for(auto intersection : intersections)
     {
         QVector2D avg = (intersection.first_line_start.velocity + intersection.first_line_end.velocity +
@@ -94,34 +90,29 @@ void IGShell::SolveCollision(PhysicalBody *another)
         intersection.second_line_start.velocity = avg;
         intersection.second_line_end.velocity = avg;
 
-        QVector2D tangent1 = intersection.first_line_end.position - intersection.first_line_start.position;
-        QVector2D tangent2 = intersection.second_line_end.position - intersection.second_line_start.position;
-        QVector2D normal1(-tangent1.y(), tangent1.x());
-        QVector2D normal2(-tangent2.y(), tangent2.x());
-        normal1.normalize();
-        normal2.normalize();
+        QVector2D another_tangent = intersection.second_line_end.position - intersection.second_line_start.position;
+        QVector2D another_normal(-another_tangent.y(), another_tangent.x());
+        another_normal.normalize();
 
         //bad solution, but some times we should use simple approaches
-        intersection.first_line_start.position -= normal2;
-        intersection.first_line_end.position -= normal2;
-        intersection.second_line_start.position -= normal1;
-        intersection.second_line_end.position -= normal1;
+        intersection.first_line_start.position -= another_normal;
+        intersection.first_line_end.position -= another_normal;
     }
 }
 
 void IGShell::KeepSceneBorders(const QRect &world_rect)
 {
-    for(auto &point : shape.GetPoints())
+    for(auto &point : points)
         point.KeepBorders(world_rect, shell_bounce);
 }
 
 void IGShell::ApplyInternalRestrictions(double delta_time)
 {
-    shape.LimitVelocity(500);
-    shape.UpdatePositions(delta_time);
+    LimitVelocity(500);
+    UpdatePositions(delta_time);
 
     vector<LinesIntersectionInfo> self_intersections;
-    shape.GetSelfIntersectionInfo(self_intersections);
+    GetSelfIntersectionInfo(self_intersections);
     for(auto self_intersection : self_intersections)
     {
         QVector2D avg = (self_intersection.first_line_start.velocity + self_intersection.first_line_end.velocity +
@@ -132,7 +123,6 @@ void IGShell::ApplyInternalRestrictions(double delta_time)
         self_intersection.second_line_end.velocity = avg;
     }
 
-    vector<PolyPoint> &points = shape.GetPoints();
     for(int i = 0; i < points.size(); i++)
     {
         PolyPoint &current = points[i];
@@ -149,40 +139,40 @@ void IGShell::ApplyInternalRestrictions(double delta_time)
 
 void IGShell::ApplyGravity(double air_density, double g, double delta_time)
 {
-    current_area = shape.GetArea() + 1;//to avoid division by zero
+    current_area = GetArea() + 1;//to avoid division by zero
     area_label_manager.ChangeText(get_label_string(current_area));
     current_density = mass / current_area;
     density_label_manager.ChangeText(get_label_string(current_density));
 
-    shape.AddVelocity(QVector2D(0, (1 - air_density / current_density) * g * delta_time));
+    AddVelocity(QVector2D(0, (1 - air_density / current_density) * g * delta_time));
 }
 
 void IGShell::MoveBy(const QPoint &offset)
 {
-    shape.MoveBy(QVector2D(offset));
+    PolygonPhysicalShape::MoveBy(QVector2D(offset));
 }
 
 void IGShell::AddMomentum(const QVector2D &momentum)
 {
-    shape.AddVelocity(QVector2D(momentum));
+    AddVelocity(QVector2D(momentum));
 }
 
 void IGShell::Draw(QPainter &painter)
 {
-    shape.Draw(painter, style);
+    PolygonPhysicalShape::Draw(painter, style);
 }
 
 QPoint IGShell::GetLocalCoordinate(const QPoint &global_coordinate) const
 {
-    return global_coordinate - shape.GetCenter().toPoint();
+    return global_coordinate - GetCenter().toPoint();
 }
 
 QPoint IGShell::GetGlobalCoordinate(const QPoint &local_coordinate) const
 {
-    return local_coordinate + shape.GetCenter().toPoint();
+    return local_coordinate + GetCenter().toPoint();
 }
 
 QVector2D IGShell::GetCenterVelocity() const
 {
-    return shape.GetCenterVelocity();
+    return PolygonPhysicalShape::GetCenterVelocity();
 }

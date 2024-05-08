@@ -4,11 +4,10 @@
 #include "physicalbody.h"
 #include "polygonphysicalshape.h"
 
-class IGShell : public PhysicalBody
+class IGShell : public PhysicalBody, public PolygonPhysicalShape
 {
 private:
     DrawingStyle style;
-    PolygonPhysicalShape shape;
     double mass;
     double gas_const;
     double shell_bounce;
