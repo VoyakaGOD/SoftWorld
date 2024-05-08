@@ -63,7 +63,7 @@ void EditOnlyBody::ApplyInternalRestrictions(double delta_time)
 
 void EditOnlyBody::ApplyGravity(double air_density, double g, double delta_time)
 {
-    velocity += QVector2D(0, 50) * g * delta_time;
+    velocity += QVector2D(0, 1) * g * delta_time;
 }
 
 void EditOnlyBody::MoveBy(const QPoint &offset)

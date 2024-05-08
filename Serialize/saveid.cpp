@@ -12,9 +12,17 @@ void SpringMassBody::SaveID(DataStorageWriter &data) const {
     PhysicalBody::SaveID(data);
     WRITER_APPEND(data, saved_obj_id_t, SPRMSS_BODY_ID);
 }
+void TestPolyBody::SaveID(DataStorageWriter &data) const {
+    PhysicalBody::SaveID(data);
+    WRITER_APPEND(data, saved_obj_id_t, TESTPOLY_BODY_ID);
+}
 void GhostBody::SaveID(DataStorageWriter &data) const {
     PhysicalBody::SaveID(data);
     WRITER_APPEND(data, saved_obj_id_t, GHOST_BODY_ID);
+}
+void IGShell::SaveID(DataStorageWriter &data) const {
+    PhysicalBody::SaveID(data);
+    WRITER_APPEND(data, saved_obj_id_t, IGSHELL_BODY_ID);
 }
 void SoftScene::SaveID(DataStorageWriter &data) const {
     WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_SCENE);

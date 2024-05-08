@@ -1,4 +1,30 @@
+#include <Serialize/ser_class_enums.h>
+
 #include "igshell.h"
+
+struct IGShellData {
+    obj_fixed_data_len_t size;
+    DrawingStyle style;
+    double mass;
+    double gas_const;
+    double shell_bounce;
+    double shell_rigidity;
+    double initial_part_length;
+    double reconstruction_radius;
+    int reconstruction_detailing;
+};
+
+static IGShellData default_data {
+    .size = 0,
+    .style = DrawingStyle(),
+    .mass = 1000,
+    .gas_const = 200,
+    .shell_bounce = 0.5,
+    .shell_rigidity = 1,
+    .initial_part_length = 60,
+    .reconstruction_radius = 10,
+    .reconstruction_detailing = 50
+};
 
 static QString get_label_string(double value)
 {
@@ -32,6 +58,39 @@ void IGShell::Reconstruct(QVector2D position, double radius, int detailing)
     initial_part_length = radius * sqrt(2 - 2*cos(dphi));
 }
 
+size_t IGShell::GetSavedSize() const {
+    return PhysicalBody::GetSavedSize() + sizeof(saved_obj_id_t)
+     + sizeof(IGShellData) + shape.GetSavedSize() + sizeof(SAVED_OBJ_NONE);
+}
+
+void IGShell::SaveData(DataStorageWriter &writer) const {
+    PhysicalBody::SaveData(writer);
+    IGShellData* data = (IGShellData*)(writer.data);
+    WRITER_MOVE_BYTES(writer, sizeof(*data))
+    *data = (IGShellData){.size = sizeof(*data), .style = this->style
+                        , .mass = this->mass, .gas_const = this->gas_const
+                        , .shell_bounce = this->shell_bounce, .shell_rigidity = this->shell_rigidity
+                        , .initial_part_length = this->initial_part_length
+                        , .reconstruction_radius = this->reconstruction_radius, .reconstruction_detailing = this->reconstruction_detailing
+                        };
+    shape.SaveData(writer);
+    WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_NONE);
+}
+
+IGShell::IGShell(DataStorageReader &reader) :
+PhysicalBody(reader), style(GETDATA(reader, IGShellData, style)),
+mass(GETDATA(reader, IGShellData, mass)), gas_const(GETDATA(reader, IGShellData, gas_const)),
+shell_bounce(GETDATA(reader, IGShellData, shell_bounce)), shell_rigidity(GETDATA(reader, IGShellData, shell_rigidity)),
+initial_part_length(GETDATA(reader, IGShellData, initial_part_length)),
+reconstruction_radius(GETDATA(reader, IGShellData, reconstruction_radius)), reconstruction_detailing(GETDATA(reader, IGShellData, reconstruction_detailing)),
+current_area(-1), current_density(-1)
+{
+
+    READER_MOVE_BYTES(reader, ((IGShellData*)reader.data)->size, {last_deserialize_error = DESERR_BOUNDS; return;})
+    shape.Deserialize(reader);
+}
+
+
 QRectF IGShell::GetBoundingRect() const
 {
     return shape.GetBoundingRect();
@@ -40,8 +99,8 @@ QRectF IGShell::GetBoundingRect() const
 void IGShell::WidenInspectorContext()
 {
     Inspector::AddHeader("shell with ideal gas", LARGE_HEADER);
-    Inspector::AddParam("m/d", mass, 1e2d, 1e7d);
-    Inspector::AddParam("GC", gas_const, 1e4d, 5e5d);
+    //Inspector::AddParam("m/d", mass, 1e2d, 1e7d);
+    //Inspector::AddParam("GC", gas_const, 1e4d, 5e5d);
     Inspector::AddParam("SB", shell_bounce, 0.0, 3.0);
     Inspector::AddParam("SR", shell_rigidity, 250.0, 20000.0);
     style.WidenInspectorContext();

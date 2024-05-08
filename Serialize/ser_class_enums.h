@@ -9,7 +9,9 @@
 enum SavedPhysicalBodyId { 
     SAVED_PHYSICALBODY_NONE = 0,
     SPRMSS_BODY_ID = 2,
+    TESTPOLY_BODY_ID = 3,
     GHOST_BODY_ID = 1,
+    IGSHELL_BODY_ID = 4,
 };
 enum SavedObjId { 
     SAVED_OBJ_NONE = 0,

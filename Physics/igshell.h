@@ -4,6 +4,8 @@
 #include "physicalbody.h"
 #include "polygonphysicalshape.h"
 
+///SERIALIZABLE IGShell:PhysicalBody IGSHELL_BODY_ID simple
+
 class IGShell : public PhysicalBody
 {
 private:
@@ -38,6 +40,13 @@ public:
     QPoint GetLocalCoordinate(const QPoint &global_coordinate) const;
     QPoint GetGlobalCoordinate(const QPoint &local_coordinate) const;
     QVector2D GetCenterVelocity() const override;
+
+    public:
+    virtual void SaveID(DataStorageWriter &data) const override;
+    virtual size_t GetSavedSize() const override;
+    virtual void SaveData(DataStorageWriter &data) const override;
+    static SerializableObject* Deserialize(DataStorageReader& reader) {return new IGShell(reader);}
+    IGShell(DataStorageReader &writer);
 
 private:
     IGShell();

@@ -4,6 +4,8 @@
 #include "physicalbody.h"
 #include "polygonphysicalshape.h"
 
+///SERIALIZABLE TestPolyBody:PhysicalBody TESTPOLY_BODY_ID simple
+
 class TestPolyBody : public PhysicalBody
 {
 private:
@@ -14,6 +16,14 @@ private:
 
 public:
     TestPolyBody(QVector2D in_pos, DrawingStyle style);
+
+// fileworks
+public:
+    virtual void SaveID(DataStorageWriter &data) const override;
+    virtual size_t GetSavedSize() const override;
+    virtual void SaveData(DataStorageWriter &data) const override;
+    static SerializableObject* Deserialize(DataStorageReader& reader) {return new TestPolyBody(reader);}
+    TestPolyBody(DataStorageReader &writer);
 
     //general methods
 public:
