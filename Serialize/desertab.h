@@ -16,6 +16,7 @@ DeserTblEntry physicalbody_deser_tbl[] = {
 /*2*/ {.name = "SpringMassBody", .type = DESER_TBL_SIMPLE, .e_simple = SpringMassBody::Deserialize},
 /*3*/ {.name = "TestPolyBody", .type = DESER_TBL_SIMPLE, .e_simple = TestPolyBody::Deserialize},
 /*4*/ {.name = "IGShell", .type = DESER_TBL_SIMPLE, .e_simple = IGShell::Deserialize},
+/*5*/ {.name = "EditOnlyBody", .type = DESER_TBL_SIMPLE, .e_simple = EditOnlyBody::Deserialize},
 };
 DeserTblBaseEntry physicalbody_deser_tbl_b[] = {
 };

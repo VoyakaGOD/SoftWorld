@@ -1,4 +1,22 @@
 #include "editonlybody.h"
+#include <Serialize/ser_class_enums.h>
+
+struct EditOnlyBodyData{
+    obj_fixed_data_len_t size;
+    QVector2D origin;
+    QVector2D velocity;
+    double radius;
+    DrawingStyle style;
+    double bounce;
+};
+
+EditOnlyBodyData default_data {
+    .origin = QVector2D(0,0),
+    .velocity  = QVector2D(0,0),
+    .radius = 10,
+    .style = DrawingStyle(),
+    .bounce = 0.5
+};
 
 EditOnlyBody::EditOnlyBody(const QPoint &origin, double radius, DrawingStyle style) : style(style)
 {
@@ -7,6 +25,36 @@ EditOnlyBody::EditOnlyBody(const QPoint &origin, double radius, DrawingStyle sty
     this->radius = radius;
     bounce = 0.7;
 }
+
+EditOnlyBody::EditOnlyBody(DataStorageReader &reader) :
+        PhysicalBody(reader),
+        origin(GETDATA(reader, EditOnlyBodyData, origin)), velocity(GETDATA(reader, EditOnlyBodyData, velocity)),
+        radius(GETDATA(reader, EditOnlyBodyData, radius)), style(GETDATA(reader, EditOnlyBodyData, style)),
+        bounce(GETDATA(reader, EditOnlyBodyData, bounce)) {
+    PTR_MOVE_BYTES(reader.data, ((EditOnlyBodyData*)(reader.data))->size);
+}
+
+size_t EditOnlyBody::GetSavedSize() const {
+    return PhysicalBody::GetSavedSize()
+     + sizeof(saved_obj_id_t) + sizeof(EditOnlyBodyData) + 1;
+}
+
+void EditOnlyBody::SaveData(DataStorageWriter &writer) const {
+    PhysicalBody::SaveData(writer);
+
+    EditOnlyBodyData* data = (EditOnlyBodyData*)(writer.data);
+    WRITER_MOVE_BYTES(writer, sizeof(*data))
+
+    data->size = sizeof(*data);
+    data->origin = this->origin;
+    data->velocity = this->velocity;
+    data->radius = this->radius;
+    data->bounce = this->bounce;
+    data->style = this->style;
+
+    WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_NONE)
+}
+
 
 QRectF EditOnlyBody::GetBoundingRect() const
 {

@@ -3,6 +3,8 @@
 
 #include "physicalbody.h"
 
+///SERIALIZABLE EditOnlyBody:PhysicalBody EDITONLY_BODY_ID simple
+
 class EditOnlyBody : public PhysicalBody
 {
 private:
@@ -20,6 +22,14 @@ public:
     void WidenInspectorContext();
     bool ContainsPoint(const QPoint &point) const;
     PhysicalBody *Clone() const;
+
+// fileworks
+public:
+    void SaveID(DataStorageWriter &data) const override;
+    size_t GetSavedSize() const override;
+    void SaveData(DataStorageWriter &data) const override;
+    static SerializableObject* Deserialize(DataStorageReader& reader) {return new EditOnlyBody(reader);}
+    EditOnlyBody(DataStorageReader &reader);
 
     //simulation methods
 public:

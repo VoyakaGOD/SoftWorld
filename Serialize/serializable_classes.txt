@@ -9,4 +9,5 @@ PhysicalBody:
 2 SpringMassBody SPRMSS_BODY_ID simple
 3 TestPolyBody TESTPOLY_BODY_ID simple
 4 IGShell IGSHELL_BODY_ID simple
+5 EditOnlyBody EDITONLY_BODY_ID simple
 :

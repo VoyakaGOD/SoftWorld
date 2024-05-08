@@ -83,6 +83,7 @@ void MainWindow::on_load_palette_btn_clicked() {
 }
 
 void MainWindow::on_save_scene_btn_clicked() {
+    SimulationThreadsController::Stop();
     main_scene.Lock();
     guiSerializeObj(this, main_scene);
     main_scene.Unlock();

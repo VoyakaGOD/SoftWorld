@@ -9,6 +9,7 @@
 #include <Physics/testpolybody.h>
 #include <Physics/ghostbody.h>
 #include <Physics/igshell.h>
+#include <Physics/editonlybody.h>
 #include <Physics/softscene.h>
 #include <Physics/physicalbody.h>
 #include <UI/palleteitem.h>

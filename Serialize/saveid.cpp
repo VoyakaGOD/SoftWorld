@@ -24,6 +24,10 @@ void IGShell::SaveID(DataStorageWriter &data) const {
     PhysicalBody::SaveID(data);
     WRITER_APPEND(data, saved_obj_id_t, IGSHELL_BODY_ID);
 }
+void EditOnlyBody::SaveID(DataStorageWriter &data) const {
+    PhysicalBody::SaveID(data);
+    WRITER_APPEND(data, saved_obj_id_t, EDITONLY_BODY_ID);
+}
 void SoftScene::SaveID(DataStorageWriter &data) const {
     WRITER_APPEND(data, saved_obj_id_t, SAVED_OBJ_SCENE);
 }

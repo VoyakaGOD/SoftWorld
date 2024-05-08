@@ -128,7 +128,7 @@ FileReadInterface::~FileReadInterface() {
 
 FileWriteInterface::FileWriteInterface(const char* filename) {
 
-    this->file  = fopen(filename, "w");
+    this->file  = fopen(filename, "wb");
     if (!(this->file)) {
         throw std::system_error(errno, std::system_category(), "cannot open file");
     }

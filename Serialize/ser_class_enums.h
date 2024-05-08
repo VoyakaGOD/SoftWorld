@@ -12,6 +12,7 @@ enum SavedPhysicalBodyId {
     TESTPOLY_BODY_ID = 3,
     GHOST_BODY_ID = 1,
     IGSHELL_BODY_ID = 4,
+    EDITONLY_BODY_ID = 5,
 };
 enum SavedObjId { 
     SAVED_OBJ_NONE = 0,
