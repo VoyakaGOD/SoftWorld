@@ -81,8 +81,12 @@ static bool GetTwoLinesIntersectionPoint(QVector2D l1s, QVector2D l1e, QVector2D
     float t1 = XProduct(b, a2) / x;
     float t2 = XProduct(b, a1) / x;
 
-    intersection_point = l1s + t1 * a1;
-    return (t1 > 0) && (t1 < 1) && (t2 > 0) && (t2 < 1);
+    if((t1 > 0) && (t1 < 1) && (t2 > 0) && (t2 < 1))
+    {
+        intersection_point = l1s + t1 * a1;
+        return true;
+    }
+    return false;
 }
 
 void PolygonPhysicalShape::GetSideBySideIntersectionPoints(const PolygonPhysicalShape &another, vector<QVector2D> &points) const
@@ -147,14 +151,6 @@ void PolygonPhysicalShape::AddVelocity(const QVector2D &delta_velocity)
 double crossProduct(QVector2D a, QVector2D b) {
     return (a.x() * b.y()) - (a.y() * b.x());
 }
-
-/*double PolygonPhysicalShape::GetArea() {
-    double r;
-    for (int i = 2; i < this->points.size(); i++) {
-        r += crossProduct(this->points[i-1].position - this->points[0].position, this->points[i].position - this->points[0].position);
-    }
-    return abs(r);
-}*/
 
 double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
     int start_point = 0;
