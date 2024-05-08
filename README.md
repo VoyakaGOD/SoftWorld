@@ -7,7 +7,7 @@
 
 It's simple simulation of soft bodies physics with **Qt** graphical interface.
 
-You can add bodies from **Palette**. 
+You can add bodies from **Palette**.
 
 You can change settings of instantiated bodies or bodies in Palette or scene in **Inspector**.
 
@@ -34,7 +34,7 @@ Enter | run/stop simulation
 This simulation runs on **CPU only**.
 
 If there are a lot of bodies on scene, it is possible,
-that physical thread will cost so much CPU time. 
+that physical thread will cost so much CPU time.
 In this case you still can change simulation,
 but your **changes may be canceled** and **frames may be skipped**.
 
@@ -77,4 +77,11 @@ $v_{new} = SB * v_{old}$
 
 $SB$ is shell bounce
 
-### 2........
+### 2.Spring-mass body model
+
+The body is simulated as rectangualr grid of massive points connected by horizontal, vertical and diagonal springs. Additionaly, each spring adds some 'friction' force proportional to relative speed in its direction. Collisions are simulated by adding impulse to points colliding with things proportionally to how deep the collision is. To conserve impulse, total impulse of collision between two bodies is proportional to their area of intersection.
+
+x and y point grid scales can be adjusted separately.
+Stiffness controls the stiffness of each spring.
+Resistance controls the amount of friction force applied by each spring for relative speed of 1.
+Density controls the mass of each point
