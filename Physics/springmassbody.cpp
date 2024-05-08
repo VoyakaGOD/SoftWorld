@@ -43,7 +43,7 @@ SpringMassBody::SpringMassBody() {
 }
 
 size_t SpringMassBody::GetSavedSize() const {
-    size_t res = sizeof(SpringMassBodyData) + sizeof(saved_obj_id_t);
+    size_t res = PhysicalBody::GetSavedSize() + sizeof(SpringMassBodyData) + sizeof(saved_obj_id_t);
     res += sizeof(SAVED_OBJ_PKG) + lenAsShortLength(this->rows.size());
     for (int i = 0; i < this->rows.size(); i++) {
         size_t row_size = sizeof(SavedSpringBodyRow) + (sizeof(PolyPoint) * this->rows[i].size());

@@ -1,4 +1,16 @@
 #include "testpolybody.h"
+#include <Serialize/ser_class_enums.h>
+
+struct TestPolyBodyData {
+    obj_fixed_data_len_t size;
+    DrawingStyle style;
+    double density;
+    float bounce;
+};
+
+static TestPolyBodyData default_data = {
+    .size = 0, .style = DrawingStyle(), .density = 100, .bounce = 0.5
+};
 
 TestPolyBody::TestPolyBody(QVector2D in_pos, DrawingStyle style) : style(style)
 {
@@ -87,4 +99,27 @@ QPoint TestPolyBody::GetGlobalCoordinate(const QPoint &local_coordinate) const
 
 QVector2D TestPolyBody::GetCenterVelocity() const {
     return shape.GetCenterVelocity();
+}
+
+size_t TestPolyBody::GetSavedSize() const {
+    return PhysicalBody::GetSavedSize() + sizeof(saved_obj_id_t)
+     + sizeof(TestPolyBodyData) + shape.GetSavedSize() + sizeof(SAVED_OBJ_NONE);
+}
+
+void TestPolyBody::SaveData(DataStorageWriter &writer) const {
+    PhysicalBody::SaveData(writer);
+    TestPolyBodyData* data = (TestPolyBodyData*)(writer.data);
+    WRITER_MOVE_BYTES(writer, sizeof(*data))
+    *data = (TestPolyBodyData){.size = sizeof(*data), .style = this->style
+                        , .density = this->density, .bounce = this->bounce};
+    shape.SaveData(writer);
+    WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_NONE);
+}
+
+TestPolyBody::TestPolyBody(DataStorageReader &reader) :
+PhysicalBody(reader), style(GETDATA(reader, TestPolyBodyData, style)),
+density(GETDATA(reader, TestPolyBodyData, density)), bounce(GETDATA(reader, TestPolyBodyData, bounce)) {
+
+    READER_MOVE_BYTES(reader, ((TestPolyBodyData*)reader.data)->size, {last_deserialize_error = DESERR_BOUNDS; return;})
+    shape.Deserialize(reader);
 }

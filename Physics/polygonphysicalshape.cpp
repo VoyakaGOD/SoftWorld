@@ -1,5 +1,8 @@
 #include "polygonphysicalshape.h"
 #include <iostream>
+#include <Serialize/serialize_special.h>
+#include <Serialize/ser_class_enums.h>
+#include <Serialize/deserialize.h>
 
 PolygonPhysicalShape::PolygonPhysicalShape() : points() {}
 
@@ -376,4 +379,35 @@ QVector2D PolygonPhysicalShape::GetCenterVelocity() const
         result += point.velocity;
 
     return result / points.size();
+}
+
+size_t PolygonPhysicalShape::GetSavedSize() const {
+    size_t len = sizeof(PolyPoint) * this->points.size();
+    return sizeof(SAVED_OBJ_STR) + lenAsShortLength(len) + len;
+}
+
+void PolygonPhysicalShape::SaveData(DataStorageWriter& writer) const{
+    WRITER_APPEND(writer, saved_obj_id_t, SAVED_OBJ_STR)
+    writeShortLength(writer, sizeof(PolyPoint) * this->points.size());
+    for(auto &point : points) {
+        WRITER_APPEND(writer, PolyPoint, point)
+    }
+}
+
+void PolygonPhysicalShape::Deserialize(DataStorageReader& reader) {
+    this->points.clear();
+    saved_obj_id_t id = 0;
+    READER_READVAL(reader, saved_obj_id_t, id, {last_deserialize_error = DESERR_BOUNDS; return; })
+    if (id != SAVED_OBJ_STR) {
+        last_deserialize_error = DESERR_INVTYPE;
+        return;
+    }
+    size_t len = readShortLength(reader);
+    PolyPoint* s_points = ((PolyPoint*)reader.data);
+    READER_MOVE_BYTES(reader, len, {last_deserialize_error = DESERR_BOUNDS; return; })
+
+    len = len / sizeof(*s_points);
+    for (int i = 0; i < len; i++) {
+        this->points.push_back(s_points[i]);
+    }
 }

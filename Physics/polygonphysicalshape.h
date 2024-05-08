@@ -4,8 +4,9 @@
 #include <vector>
 #include <QRectF>
 #include <QPainter>
+#include <Utils/drawingstyle.h>
+#include <Utils/fileworks.h>
 #include "linesintersectioninfo.h"
-#include "Utils/drawingstyle.h"
 
 using namespace std;
 
@@ -35,7 +36,12 @@ public:
     void GetSideBySideIntersectionInfo(PolygonPhysicalShape &another, vector<LinesIntersectionInfo> &info);
     void GetSelfIntersectionInfo(vector<LinesIntersectionInfo> &info);
     void LimitVelocity(double limit);
-    virtual QVector2D GetCenterVelocity() const;
+    QVector2D GetCenterVelocity() const;
+
+    size_t GetSavedSize() const;
+    void SaveData(DataStorageWriter& writer) const;
+    void Deserialize(DataStorageReader& reader);
+
 };
 
 #endif // POLYGONPHYSICALSHAPE_H
