@@ -217,28 +217,40 @@ double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
         return 0;
     }
 
-    this->debuglines.clear();
-    this->debuglines.push_back(QLine(this->points[in_l].position.toPoint(), this->points[in_h].position.toPoint()));
+    //this->debuglines.clear();
+    //this->debuglines.push_back(QLine(this->points[in_l].position.toPoint(), this->points[in_h].position.toPoint()));
     //this->debuglines.push_back(QLine(in_l_point.toPoint(), out_l_point.toPoint()));
 
     //this->debuglines.push_back(QLine(xpoint_l.toPoint(), xpoint_h.toPoint()));
 
     double r = 0;
-    for (int i  = in_l; i < in_h; i++) {
+    for (int i  = in_l; i != in_h;) {
+        int new_i = (i+1) % this->points.size();
         if (!other.ContainsPoint(this->points[i].position)) {
             std::cout << "BUG DETECTED" << std::endl;
             return 0;
         }
-        r += crossProduct(this->points[i].position - xpoint_l, this->points[i+1].position - xpoint_l);
+        r += crossProduct(this->points[i].position - xpoint_l, this->points[new_i].position - xpoint_l);
+        i = new_i;
     }
     r += crossProduct(this->points[in_h].position - xpoint_l, xpoint_h - xpoint_l);
+
+    if (abs(r) > 100000) {
+        debuglines.clear();
+        //for (int i  = in_l; i < in_h; i++) {
+        //   debuglines.push_back(QLine(this->points[i].position.toPoint(), xpoint_l.toPoint()/*this->points[i+1].position.toPoint())*/));
+        //}
+        debuglines.push_back(QLine(in_l_point.toPoint(), out_l_point.toPoint()));
+        debuglines.push_back(QLine(other.points[other_inl].position.toPoint(), other.points[other_inl-1].position.toPoint()));
+        debuglines.push_back(QLine(xpoint_l.toPoint(), xpoint_h.toPoint()));
+    }
 
     if (other_inl == other_inh) {
         return abs(r);
     }
 
     if (this->ContainsPoint(other.points[other_inl].position)) {
-        //cout << "<" << (other_inh - other_inl + other.points.size()) % other.points.size() << " " << other.points.size() << " ";;
+        //cout << "<" << r << " " << (other_inh - other_inl + other.points.size()) % other.points.size() << " " << other.points.size() << " ";;
         other_inh = other_inh - 1;
         if (other_inh < 0) {
             other_inh = other.points.size() - 1;
@@ -250,14 +262,14 @@ double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
                 std::cout << "BUG DETECTED" << std::endl;
                 return abs(r);
             }
-            this->debuglines.push_back(QLine(other.points[i].position.toPoint(), other.points[new_i].position.toPoint()));
+            //this->debuglines.push_back(QLine(other.points[i].position.toPoint(), other.points[new_i].position.toPoint()));
             r -= crossProduct(other.points[i].position - xpoint_l, other.points[new_i].position - xpoint_l);
             i = new_i;
         }
         r -= crossProduct(other.points[other_inh].position - xpoint_l, xpoint_h - xpoint_l);
     }
     else {
-        //cout << ">" << (other_inl - other_inh + other.points.size()) % other.points.size() << " " << other.points.size() << " ";
+        //cout << ">" << r << " " << (other_inl - other_inh + other.points.size()) % other.points.size() << " " << other.points.size() << " ";
         other_inl = other_inl - 1;
         if (other_inl < 0) {
             other_inl = other.points.size() - 1;
@@ -273,7 +285,7 @@ double PolygonPhysicalShape::getIntersectionArea(PolygonPhysicalShape& other) {
                 return abs(r);
             }
 
-            this->debuglines.push_back(QLine(other.points[i].position.toPoint(), other.points[new_i].position.toPoint()));
+            //this->debuglines.push_back(QLine(other.points[i].position.toPoint(), other.points[new_i].position.toPoint()));
             r -= crossProduct(other.points[i].position - xpoint_l, other.points[new_i].position - xpoint_l);
             i = new_i;
         }

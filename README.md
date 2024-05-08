@@ -47,7 +47,7 @@ Or also you can **stop simulation**, that will interrupt physics calculations.
 
 The main idea is ideal gas law: $PV = nRT$
 
-It provides normal points acceleration: $a_n = GC * \frac{l}{S^3}$
+It provides normal points acceleration: $a_n = GC^3 * \frac{l}{S^3}$
 
 $S$ is (visible)area of the shell contents
 

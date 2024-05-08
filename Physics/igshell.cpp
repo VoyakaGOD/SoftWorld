@@ -41,7 +41,7 @@ void IGShell::WidenInspectorContext()
 {
     Inspector::AddHeader("shell with ideal gas", LARGE_HEADER);
     Inspector::AddParam("m/d", mass, 1e2d, 1e7d);
-    Inspector::AddParam("GC", gas_const, 1e4d, 5e5d);
+    Inspector::AddParam("GC", gas_const, 1e4d, 1e5d);
     Inspector::AddParam("SB", shell_bounce, 0.0, 3.0);
     Inspector::AddParam("SR", shell_rigidity, 250.0, 20000.0);
     style.WidenInspectorContext();

@@ -272,7 +272,7 @@ void SpringMassBody::MoveBy(const QPoint &offset) {
 void SpringMassBody::AddMomentum(const QVector2D &momentum) {
     for (int i = 0; i < this->rows.size(); i++) {
         for (int j = 0; j < this->rows[i].size(); j++) {
-            this->rows[i][j].velocity += QVector2D(momentum);
+            this->rows[i][j].velocity += momentum;
         }
     }
 }
@@ -324,9 +324,9 @@ void SpringMassBody::SolveCollision(PhysicalBody *another) {
     collision_vector.normalize();
 
     double total_impulse = PolygonPhysicalShape::getIntersectionArea(*p_another)*collision_hardness_factor;
-    this->debuglines.push_back(QLine(intpoints[0].toPoint(), (intpoints[0] + collision_vector * 100).toPoint()));
+    //this->debuglines.push_back(QLine(intpoints[0].toPoint(), (intpoints[0] + collision_vector * 100).toPoint()));
     std::cout << "I" << total_impulse << std::endl;
-    return;
+    //return;
 
 
     double total_factor = 0;
@@ -381,8 +381,6 @@ QPoint SpringMassBody::GetLocalCoordinate(const QPoint &global_coordinate) const
             if (pointInTriangle(po1, px, py, QVector2D(global_coordinate)) || pointInTriangle(po2, px, py, QVector2D(global_coordinate))) {
                 QPoint r = translateCoordinatesTriangle(po1, px, py, QVector2D(global_coordinate), this->xscale, this->yscale) + QPoint((j - 1) * xscale, (i-1) * yscale);
                 QPoint backpoint = this->GetGlobalCoordinate(r);
-                std::cout << r.x() << " " << r.y() << std::endl;
-                ((SpringMassBody*)this)->debuglines.push_back(QLine(backpoint, global_coordinate));
                 return r;
             }
 	    }

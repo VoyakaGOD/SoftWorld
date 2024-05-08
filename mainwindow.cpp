@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     main_scene.AddBody(test_body);
     test_body->WidenInspectorContext();
 
-    //main_scene.AddBody(new TestPolyBody(QVector2D(0, 0), DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
+    main_scene.AddBody(new TestPolyBody(QVector2D(0, 0), DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
     //main_scene.AddBody(new TestPolyBody(QVector2D(200, 100), DrawingStyle(Qt::darkRed, Qt::magenta, 2)));
 
     ui->palleteContents->AddPalleteItem(new SpringMassBody(), "Spring");
