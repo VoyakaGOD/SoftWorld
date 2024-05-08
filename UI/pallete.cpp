@@ -52,8 +52,6 @@ Pallete::~Pallete() {
 
 void Pallete::PostInit(SceneView* view) {
     this->sceneview = view;
-    this->AddPalleteItem(new GhostBody(), "test");
-    this->AddPalleteItem(new GhostBody(), "test2");
 }
 
 void Pallete::Clear(){

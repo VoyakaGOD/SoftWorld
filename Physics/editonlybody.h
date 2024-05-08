@@ -10,6 +10,7 @@ private:
     QVector2D velocity;
     double radius;
     DrawingStyle style;
+    double bounce;
 public:
     EditOnlyBody(const QPoint &origin, double radius, DrawingStyle style);
 

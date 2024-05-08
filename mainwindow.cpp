@@ -8,37 +8,13 @@
 #include <Serialize/deserialize.h>
 #include <Serialize/serialize.h>
 #include <Serialize/serialize_ui.h>
-
-//temporary:
-#include "Inspector/inspector.h"
 #include "Physics/editonlybody.h"
-#include "Physics/testpolybody.h"
 #include "Physics/igshell.h"
 #include "Physics/softscene.h"
 #include "Threads/simulationthreadscontroller.h"
 #include <Physics/springmassbody.h>
 
 extern SoftScene main_scene;
-
-QString dev = "everything was deleted!";
-
-static void test_func()
-{
-    qDebug() << dev;
-}
-
-int int_param_value = 0;
-QColor color_param_value = QColorConstants::Blue;
-float float_param_value = 0;
-double double_param_value = 0;
-static void print_func()
-{
-    qDebug("int_param = %d, color_param = %s, float_param = %f, double_param = %f",
-           int_param_value, color_param_value.name().toUtf8().constData(),
-           float_param_value, double_param_value);
-
-}
-//temporary
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -49,34 +25,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     SimulationThreadsController::Mount(&main_scene, 16000, ui->main_view, 16000);
     Icons::AddIcon("settings", ":/Icons/settings.png");
 
+    ui->palleteContents->AddPalleteItem(new SpringMassBody(), "spring");
+    IGShell *example_shell = new IGShell(QVector2D(0, 0), 100, 50, DrawingStyle(Qt::darkRed, Qt::black, 3), 10000, 28000, 1, 1450);
+    ui->palleteContents->AddPalleteItem(example_shell, "soft shell");
 
-    //temporary *********************************************************************************************
-    Inspector::AddHeader("some object", LARGE_HEADER);
-    Inspector::AddParam("color", color_param_value);
-    Inspector::AddParam("integer", int_param_value, 12, 25);
-    Inspector::AddParam("float", float_param_value, -5.0f, 5.0f);
-    Inspector::AddParam("double", double_param_value, -1e3, 1e3);
-    Inspector::AddParam("dev", dev);
+    EditOnlyBody *ball = new EditOnlyBody(QPoint(100,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
+    main_scene.AddBody(ball);
+    example_shell = new IGShell(QVector2D(320, 300), 100, 50, DrawingStyle(QColor("#00be7d"), QColor("#027290"), 3), 10000, 28000, 3, 1450);
+    main_scene.AddBody(example_shell);
 
-    Inspector::AddHeader("actions", NORMAL_HEADER);
-    Inspector::AddAction("delete everything", test_func);
-    Inspector::AddAction("print", print_func);
-
-    //Inspector::Clear();
-    Inspector::AddHeader("----------------------", SMALL_HEADER);
-
-    EditOnlyBody *test_body = new EditOnlyBody(QPoint(150,300), 40, DrawingStyle(Qt::darkGreen, Qt::darkYellow, 5));
-    main_scene.AddBody(test_body);
-    test_body->WidenInspectorContext();
-
-    main_scene.AddBody(new TestPolyBody(QVector2D(0, 0), DrawingStyle(QColor("#facf56"), QColor("#cba33d"), 5)));
-    //main_scene.AddBody(new TestPolyBody(QVector2D(200, 100), DrawingStyle(Qt::darkRed, Qt::magenta, 2)));
-
-    ui->palleteContents->AddPalleteItem(new SpringMassBody(), "Spring");
-    main_scene.AddBody(new IGShell(QVector2D(300, 350), 100, 50, DrawingStyle(Qt::darkRed, Qt::black, 1), 1000, 200, 0.5, 1));
-
-    //temporary *********************************************************************************************
-
+    ball->WidenInspectorContext();
     ui->run_stop_btn->SetUp();
     ui->inspector_btn->SetUp();
     ui->palette_btn->SetUp();

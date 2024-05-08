@@ -5,6 +5,7 @@ EditOnlyBody::EditOnlyBody(const QPoint &origin, double radius, DrawingStyle sty
     this->origin = QVector2D(origin);
     velocity = QVector2D(100, -250);
     this->radius = radius;
+    bounce = 0.7;
 }
 
 QRectF EditOnlyBody::GetBoundingRect() const
@@ -17,6 +18,7 @@ void EditOnlyBody::WidenInspectorContext()
 {
     Inspector::AddHeader("edit-only body", LARGE_HEADER);
     Inspector::AddParam("radius", radius, 5, 250);
+    Inspector::AddParam("bounce", bounce, 0, 0.95);
     style.WidenInspectorContext();
 }
 
@@ -37,22 +39,22 @@ void EditOnlyBody::KeepSceneBorders(const QRect &world_rect)
     if(origin.x() + radius > world_rect.right())
     {
         origin.setX(world_rect.right() - radius);
-        velocity.setX(-0.7 * velocity.x());
+        velocity.setX(-bounce * velocity.x());
     }
     if(origin.x() - radius < world_rect.left())
     {
         origin.setX(world_rect.left() + radius);
-        velocity.setX(-0.7 * velocity.x());
+        velocity.setX(-bounce * velocity.x());
     }
     if(origin.y() - radius < world_rect.top())
     {
         origin.setY(world_rect.top() + radius);
-        velocity.setY(-0.7 * velocity.y());
+        velocity.setY(-bounce * velocity.y());
     }
     if(origin.y() + radius > world_rect.bottom())
     {
         origin.setY(world_rect.bottom() - radius);
-        velocity.setY(-0.7 * velocity.y());
+        velocity.setY(-bounce * velocity.y());
     }
 }
 
